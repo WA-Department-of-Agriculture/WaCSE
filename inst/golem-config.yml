@@ -1,0 +1,12 @@
+default:
+  golem_name: WaCSEshiny
+  golem_version: 0.0.0.9000
+  app_prod: no
+production:
+  app_prod: yes
+dev:
+<<<<<<< HEAD
+  golem_wd: !expr here::here()
+=======
+  golem_wd: \\agrfloly01/Agency Files/NRAS/Sustainable_Farms_and_Fields/WaCSE/WaCSEshiny
+>>>>>>> 291fc0b (initial commit)

@@ -1,0 +1,11 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^data-raw$
+dev_history.R
+^dev$
+$run_dev.*
+<<<<<<< HEAD
+=======
+^LICENSE\.md$
+^README\.Rmd$
+>>>>>>> 291fc0b (initial commit)
