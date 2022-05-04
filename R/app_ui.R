@@ -30,15 +30,9 @@ golem_add_external_resources <- function() {
   )
 
   tags$head(
-<<<<<<< HEAD
-<<<<<<< HEAD
     favicon(),
-=======
     favicon(ext = "png"),
->>>>>>> 291fc0b (initial commit)
-=======
     favicon(),
->>>>>>> aa99b20938c08397c8f9a4483530660eb194a9e3
     bundle_resources(
       path = app_sys("app/www"),
       app_title = "WaCSEshiny"

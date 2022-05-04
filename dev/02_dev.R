@@ -15,7 +15,9 @@
 
 ## Dependencies ----
 ## Amend DESCRIPTION with dependencies read from package code parsing
-attachment::att_amend_desc()
+usethis::use_package("dplyr")
+usethis::use_package("echarts4r")
+#attachment::att_amend_desc()
 
 ## Add modules ----
 ## Create a module infrastructure in R/
