@@ -1,5 +1,8 @@
 Package: WaCSEshiny
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> aa99b20938c08397c8f9a4483530660eb194a9e3
 Title: An Amazing Shiny App
 Version: 0.0.0.9000
 Authors@R: 
@@ -9,6 +12,7 @@ Authors@R:
            email = "your@email.com")
 Description: What the package does (one paragraph).
 License: What license is it under?
+<<<<<<< HEAD
 =======
 Title: WaCSE
 Version: 0.0.0.9000
@@ -16,6 +20,8 @@ Authors@R: person('Jadey', 'Ryan', email = 'jryan@agr.wa.gov', role = c('cre', '
 Description: The Washington Climate Smart Estimator (WaCSE) is a shiny application to explore greenhouse gas emission reduction potentials from different conservation practices across Washington's diverse counties.
 License: CC BY 4.0
 >>>>>>> 291fc0b (initial commit)
+=======
+>>>>>>> aa99b20938c08397c8f9a4483530660eb194a9e3
 Imports: 
     config (>= 0.3.1),
     golem (>= 0.3.2),
@@ -24,6 +30,7 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 URL: https://github.com/WA-Department-of-Agriculture/WaCSEshiny
 BugReports: https://github.com/WA-Department-of-Agriculture/WaCSEshiny/issues
@@ -31,3 +38,5 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 >>>>>>> 291fc0b (initial commit)
+=======
+>>>>>>> aa99b20938c08397c8f9a4483530660eb194a9e3

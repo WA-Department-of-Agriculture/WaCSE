@@ -6,7 +6,11 @@ production:
   app_prod: yes
 dev:
 <<<<<<< HEAD
+<<<<<<< HEAD
   golem_wd: !expr here::here()
 =======
   golem_wd: \\agrfloly01/Agency Files/NRAS/Sustainable_Farms_and_Fields/WaCSE/WaCSEshiny
 >>>>>>> 291fc0b (initial commit)
+=======
+  golem_wd: !expr here::here()
+>>>>>>> aa99b20938c08397c8f9a4483530660eb194a9e3
