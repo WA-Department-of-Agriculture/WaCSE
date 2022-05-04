@@ -1,14 +1,10 @@
+^renv$
+^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^data-raw$
 dev_history.R
 ^dev$
 $run_dev.*
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 ^LICENSE\.md$
 ^README\.Rmd$
->>>>>>> 291fc0b (initial commit)
-=======
->>>>>>> aa99b20938c08397c8f9a4483530660eb194a9e3
