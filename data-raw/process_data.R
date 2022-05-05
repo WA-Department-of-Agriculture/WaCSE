@@ -1,15 +1,9 @@
-
-# Load packages -----------------------------------------------------------
-
-library(dplyr)
-library(stringr)
-
 # Read in data ------------------------------------------------------------
 
 comet_all <- vroom::vroom("data-raw/US_COMET-Planner_Download.csv",
-                      na = "-999.00", # import -999 values as na (means "not estimated")
-                      col_select = c(1:15, 18:19, 33:34) # select only cols of interest
-                      )
+                          na = "-999.00", # import -999 values as na (means "not estimated")
+                          col_select = c(1:15, 18:19, 33:34) # select only cols of interest
+)
 
 # Filter to only WA
 # Filter out multiple CPS implementations since Haley Nagle confirmed they are additive.

@@ -5,14 +5,18 @@
 #' @import shiny
 #' @noRd
 app_ui <- function(request) {
-  tagList(
-    # Leave this function for adding external resources
+  tagList(# Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
-      h1("WaCSEshiny")
-    )
-  )
+      navbarPage(
+        "Washington Climate Smart Estimator (WaCSE)",
+        tabPanel("Compare practices"),
+        tabPanel("Compare counties"),
+        tabPanel("Calculate your estimate"),
+        tabPanel("About")
+      )
+    ))
 }
 
 #' Add external Resources to the Application
@@ -32,7 +36,6 @@ golem_add_external_resources <- function() {
   tags$head(
     favicon(),
     favicon(ext = "png"),
-    favicon(),
     bundle_resources(
       path = app_sys("app/www"),
       app_title = "WaCSEshiny"
