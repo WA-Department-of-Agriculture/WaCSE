@@ -1,6 +1,8 @@
 
 <!-- aboutWaCSE.md is generated from aboutWaCSE.Rmd. Please edit that file -->
 
+<img src = "inst/app/www/hex-WaCSE.png" align = "right" alt = "logo" width = "130"/>
+
 # Washington Climate Smart Estimator (WaCSE)
 
 ### Who and what is this tool for?

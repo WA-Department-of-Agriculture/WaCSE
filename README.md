@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+<img src = "inst/app/www/hex-WaCSE.png" align = "right" alt = "logo" width = "130"/>
+
 # Washington Climate Smart Estimator (WaCSE)
 
 The Washington State Department of Agriculture (WSDA) developed WaCSE as
