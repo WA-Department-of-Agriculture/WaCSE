@@ -3,18 +3,55 @@
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
 #' @import shiny
+#' @import dplyr
 #' @noRd
+
+# Set up filterset using devtools::install_github("davesteps/shinyFilters"
+
+library(dplyr, warn.conflicts = F)
+library(shinyFilters)
+
+filterSet <- newFilterSet("comet_wa") %>%
+  addSelectFilter("County", "county") %>%
+  addSelectFilter("Class", "class") %>%
+  addSelectFilter("Practice", "cps_name") %>%
+  addSelectFilter("Irrigation", "irrigation")
+
+
+
 app_ui <- function(request) {
   tagList(# Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
+      theme = bslib::bs_theme(version = 5, bootswatch = "lux"),
+      shinyjs::useShinyjs(),
+
       navbarPage(
         "Washington Climate Smart Estimator (WaCSE)",
-        tabPanel("Compare practices"),
-        tabPanel("Compare counties"),
+        inverse = TRUE,
+        collapsible = TRUE,
+
+        tabPanel(
+          "Explore the data",
+          sidebarLayout(
+            sidebarPanel(
+              filterInputs(filterSet),
+              hr(),
+              filterMaster(filterSet),
+              filterResetButton(filterSet)
+            ),
+            mainPanel(
+              fluidRow(
+                DT::dataTableOutput("table")
+              )
+            )
+          )
+        ),
+
         tabPanel("Calculate your estimate"),
-        tabPanel("About")
+
+        tabPanel("About", includeMarkdown("ABOUT.md"))
       )
     ))
 }
