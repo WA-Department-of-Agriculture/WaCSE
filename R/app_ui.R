@@ -16,25 +16,12 @@ app_ui <- function(request) {
     # Your application UI logic
     fluidPage(
       theme = bslib::bs_theme(version = 5, bootswatch = "lumen"),
-      thematic::thematic_on(),
       shinyjs::useShinyjs(),
       navbarPage(
         "Washington Climate Smart Estimator (WaCSE)",
         inverse = TRUE,
         collapsible = TRUE,
 
-        tabPanel(
-          "Explore the data",
-          sidebarLayout(
-            sidebarPanel(width = 3,
-                         mod_selectizeGroup_ui("filters")),
-            mainPanel(width = 9,
-                      tabsetPanel(
-                        tabPanel("Table",
-                                 DT::dataTableOutput("explore"))
-                      ))
-          ),
-        ),
         tabPanel("Explore the data",
                  sidebarLayout(
                    sidebarPanel(width = 3,
@@ -45,7 +32,7 @@ app_ui <- function(request) {
                                tabPanel("Table",
                                         fluidRow(DT::dataTableOutput("explore"))
                              ))
-                 ))),
+                   ))),
 
         tabPanel("Calculate your estimate"),
 

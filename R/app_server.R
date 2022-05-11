@@ -41,10 +41,6 @@ app_server <- function(input, output, session) {
     options = list(
       autoWidth = TRUE,
       columnDefs = list(list(width = "10px", targets = "_all")),
-      dom = "t",
-      rowGroup = list(dataSrc = 0),
-      scrollX = TRUE,
-      scrollY = 500,
       dom = "t, p",
       rowGroup = list(dataSrc = 0),
       pageLength = 10,
