@@ -30,7 +30,11 @@ app_server <- function(input, output, session) {
         "CO2 Mean" = co2_mean,
         "N2O Mean" = n2o_mean,
         "Soil Carbon Mean" = soil_carbon_co2,
-        "Total GHG" = total_ghg_co2
+        "Total GHG" = total_ghg_co2,
+        "CO2 Mean (MT CO2e/ac/yr)" = co2_mean,
+        "N2O Mean (MT CO2e/ac/yr)" = n2o_mean,
+        "Soil Carbon (MT CO2e/ac/yr)" = soil_carbon_co2,
+        "Total GHG (MT CO2e/ac/yr)" = total_ghg_co2
       ),
     rownames = FALSE,
     extensions = c("Scroller", "RowGroup"),
@@ -40,7 +44,12 @@ app_server <- function(input, output, session) {
       dom = "t",
       rowGroup = list(dataSrc = 0),
       scrollX = TRUE,
-      scrollY = 500
+      scrollY = 500,
+      dom = "t, p",
+      rowGroup = list(dataSrc = 0),
+      pageLength = 10,
+      scrollX = TRUE,
+      scrollY = 400
     ),
     selection = "none"
   )

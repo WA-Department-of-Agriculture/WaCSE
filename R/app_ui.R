@@ -6,8 +6,6 @@
 #' @import dplyr
 #' @noRd
 
-# Set up filterset using devtools::install_github("davesteps/shinyFilters"
-
 library(dplyr, warn.conflicts = F)
 library(shinyWidgets)
 
@@ -17,9 +15,9 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
-      theme = bslib::bs_theme(version = 5, bootswatch = "lux"),
+      theme = bslib::bs_theme(version = 5, bootswatch = "lumen"),
+      thematic::thematic_on(),
       shinyjs::useShinyjs(),
-
       navbarPage(
         "Washington Climate Smart Estimator (WaCSE)",
         inverse = TRUE,
@@ -37,6 +35,18 @@ app_ui <- function(request) {
                       ))
           ),
         ),
+        tabPanel("Explore the data",
+                 sidebarLayout(
+                   sidebarPanel(width = 3,
+                                mod_selectizeGroup_ui("filters"),
+                                br()),
+                   mainPanel(width = 9,
+                             tabsetPanel(
+                               tabPanel("Table",
+                                        fluidRow(DT::dataTableOutput("explore"))
+                             ))
+                 ))),
+
         tabPanel("Calculate your estimate"),
 
         tabPanel("About", includeMarkdown("ABOUT.md"))
