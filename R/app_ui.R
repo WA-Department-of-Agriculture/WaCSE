@@ -9,18 +9,11 @@
 # Set up filterset using devtools::install_github("davesteps/shinyFilters"
 
 library(dplyr, warn.conflicts = F)
-library(shinyFilters)
-
-filterSet <- newFilterSet("comet_wa") %>%
-  addSelectFilter("County", "county") %>%
-  addSelectFilter("Class", "class") %>%
-  addSelectFilter("Practice", "cps_name") %>%
-  addSelectFilter("Irrigation", "irrigation")
-
-
+library(shinyWidgets)
 
 app_ui <- function(request) {
-  tagList(# Leave this function for adding external resources
+  tagList(
+    # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
@@ -35,25 +28,21 @@ app_ui <- function(request) {
         tabPanel(
           "Explore the data",
           sidebarLayout(
-            sidebarPanel(
-              filterInputs(filterSet),
-              hr(),
-              filterMaster(filterSet),
-              filterResetButton(filterSet)
-            ),
-            mainPanel(
-              fluidRow(
-                DT::dataTableOutput("table")
-              )
-            )
-          )
+            sidebarPanel(width = 3,
+                         mod_selectizeGroup_ui("filters")),
+            mainPanel(width = 9,
+                      tabsetPanel(
+                        tabPanel("Table",
+                                 DT::dataTableOutput("explore"))
+                      ))
+          ),
         ),
-
         tabPanel("Calculate your estimate"),
 
         tabPanel("About", includeMarkdown("ABOUT.md"))
       )
-    ))
+    )
+  )
 }
 
 #' Add external Resources to the Application

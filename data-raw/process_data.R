@@ -5,15 +5,15 @@ comet_all <- vroom::vroom("data-raw/US_COMET-Planner_Download.csv",
                           col_select = c(1:15, 18:19, 33:34) # select only cols of interest
 )
 
-# Filter to only WA
-# Filter out multiple CPS implementations since Haley Nagle confirmed they are additive.
-# Keep only GHG variables that have data. CH4 has no data.
+# filter to only WA
+# filter out multiple CPS implementations since Haley Nagle confirmed they are additive.
+# keep only GHG variables that have data. CH4 has no data.
 
 comet_wa <- comet_all %>%
   dplyr::filter(state == "WA") %>%
   dplyr::filter(!is.na(cpsnum))
 
-# Parse out CPS implementations -------------------------------------------
+# parse out CPS implementations -------------------------------------------
 
 ## tags for irrigation (options: non-irrigated, irrigated, not specified)
 
@@ -32,6 +32,11 @@ for (row in 1:nrow(comet_wa)) {
     )
 }
 
-write.csv(comet_wa, "data-raw/comet_wa.csv")
+# convert character strings to factors
 
-usethis::use_data(comet_wa)
+comet_wa <- as.data.frame(unclass(comet_wa),
+                          stringsAsFactors = TRUE)
+
+write.csv(comet_wa, "data-raw/comet_wa.csv", overwrite = TRUE)
+
+usethis::use_data(comet_wa, overwrite = TRUE)
