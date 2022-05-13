@@ -3,7 +3,7 @@
 #' A dataset containing the coefficients of greenhouse gas emissions
 #' and soil carbon for Washington State.
 #'
-#' @format A data frame with 4320 rows and 20 variables:
+#' @format A data frame with 17280 rows and 12 variables. The Rda dataset tidies the data by pivoting longer:
 #' \describe{
 #'   \item{state}{Abbreviation for state}
 #'   \item{county}{County name}

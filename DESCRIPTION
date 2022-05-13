@@ -10,10 +10,12 @@ Imports:
     dplyr,
     DT,
     echarts4r,
+    ggplot2,
     glue,
     golem (>= 0.3.2),
     htmltools,
-    shiny (>= 1.7.1)
+    shiny (>= 1.7.1),
+    shinyWidgets
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
