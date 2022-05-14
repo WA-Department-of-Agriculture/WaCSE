@@ -9,8 +9,6 @@
 library(dplyr, warn.conflicts = F)
 library(shinyWidgets)
 
-units <- "MT CO2e/ac/yr = metric tonnes CO2 equivalent per acre per year."
-
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
@@ -35,8 +33,7 @@ app_ui <- function(request) {
                                         DT::dataTableOutput("table")
                                         ),
                                tabPanel("Bar Graph",
-                                        mod_plot_ui("plot_1"),
-                                        plotOutput("plot_1")
+                                        echarts4r::echarts4rOutput("plot")
                                         )
                              )
                    ))),

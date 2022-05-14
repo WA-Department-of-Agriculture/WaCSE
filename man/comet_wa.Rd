@@ -5,7 +5,7 @@
 \alias{comet_wa}
 \title{A subset of the NRCS Comet-Planner dataset}
 \format{
-A data frame with 4320 rows and 20 variables:
+A data frame with 17280 rows and 12 variables. The Rda dataset tidies the data by pivoting longer:
 \describe{
   \item{state}{Abbreviation for state}
   \item{county}{County name}

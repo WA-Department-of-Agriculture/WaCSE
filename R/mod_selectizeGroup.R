@@ -23,7 +23,7 @@ mod_selectizeGroup_ui <- function(id) {
         placeholder = "All classes"
       ),
       practice = list(
-        inputId = "cps_name",
+        inputId = "practice",
         label = "Conservation practices:",
         placeholder = "All practices"
       ),
@@ -40,20 +40,23 @@ mod_selectizeGroup_ui <- function(id) {
 #' selectizeGroup Server Functions
 #'
 #' @noRd
-mod_selectizeGroup_server <- function(id) {
-  id = "filters"
-    moduleServer(id, function(input, output, session) {
-    ns <- session$ns
-    filtered_df <- selectizeGroupServer(
-      input,
-      output,
-      session,
-      data = comet_wa,
-      vars = c("county", "class", "cps_name", "irrigation"),
-      inline = FALSE
-    )
-  })
-}
+#'
+#' this doesn't work for passing the resulting filtered dataframe to other outputs
+#'
+# mod_selectizeGroup_server <- function(id) {
+#   id
+#     moduleServer(id, function(input, output, session) {
+#     ns <- session$ns
+#     selectizeGroupServer(
+#       input,
+#       output,
+#       session,
+#       data = comet_wa,
+#       vars = c("county", "class", "practice", "irrigation"),
+#       inline = FALSE
+#     )
+#   })
+# }
 
 ## To be copied in the UI
 # mod_selectizeGroup_ui("selectizeGroup_1")

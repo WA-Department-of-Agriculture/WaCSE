@@ -12,13 +12,13 @@ app_server <- function(input, output, session) {
     module = selectizeGroupServer,
     id = "filters",
     data = comet_wa,
-    vars = c("county", "class", "cps_name", "irrigation"),
+    vars = c("county", "class", "practice", "irrigation"),
     inline = FALSE
   )
 
 
-  output$table <- DT::renderDataTable(table(res_mod()))
-  output$plot_1 <- renderPlot(bar_graph(res_mod(), y = res_mod()$co2_mean))
+  output$table <- DT::renderDataTable(fct_table(res_mod()))
+  output$plot <- echarts4r::renderEcharts4r(fct_plot(res_mod()))
 
 
 }
