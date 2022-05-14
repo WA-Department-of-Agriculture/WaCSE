@@ -29,7 +29,9 @@ app_ui <- function(request) {
                                 br()),
                    mainPanel(width = 9,
                              tabsetPanel(
+                               type = "pills",
                                tabPanel("Table",
+<<<<<<< HEAD
                                         DT::dataTableOutput("table")
                                         ),
                                tabPanel("Bar Graph",
@@ -37,6 +39,27 @@ app_ui <- function(request) {
                                         )
                              )
                    ))),
+=======
+                                        DT::dataTableOutput("table")),
+                               tabPanel(
+                                 "Bar Graph",
+                                 fluidRow(
+                                   selectInput(
+                                     "ghg_type",
+                                     label = "Select a greenhouse gas to graph.",
+                                     choices = c(
+                                       "CO2" = "co2",
+                                       "N2O" = "n2o",
+                                       "Soil Carbon" = "soil.carbon.co2",
+                                       "Total GHG" = "total.ghg.co2"
+                                     )
+                                   )
+                                 ),
+                                 fluidRow(plotly::plotlyOutput("plot"))
+                               )
+                             ))
+                 )),
+>>>>>>> 89a86cc (continued work on table and plot)
 
         tabPanel("Calculate your estimate"),
 
@@ -55,18 +78,14 @@ app_ui <- function(request) {
 #' @importFrom golem add_resource_path activate_js favicon bundle_resources
 #' @noRd
 golem_add_external_resources <- function() {
-  add_resource_path(
-    "www",
-    app_sys("app/www")
-  )
+  add_resource_path("www",
+                    app_sys("app/www"))
 
   tags$head(
     favicon(),
     favicon(ext = "png"),
-    bundle_resources(
-      path = app_sys("app/www"),
-      app_title = "WaCSEshiny"
-    )
+    bundle_resources(path = app_sys("app/www"),
+                     app_title = "WaCSEshiny")
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
   )

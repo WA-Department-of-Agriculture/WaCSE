@@ -8,46 +8,40 @@
 #'
 #' @importFrom shiny NS tagList
 
-col_names <-
-  c(
-    "County",
-    "Class",
-    "Practice",
-    "Implementation",
-    "CO2 Mean",
-    "N2O Mean",
-    "Soil Carbon Mean",
-    "Total GHG"
-  )
-
 mod_table_ui <- function(id){
   ns <- NS(id)
   tagList(
-      DT::dataTableOutput(ns("explore"))
+      DT::dataTableOutput(ns("table"))
       )
   }
 
 #' table Server Functions
 #'
 #' @noRd
+#'
 mod_table_server <- function(id, data) {
   moduleServer(
     id,
     function(input, output, session) {
-    ns <- session$ns
-
-    DT::renderDataTable({
-    data %>%
-      select(county,
-             class,
-             cps_name,
-             planner_implementation,
-             co2_mean,
-             n2o_mean,
-             soil_carbon_co2,
-             total_ghg_co2)
-    })
-  })
+      output$table <- DT::renderDataTable(
+        data %>%
+          select_cols() %>%
+          rename_cols(),
+        rownames = FALSE,
+        extensions = c("Scroller", "RowGroup"),
+        options = list(
+          autoWidth = TRUE,
+          columnDefs = list(list(width = "10px", targets = "_all")),
+          dom = "t, p",
+          rowGroup = list(dataSrc = 0),
+          pageLength = 10,
+          scrollX = TRUE,
+          scrollY = 400
+        ),
+        selection = "none"
+      )
+    }
+  )
 }
 
 ## To be copied in the UI

@@ -8,6 +8,10 @@
 #'
 
 fct_table <- function(data) {
+<<<<<<< HEAD
+=======
+  req(data)
+>>>>>>> 89a86cc (continued work on table and plot)
     data <-
       dplyr::select(
         data,
