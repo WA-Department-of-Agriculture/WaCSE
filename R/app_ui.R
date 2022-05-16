@@ -9,13 +9,17 @@
 library(dplyr, warn.conflicts = F)
 library(shinyWidgets)
 
+thematic::thematic_shiny(font = "auto")
+
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
-      theme = bslib::bs_theme(version = 5, bootswatch = "lumen"),
+      theme = bslib::bs_theme(version = 5,
+                              bootswatch = "lumen",
+                              base_font = bslib::font_google("Montserrat")),
       shinyjs::useShinyjs(),
       navbarPage(
         "Washington Climate Smart Estimator (WaCSE)",
@@ -31,18 +35,9 @@ app_ui <- function(request) {
                              tabsetPanel(
                                type = "pills",
                                tabPanel("Table",
-<<<<<<< HEAD
                                         DT::dataTableOutput("table")
                                         ),
                                tabPanel("Bar Graph",
-                                        echarts4r::echarts4rOutput("plot")
-                                        )
-                             )
-                   ))),
-=======
-                                        DT::dataTableOutput("table")),
-                               tabPanel(
-                                 "Bar Graph",
                                  fluidRow(
                                    selectInput(
                                      "ghg_type",
@@ -59,7 +54,6 @@ app_ui <- function(request) {
                                )
                              ))
                  )),
->>>>>>> 89a86cc (continued work on table and plot)
 
         tabPanel("Calculate your estimate"),
 

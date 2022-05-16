@@ -2,33 +2,12 @@
 #'
 #' @description A fct function to create a bar graph
 #'
-<<<<<<< HEAD
-=======
 #' @import ggplot2
 #'
->>>>>>> 89a86cc (continued work on table and plot)
 #' @return The return value, if any, from executing the function.
 #'
 #' @noRd
 
-<<<<<<< HEAD
-fct_plot <- function(data) {
-  data |>
-  dplyr::group_by(county) |>
-  subset(ghg_type == "co2") |>
-  echarts4r::e_charts(x = implementation) |>
-  echarts4r::e_bar(serie = mean) |>
-  echarts4r::e_error_bar(lower, upper) |>
-  echarts4r::e_grid(
-    show = TRUE,
-    left = 50,
-    right = 50,
-    top = 50,
-    bottom = 100
-  ) |>
-  echarts4r::e_tooltip() |>
-  echarts4r::e_datazoom(start = 50)
-=======
 fct_label <- function(ghg_type) {
   if (ghg_type == "co2")
     return("Carbon dioxide")
@@ -47,7 +26,7 @@ fct_plot <- function(data, ghg_type) {
   data <- data |>
     subset(ghg_type = ghg_type)
 
-  ggplot(data, aes(x = implementation,
+  ggplot(data, aes(x = factor(implementation),
                    y = mean,
                    fill = county)
          ) +
@@ -74,5 +53,4 @@ fct_plot <- function(data, ghg_type) {
       }
     ) +
     theme_classic()
->>>>>>> 89a86cc (continued work on table and plot)
 }

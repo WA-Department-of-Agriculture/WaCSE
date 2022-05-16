@@ -18,9 +18,7 @@ app_server <- function(input, output, session) {
 
 
   output$table <- DT::renderDataTable(fct_table(res_mod()))
-<<<<<<< HEAD
   output$plot <- echarts4r::renderEcharts4r(fct_plot(res_mod()))
-=======
 
   ghg_type <- reactive({input$ghg_type})
 
@@ -30,7 +28,6 @@ app_server <- function(input, output, session) {
 
 
   output$plot <- plotly::renderPlotly(fct_plot(filtered(), ghg_type()))
->>>>>>> 89a86cc (continued work on table and plot)
 
 
 }
