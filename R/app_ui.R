@@ -38,19 +38,7 @@ app_ui <- function(request) {
                                         DT::dataTableOutput("table")
                                         ),
                                tabPanel("Bar Graph",
-                                 fluidRow(
-                                   selectInput(
-                                     "ghg_type",
-                                     label = "Select a greenhouse gas to graph.",
-                                     choices = c(
-                                       "CO2" = "co2",
-                                       "N2O" = "n2o",
-                                       "Soil Carbon" = "soil.carbon.co2",
-                                       "Total GHG" = "total.ghg.co2"
-                                     )
-                                   )
-                                 ),
-                                 fluidRow(plotly::plotlyOutput("plot"))
+                                        mod_plot_ui("plot")
                                )
                              ))
                  )),

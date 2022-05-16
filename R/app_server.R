@@ -18,7 +18,6 @@ app_server <- function(input, output, session) {
 
 
   output$table <- DT::renderDataTable(fct_table(res_mod()))
-  output$plot <- echarts4r::renderEcharts4r(fct_plot(res_mod()))
 
   ghg_type <- reactive({input$ghg_type})
 

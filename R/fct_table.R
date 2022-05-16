@@ -37,7 +37,8 @@ fct_table <- function(data) {
                 th(colspan = 1, "Soil carbon"),
                 th(colspan = 1, "Total greenhouse gas"),
               ),
-              tr(th(colspan = 4, tags$i("(metric tonnes CO2 equivalent per acre per year)")))
+              tr(th(colspan = 4,
+                    tags$i("(metric tonnes CO2 equivalent per acre per year)")))
             )))
 
     DT::datatable(

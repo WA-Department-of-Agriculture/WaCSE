@@ -3,10 +3,13 @@
 #' @description A fct function to create a bar graph
 #'
 #' @import ggplot2
+#' @import plotly
 #'
 #' @return The return value, if any, from executing the function.
 #'
 #' @noRd
+
+# labels for y-axis
 
 fct_label <- function(ghg_type) {
   if (ghg_type == "co2")
@@ -19,17 +22,28 @@ fct_label <- function(ghg_type) {
     return("Total GHG")
 }
 
-
 fct_plot <- function(data, ghg_type) {
+
+  # require data
   req(data)
 
+
+  # subset data based on chosen ghg type
   data <- data |>
     subset(ghg_type = ghg_type)
 
-  ggplot(data, aes(x = factor(implementation),
+
+  # plot data
+  plot <-
+    ggplot(data, aes(x = factor(implementation),
                    y = mean,
-                   fill = county)
+                   fill = county,
+                   text = paste("Practice Implementation: ", implementation,
+                                "\nCounty: ", county,
+                                "\nGHG Coefficient: ", mean)
+                   )
          ) +
+    scale_fill_viridis_d() +
     geom_bar(stat = "identity",
              position = position_dodge()
              ) +
@@ -43,14 +57,30 @@ fct_plot <- function(data, ghg_type) {
     labs(
       fill = "County",
       x = "Practice Implementation",
-      y = paste(fct_label(ghg_type), "(MT CO2e/ac/yr)"),
+      y = paste(fct_label(ghg_type), "\n(MT CO2e/ac/yr)"),
       title = paste(fct_label(ghg_type))
     ) +
     coord_flip() +
     scale_x_discrete(
-      labels = function(x) {
-        stringr::str_wrap(x, width = 25)
-      }
+      labels = wrap(data$implementation, 25)
     ) +
     theme_classic()
+
+
+    # plot with ggplotly
+  ggplotly <-
+    ggplotly(plot, tooltip = c("text")) %>%
+    config(displaylogo = FALSE,
+           modeBarButtonsToRemove = list(
+             "sendDataToCloud",
+             "pan2d",
+             "zoomIn2d",
+             "zoomOut2d",
+             "select2d",
+             "lasso2d",
+             "hoverClosestCartesian",
+             "hoverCompareCartesian",
+             "autoScale2d"
+           ))
+
 }
