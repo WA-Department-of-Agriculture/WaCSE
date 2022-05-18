@@ -5,31 +5,80 @@
 #' @import shiny
 #' @noRd
 
+# TODO: fix choices subsetting so logical subscript error no longer appears in console
+#       keep trying to modularize the code and figure out why the server parts don't work
+
 app_server <- function(input, output, session) {
   # Your application server logic
 
-  res_mod <- callModule(
-    module = selectizeGroupServer,
-    id = "filters",
-    data = comet_wa,
-    vars = c("county", "class", "practice", "irrigation"),
-    inline = FALSE
-  )
+  # Render UI filter elements -----------------------------------------------
 
+  output$practice <- renderUI({
+    choices <- unique(comet_wa
+                      [comet_wa$class == input$class, "practice"])
+    choices <- as.character(pull(choices))
 
-  output$table <- DT::renderDataTable(fct_table(res_mod()))
+    selectInput(
+      inputId = "practice",
+      label = "Conservation Practice:",
+      choices = choices,
+      selected = choices[1],
+      multiple = TRUE
+    )
+  })
 
-  ghg_type <- reactive({input$ghg_type})
+  output$irrigation <- renderUI({
+    choices <- unique(comet_wa
+                      [comet_wa$practice == input$practice, "irrigation"])
+    choices <- as.character(pull(choices))
 
-  filtered <- reactive({
-    subset(res_mod(), ghg_type == input$ghg_type)
+    selectInput(
+      inputId = "irrigation",
+      label = "Irrigation Type:",
+      choices = choices,
+      selected = choices,
+      multiple = TRUE
+    )
+  })
+
+  observeEvent(input$reset, {
+    updateSelectInput(session, inputId = "county", selected = "")
+    updateSelectInput(session, inputId = "class", selected = "")
+    updateSelectInput(session, inputId = "practice", selected = "")
+    updateSelectInput(session, inputId = "irrigation", selected = "")
   })
 
 
-  output$plot <- plotly::renderPlotly(fct_plot(filtered(), ghg_type()))
+  # Generate reactive filtered dataframe ------------------------------------
 
+  filtered_df <- reactive({
+    subset(
+      comet_wa,
+      comet_wa$county %in% input$county &
+        comet_wa$class %in% input$class &
+        comet_wa$practice %in% input$practice &
+        comet_wa$irrigation %in% input$irrigation
+    )
+  })
+
+
+  # Render table ------------------------------------------------------------
+
+  output$table <- DT::renderDataTable(fct_table(filtered_df()))
+
+
+  # Render plot -------------------------------------------------------------
+
+  ghg_type <- reactive({
+    input$ghg_type
+  })
+
+  filtered_plot <- reactive({
+    subset(filtered_df(), ghg_type == input$ghg_type)
+  })
+
+  output$plot <- plotly::renderPlotly({
+    fct_plot(filtered_plot(), ghg_type())
+  })
 
 }
-
-
-

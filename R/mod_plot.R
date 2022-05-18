@@ -10,7 +10,7 @@
 
 mod_plot_ui <- function(id) {
   ns <- NS(id)
-  tagList(fluidRow(
+  tagList(
     selectInput(
       "ghg_type",
       label = "Select a greenhouse gas to graph.",
@@ -20,27 +20,29 @@ mod_plot_ui <- function(id) {
         "Soil Carbon" = "soil.carbon.co2",
         "Total GHG" = "total.ghg.co2"
       )
-    )
-  ),
-  fluidRow(plotly::plotlyOutput("plot")))
+    ),
+    plotly::plotlyOutput("plot")
+  )
 }
 
 #' plot Server Functions
 #'
 #' @noRd
 
-mod_plot_server <- function(id, data) {
-  moduleServer(id, function(input, output, session) {
-    ns <- session$ns
+3
 
-    ghg_type <- reactive({
-      input$ghg_type
-    })
-
-    output$plot <-
-      echarts4r::renderEcharts4r(fct_plot(data, ghg_type))
-  })
-}
+# mod_plot_server <- function(id, data) {
+#   moduleServer(id, function(input, output, session) {
+#     ns <- session$ns
+#
+#     ghg_type <- reactive({
+#       input$ghg_type
+#     })
+#
+#     output$plot <-
+#       echarts4r::renderEcharts4r(fct_plot(data, ghg_type))
+#   })
+# }
 
 
 ## To be copied in the UI

@@ -1,0 +1,7 @@
+.bs-select-all {
+  display: none;
+}
+
+.bs-deselect-all {
+  width: 100%;
+}

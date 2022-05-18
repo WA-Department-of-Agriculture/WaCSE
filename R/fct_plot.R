@@ -22,11 +22,13 @@ fct_label <- function(ghg_type) {
     return("Total GHG")
 }
 
-fct_plot <- function(data, ghg_type) {
+# TODO:  fix scales so upper error bar is not cut off
+#         don't show error bars if data is not there
+#         reverse legend order to match the order of the bars
 
+fct_plot <- function(data, ghg_type) {
   # require data
   req(data)
-
 
   # subset data based on chosen ghg type
   data <- data |>
@@ -35,52 +37,59 @@ fct_plot <- function(data, ghg_type) {
 
   # plot data
   plot <-
-    ggplot(data, aes(x = factor(implementation),
-                   y = mean,
-                   fill = county,
-                   text = paste("Practice Implementation: ", implementation,
-                                "\nCounty: ", county,
-                                "\nGHG Coefficient: ", mean)
-                   )
-         ) +
-    scale_fill_viridis_d() +
-    geom_bar(stat = "identity",
-             position = position_dodge()
-             ) +
+    ggplot(data,
+           aes(
+             x = factor(implementation),
+             y = mean,
+             fill = forcats::fct_rev(county),
+             text = paste(
+               "Practice Implementation: ",
+               implementation,
+               "\nCounty: ",
+               county,
+               "\nGHG Coefficient: ",
+               mean
+             )
+           )) +
+    scale_fill_viridis_d(breaks = rev, direction = -1) +
+    geom_col(position = position_dodge(width = 0.9)) +
     geom_errorbar(
       ymin = data$lower,
       ymax = data$upper,
-      width = 0.05,
-      stat = "identity",
-      position = position_dodge(0.9)
+      width = 0.03,
+      size = 0.05,
+      position = position_dodge(width = 0.9)
     ) +
     labs(
       fill = "County",
-      x = "Practice Implementation",
-      y = paste(fct_label(ghg_type), "\n(MT CO2e/ac/yr)"),
-      title = paste(fct_label(ghg_type))
+      x = NULL,
+      y = paste(fct_label(ghg_type), "\n(MT CO2e/ac/yr)")
     ) +
-    coord_flip() +
+    coord_flip(expand = TRUE) +
     scale_x_discrete(
-      labels = wrap(data$implementation, 25)
+      labels = wrap(data$implementation, 100),
+      guide = guide_axis(n.dodge = 2)
     ) +
     theme_classic()
 
 
-    # plot with ggplotly
+
+  # plot with ggplotly
   ggplotly <-
     ggplotly(plot, tooltip = c("text")) %>%
-    config(displaylogo = FALSE,
-           modeBarButtonsToRemove = list(
-             "sendDataToCloud",
-             "pan2d",
-             "zoomIn2d",
-             "zoomOut2d",
-             "select2d",
-             "lasso2d",
-             "hoverClosestCartesian",
-             "hoverCompareCartesian",
-             "autoScale2d"
-           ))
+    config(
+      displaylogo = FALSE,
+      modeBarButtonsToRemove = list(
+        "sendDataToCloud",
+        "pan2d",
+        "zoomIn2d",
+        "zoomOut2d",
+        "select2d",
+        "lasso2d",
+        "hoverClosestCartesian",
+        "hoverCompareCartesian",
+        "autoScale2d"
+      )
+    )
 
 }
