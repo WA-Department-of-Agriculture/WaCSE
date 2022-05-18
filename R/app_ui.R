@@ -29,14 +29,14 @@ app_ui <- function(request) {
         tabPanel("Explore the data",
                  sidebarLayout(
                    sidebarPanel(width = 3,
-                                mod_selectizeGroup_ui("filters"),
-                                br()),
+                                mod_filters_ui("filters")
+                                ),
                    mainPanel(width = 9,
                              tabsetPanel(
                                type = "pills",
                                tabPanel("Table",
                                         DT::dataTableOutput("table")
-                                        ),
+                               ),
                                tabPanel("Bar Graph",
                                         mod_plot_ui("plot")
                                )
