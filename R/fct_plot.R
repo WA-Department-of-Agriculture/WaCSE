@@ -10,7 +10,6 @@
 #' @noRd
 
 # TODO:   fix error messages if no filters are selected
-#         add conditional UI selector for nutrient management
 
 # labels for y-axis
 
@@ -91,7 +90,7 @@ fct_plot <- function(data, ghg_type) {
     options = list(
       opts_tooltip(css = tooltip_css,
                    use_fill = TRUE),
-      opts_toolbar(pngname = "plot"),
+      opts_toolbar(saveaspng = FALSE),
       opts_zoom(max = 5)
     )
   )

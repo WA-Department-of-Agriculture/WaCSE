@@ -6,9 +6,6 @@
 #' @import dplyr
 #' @noRd
 
-library(dplyr, warn.conflicts = F)
-library(shinyWidgets)
-
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources

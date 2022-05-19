@@ -16,7 +16,6 @@ fct_table <- function(data) {
         "class",
         "practice",
         "implementation",
-        "irrigation",
         "ghg_type",
         "mean"
       ) |>
@@ -31,7 +30,6 @@ fct_table <- function(data) {
                 th(rowspan = 2, "Conservation Class"),
                 th(rowspan = 2, "Conservation Practice"),
                 th(rowspan = 2, "Practice Implementation"),
-                th(rowspan = 2, "Irrigation"),
                 th(colspan = 1, "Carbon dioxide"),
                 th(colspan = 1, "Nitrous oxide"),
                 th(colspan = 1, "Soil carbon"),

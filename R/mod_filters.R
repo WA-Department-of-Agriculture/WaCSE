@@ -11,21 +11,25 @@
 mod_filters_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    selectInput(
+    selectizeInput(
       inputId = "county",
       label = "County:",
       choices = unique(comet_wa$county),
       multiple = TRUE,
-      selected = unique(comet_wa$county[1])
+      selected = unique(comet_wa$county[1]),
+      options = list(plugins = list("remove_button"))
     ),
-    selectInput(
+    selectizeInput(
       inputId = "class",
       label = "Conservation Class:",
       choices = unique(comet_wa$class),
       multiple = TRUE,
-      selected = unique(comet_wa$class[1])
+      selected = unique(comet_wa$class[1]),
+      options = list(plugins = list("remove_button"))
     ),
     uiOutput("practice"),
+    uiOutput("nutrient_practice"),
+    uiOutput("land_use"),
     uiOutput("irrigation"),
     actionButton("reset", "Reset")
   )

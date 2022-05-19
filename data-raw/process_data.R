@@ -1,3 +1,7 @@
+library(dplyr)
+library(tidyr)
+library
+
 # Read in data ------------------------------------------------------------
 
 comet_all <- vroom::vroom("data-raw/US_COMET-Planner_Download.csv",
@@ -20,7 +24,7 @@ comet_all <- comet_all %>%
   )
 
 # filter to only WA
-# filter out multiple CPS implementations since Haley Nagle confirmed they are additive.
+# filter out multiple CPS implementations since COMET team confirmed they are additive.
 
 comet_wa <- comet_all %>%
   dplyr::filter(state == "WA") %>%
@@ -28,8 +32,6 @@ comet_wa <- comet_all %>%
 
 
 # parse out CPS implementations -------------------------------------------
-
-## tags for irrigation (options: non-irrigated, irrigated, not specified)
 
 comet_wa <- comet_wa %>%
   tidyr::extract(
@@ -51,29 +53,33 @@ comet_wa <- comet_wa %>%
     remove = FALSE
   )
 
-# replace nas
+# replace NAs
 
 comet_wa <- comet_wa %>% tidyr::replace_na(list(
   irrigation = "Not Specified",
-  current_land_use = "Not Specified"
+  current_land_use = "Not Specified",
+  nutrient_practice = "Not Applicable"
 ))
 
-# replace Crops with Cropland and Rate with Reduce Application Rate
+# replace Crops with Cropland, Rate with Reduce Application Rate, Chicken with Chicken Manure
 
 comet_wa$current_land_use <-
   stringr::str_replace(comet_wa$current_land_use, "Crops", "Cropland")
 
 comet_wa$nutrient_practice <-
   stringr::str_replace_all(comet_wa$nutrient_practice, c(
-    "Rate" = "Reduce Rate",
+    "Rate" = "Reduce Application Rate",
     "Chicken" = "Chicken Manure"
   ))
 
-# convert character strings to factors ------------------------------------
+# convert character strings to factors
 
 comet_wa <- as.data.frame(unclass(comet_wa),
   stringsAsFactors = TRUE
 )
+
+# create separate df for just the tags
+comet_tags <- unique(comet_wa[,4:9])
 
 # pivot to tidy data ------------------------------------------------------------
 
@@ -108,5 +114,7 @@ comet_wa <- fct_error(comet_wa)
 # write to csv and load in usethis ----------------------------------------
 
 write.csv(comet_wa, "data-raw/comet_wa.csv")
+write.csv(comet_tags, "data-raw/comet_tags.csv")
 
 usethis::use_data(comet_wa, overwrite = TRUE)
+usethis::use_data(comet_tags, overwrite = TRUE)
