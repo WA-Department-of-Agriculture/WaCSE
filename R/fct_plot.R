@@ -3,11 +3,14 @@
 #' @description A fct function to create a bar graph
 #'
 #' @import ggplot2
-#' @import plotly
+#' @import ggiraph
 #'
 #' @return The return value, if any, from executing the function.
 #'
 #' @noRd
+
+# TODO:   fix error messages if no filters are selected
+#         add conditional UI selector for nutrient management
 
 # labels for y-axis
 
@@ -22,10 +25,6 @@ fct_label <- function(ghg_type) {
     return("Total GHG")
 }
 
-# TODO:  fix scales so upper error bar is not cut off
-#         don't show error bars if data is not there
-#         reverse legend order to match the order of the bars
-
 fct_plot <- function(data, ghg_type) {
   # require data
   req(data)
@@ -34,62 +33,67 @@ fct_plot <- function(data, ghg_type) {
   data <- data |>
     subset(ghg_type = ghg_type)
 
-
   # plot data
   plot <-
-    ggplot(data,
-           aes(
-             x = factor(implementation),
-             y = mean,
-             fill = forcats::fct_rev(county),
-             text = paste(
-               "Practice Implementation: ",
-               implementation,
-               "\nCounty: ",
-               county,
-               "\nGHG Coefficient: ",
-               mean
-             )
-           )) +
-    scale_fill_viridis_d(breaks = rev, direction = -1) +
-    geom_col(position = position_dodge(width = 0.9)) +
-    geom_errorbar(
-      ymin = data$lower,
-      ymax = data$upper,
-      width = 0.03,
-      size = 0.05,
-      position = position_dodge(width = 0.9)
+    ggplot(
+      data,
+      aes(
+        x = factor(wrap(implementation, 100)),
+        y = mean,
+        ymin = lower,
+        ymax = upper,
+        fill = county,
+        text = paste(
+          "Practice Implementation: ",
+          implementation,
+          "\nCounty: ",
+          county,
+          "\nGHG Coefficient: ",
+          mean
+        ),
+        na.rm = TRUE
+      )
     ) +
+    coord_flip() +
+    geom_col_interactive(aes(
+      tooltip = glue::glue(
+        "<b>{implementation}</b>\nCounty: {county}\nGHG Estimate: {mean} (MT CO2e/ac/yr)"
+      )
+    ),
+    position = position_dodge2(reverse = TRUE)) +
+    geom_errorbar(position = position_dodge2(
+      width = 0.01,
+      padding = 0.1,
+      reverse = TRUE
+    )) +
+    scale_fill_viridis_d(begin = 0,
+                         end = 0.8) +
     labs(
       fill = "County",
       x = NULL,
-      y = paste(fct_label(ghg_type), "\n(MT CO2e/ac/yr)")
-    ) +
-    coord_flip(expand = TRUE) +
-    scale_x_discrete(
-      labels = wrap(data$implementation, 100),
-      guide = guide_axis(n.dodge = 2)
-    ) +
-    theme_classic()
-
-
-
-  # plot with ggplotly
-  ggplotly <-
-    ggplotly(plot, tooltip = c("text")) %>%
-    config(
-      displaylogo = FALSE,
-      modeBarButtonsToRemove = list(
-        "sendDataToCloud",
-        "pan2d",
-        "zoomIn2d",
-        "zoomOut2d",
-        "select2d",
-        "lasso2d",
-        "hoverClosestCartesian",
-        "hoverCompareCartesian",
-        "autoScale2d"
+      y = paste(
+        "\n",
+        fct_label(ghg_type),
+        "\n(Metric tonnes CO2 equivalent per acre per year)"
       )
+    ) +
+    theme_classic(base_family = "montserrat") +
+    theme(axis.text.y = element_text(margin = margin(r = 20)))
+
+  # plot with ggiraph
+
+  tooltip_css <- "color:white;padding:8px;border-radius:6px;"
+
+  plot <- girafe(
+    ggobj = plot,
+    width_svg = 10,
+    height_svg = 4,
+    options = list(
+      opts_tooltip(css = tooltip_css,
+                   use_fill = TRUE),
+      opts_toolbar(pngname = "plot"),
+      opts_zoom(max = 5)
     )
+  )
 
 }

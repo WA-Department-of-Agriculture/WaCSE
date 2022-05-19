@@ -36,7 +36,7 @@ app_server <- function(input, output, session) {
       inputId = "irrigation",
       label = "Irrigation Type:",
       choices = choices,
-      selected = choices,
+      selected = choices[1],
       multiple = TRUE
     )
   })
@@ -77,7 +77,8 @@ app_server <- function(input, output, session) {
     subset(filtered_df(), ghg_type == input$ghg_type)
   })
 
-  output$plot <- plotly::renderPlotly({
+  output$plot <- ggiraph::renderGirafe({
+    req(filtered_plot())
     fct_plot(filtered_plot(), ghg_type())
   })
 

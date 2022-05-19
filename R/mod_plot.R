@@ -21,7 +21,7 @@ mod_plot_ui <- function(id) {
         "Total GHG" = "total.ghg.co2"
       )
     ),
-    plotly::plotlyOutput("plot")
+    (ggiraph::girafeOutput("plot"))
   )
 }
 
@@ -29,7 +29,6 @@ mod_plot_ui <- function(id) {
 #'
 #' @noRd
 
-3
 
 # mod_plot_server <- function(id, data) {
 #   moduleServer(id, function(input, output, session) {
