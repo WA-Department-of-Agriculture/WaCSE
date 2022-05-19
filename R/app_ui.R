@@ -9,8 +9,6 @@
 library(dplyr, warn.conflicts = F)
 library(shinyWidgets)
 
-thematic::thematic_shiny(font = "auto")
-
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources

@@ -2,8 +2,8 @@
 
 export(run_app)
 import(dplyr)
+import(ggiraph)
 import(ggplot2)
-import(plotly)
 import(shiny)
 importFrom(golem,activate_js)
 importFrom(golem,add_resource_path)
