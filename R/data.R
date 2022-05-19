@@ -3,7 +3,7 @@
 #' A dataset containing the coefficients of greenhouse gas emissions
 #' and soil carbon for Washington State.
 #'
-#' @format A data frame with 17280 rows and 12 variables. The Rda dataset tidies the data by pivoting longer:
+#' @format A data frame with 17280 rows and 14 variables. The Rda dataset tidies the data by pivoting longer.
 #' \describe{
 #'   \item{state}{Abbreviation for state}
 #'   \item{county}{County name}
@@ -14,6 +14,9 @@
 #'   \item{cpsnum}{USDA-NRCS Conservation Practice Standard number}
 #'   \item{cps_name}{USDA-NRCS Conservation Practice Standard name}
 #'   \item{planner_implementation}{The implementation scenario modeled for each conservation practice standard; implementation scenarios are described in more detail in the one-page summaries associated with each practice}
+#'   \\item{current_land_use}{Value extracted from planner_implementation to use as filtering tag.}
+#'   \\item{irrigation}{Value extracted from planner_implementation to use as filtering tag.}
+#'   \\item{nutrient_practice}{Value extracted from planner_implementation to use as filtering tag.}
 #'   \item{n}{Sample size for COMET-Farm modeled practices}
 #'   \item{lrr_fill}{Indicator column to denote when a value is derived from the LRR average. Value of 1 indicates an LRR average}
 #'   \item{co2_mean}{Mean total carbon dioxide (CO2) emission reductions (sum of all CO2 sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}

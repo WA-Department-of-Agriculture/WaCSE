@@ -1,10 +1,10 @@
 # Read in data ------------------------------------------------------------
 
 comet_all <- vroom::vroom("data-raw/US_COMET-Planner_Download.csv",
-                          na = "-999.00", # import -999 values as na (means "not estimated")
-                          col_select = c(1:2, 4, 6, 8, 9, 12:15, 18:19, 33:34)
-                          # select only cols of interest
-                          # keep only GHG variables that have data. CH4 has no data.
+  na = "-999.00", # import -999 values as na (means "not estimated")
+  col_select = c(1:2, 4, 6, 8, 9, 12:15, 18:19, 33:34)
+  # select only cols of interest
+  # keep only GHG variables that have data. CH4 has no data.
 )
 
 # rename columns ----------------------------------------------------------
@@ -31,34 +31,55 @@ comet_wa <- comet_all %>%
 
 ## tags for irrigation (options: non-irrigated, irrigated, not specified)
 
-comet_wa$irrigation <- NA
-
-for (row in 1:nrow(comet_wa)) {
-  comet_wa$irrigation[row] <-
-    ifelse(
-      stringr::str_detect(comet_wa$implementation[row],
-                          "Non-Irrigated") == TRUE, "Non-irrigated",
-      ifelse(
-        stringr::str_detect(comet_wa$implementation[row],
-                            "Irrigated") == TRUE, "Irrigated",
-        "Not specified"
-      )
-    )
-}
-
 comet_wa <- comet_wa %>%
-  dplyr::relocate(irrigation, .after = implementation)
+  tidyr::extract(
+    "implementation",
+    "nutrient_practice",
+    "(Rate|Beef Feedlot Manure|Chicken|Compost|Dairy Manure|Other Manure|Sheep Manure|Swine Manure)",
+    remove = FALSE
+  ) %>%
+  tidyr::extract(
+    "implementation",
+    "irrigation",
+    "(Non-Irrigated|Irrigated)",
+    remove = FALSE
+  ) %>%
+  tidyr::extract(
+    "implementation",
+    "current_land_use",
+    "(Cropland|Crops|Rangeland|Grassland|Pasture)",
+    remove = FALSE
+  )
+
+# replace nas
+
+comet_wa <- comet_wa %>% tidyr::replace_na(list(
+  irrigation = "Not Specified",
+  current_land_use = "Not Specified"
+))
+
+# replace Crops with Cropland and Rate with Reduce Application Rate
+
+comet_wa$current_land_use <-
+  stringr::str_replace(comet_wa$current_land_use, "Crops", "Cropland")
+
+comet_wa$nutrient_practice <-
+  stringr::str_replace_all(comet_wa$nutrient_practice, c(
+    "Rate" = "Reduce Rate",
+    "Chicken" = "Chicken Manure"
+  ))
 
 # convert character strings to factors ------------------------------------
 
 comet_wa <- as.data.frame(unclass(comet_wa),
-                          stringsAsFactors = TRUE)
+  stringsAsFactors = TRUE
+)
 
 # pivot to tidy data ------------------------------------------------------------
 
 comet_wa <- comet_wa %>%
   tidyr::pivot_longer(
-    cols = 8:15,
+    cols = 10:17,
     names_to = c("ghg_type", "type"),
     names_sep = "_",
     values_to = "value"
@@ -76,10 +97,10 @@ fct_error <- function(data) {
   errors <- data %>%
     dplyr::summarize(
       lower = mean - sterr,
-      upper = mean + sterr)
+      upper = mean + sterr
+    )
 
   bind_cols(data, errors)
-
 }
 
 comet_wa <- fct_error(comet_wa)
