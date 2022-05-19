@@ -25,6 +25,12 @@ fct_label <- function(ghg_type) {
     return("Total GHG")
 }
 
+<<<<<<< HEAD
+=======
+# TODO:   fix error messages if no filters are selected
+#         add conditional UI selector for nutrient management
+
+>>>>>>> 9fd432d1c20200300a58b265ff939834033389fe
 fct_plot <- function(data, ghg_type) {
   # require data
   req(data)
@@ -55,6 +61,7 @@ fct_plot <- function(data, ghg_type) {
       )
     ) +
     coord_flip() +
+<<<<<<< HEAD
     geom_col_interactive(aes(
       tooltip = glue::glue(
         "<b>{implementation}</b>\nCounty: {county}\nGHG Estimate: {mean} (MT CO2e/ac/yr)"
@@ -66,22 +73,41 @@ fct_plot <- function(data, ghg_type) {
       padding = 0.1,
       reverse = TRUE
     )) +
+=======
+    geom_col_interactive(aes(tooltip = glue::glue("<b>{implementation}</b>\nCounty: {county}\nGHG Estimate: {mean} (MT CO2e/ac/yr)")),
+                         position = position_dodge2(reverse = TRUE)
+                         ) +
+    geom_errorbar(
+      position = position_dodge2(
+        width = 0.01,
+        padding = 0.1,
+        reverse = TRUE
+      )
+    ) +
+>>>>>>> 9fd432d1c20200300a58b265ff939834033389fe
     scale_fill_viridis_d(begin = 0,
                          end = 0.8) +
     labs(
       fill = "County",
       x = NULL,
+<<<<<<< HEAD
       y = paste(
         "\n",
         fct_label(ghg_type),
         "\n(Metric tonnes CO2 equivalent per acre per year)"
       )
+=======
+      y = paste("\n",
+                fct_label(ghg_type),
+                "\n(Metric tonnes CO2 equivalent per acre per year)")
+>>>>>>> 9fd432d1c20200300a58b265ff939834033389fe
     ) +
     theme_classic(base_family = "montserrat") +
     theme(axis.text.y = element_text(margin = margin(r = 20)))
 
   # plot with ggiraph
 
+<<<<<<< HEAD
   tooltip_css <- "color:white;padding:8px;border-radius:6px;"
 
   plot <- girafe(
@@ -94,6 +120,18 @@ fct_plot <- function(data, ghg_type) {
       opts_toolbar(pngname = "plot"),
       opts_zoom(max = 5)
     )
+=======
+  tooltip_css <- "color:white;outline-color:black;padding:8px;border-radius:6px;"
+
+  plot <- girafe(ggobj = plot,
+                 width_svg = 10,
+                 height_svg = 4,
+                 options = list(
+                   opts_tooltip(css = tooltip_css,
+                                use_fill = TRUE),
+                   opts_toolbar(pngname = "plot")
+                   )
+>>>>>>> 9fd432d1c20200300a58b265ff939834033389fe
   )
 
 }
