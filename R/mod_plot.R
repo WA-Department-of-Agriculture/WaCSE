@@ -17,10 +17,10 @@ mod_plot_ui <- function(id) {
         "ghg_type",
         label = "Select an Emission Reduction Coefficient (ERC) to graph.",
         choices = c(
+          "Total Greenhouse Gases" = "total.ghg.co2",
           "Carbon Dioxide" = "co2",
           "Nitrous Oxide" = "n2o",
-          "Soil Carbon" = "soil.carbon.co2",
-          "Total Greenhouse Gases" = "total.ghg.co2"
+          "Methane" = "ch4"
         ),
         width = "100%"
       )

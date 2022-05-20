@@ -10,6 +10,8 @@
 #' @noRd
 
 # TODO:   fix error messages if no filters are selected
+#         remove/don't plot null values (with popup message)
+#         write text desc for values of zero and negatives
 
 # labels for y-axis
 
@@ -18,15 +20,19 @@ fct_label <- function(ghg_type) {
     return("Carbon Dioxide")
   if (ghg_type == "n2o")
     return("Nitrous Oxide")
-  if (ghg_type == "soil.carbon.co2")
-    return("Soil Carbon")
+  if (ghg_type == "ch4")
+    return("Methane")
   if (ghg_type == "total.ghg.co2")
     return("Total Greenhouse Gases")
 }
 
+
 fct_plot <- function(data, ghg_type) {
   # require data
   req(data)
+
+  # color blind friendly colors for negative-bad, positive-good
+  x_axis_cols <- ifelse(data$mean > 0, "#018571", "#a6611a")
 
   # subset data based on chosen ghg type
   data <- data |>
@@ -77,7 +83,8 @@ fct_plot <- function(data, ghg_type) {
       )
     ) +
     theme_classic(base_family = "montserrat") +
-    theme(axis.text.y = element_text(margin = margin(r = 20)))
+    theme(axis.text.y = element_text(margin = margin(r = 20)),
+          axis.text.x = element_text(color = x_axis_cols))
 
   # plot with ggiraph
 

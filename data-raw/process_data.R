@@ -1,14 +1,13 @@
 library(dplyr)
 library(tidyr)
-library
 
 # Read in data ------------------------------------------------------------
 
 comet_all <- vroom::vroom("data-raw/US_COMET-Planner_Download.csv",
   na = "-999.00", # import -999 values as na (means "not estimated")
-  col_select = c(1:2, 4, 6, 8, 9, 12:15, 18:19, 33:34)
+  col_select = c(1:2, 4, 6, 8, 9, 12:17, 33:34)
   # select only cols of interest
-  # keep only GHG variables that have data. CH4 has no data.
+  # keep only GHG variables that have data. Soil carbon equals CO2.
 )
 
 # rename columns ----------------------------------------------------------
@@ -17,8 +16,6 @@ comet_all <- comet_all %>%
   dplyr::rename(
     practice = cps_name,
     implementation = planner_implementation,
-    soil.carbon.co2_mean = soil_carbon_co2,
-    soil.carbon.co2_sterr = soil_carbon_co2_sterr,
     total.ghg.co2_mean = total_ghg_co2,
     total.ghg.co2_sterr = total_ghg_co2_sterr
   )

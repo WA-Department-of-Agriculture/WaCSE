@@ -23,8 +23,10 @@
 #'   \item{co2_sterr}{Standard error of the mean of total carbon dioxide (CO2) emission reductions (sum of all CO2 sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
 #'   \item{n2o_mean}{Mean total nitrous oxide (N2O) emission reductions (sum of all N2O emission sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
 #'   \item{n2o_sterr}{Standard error of the mean for total nitrous oxide (N2O) emission reductions (sum of all N2O emission sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
-#'   \item{soil_carbon_co2}{Mean carbon dioxide (CO2) emissions reductions from soil carbon in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
-#'   \item{soil_carbon_co2_sterr}{Standard error of the mean for carbon dioxide (CO2) emissions reductions from soil carbon in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   \item{ch4_mean}{Mean total methane (CH4) emission reductions (sum of all CH4 emission sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   \item{ch4_sterr}{Standard error of the mean for total methane (CH4) emission reductions (sum of all CH4 emission sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   \item{total_ghg_co2}{Mean of total greenhouse gas emission reductions in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   \item{total_ghg_co2_sterr}{Standard error of the mean for total greenhouse gas emission reductions in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
 #'   ...
 #' }
 #'
