@@ -15,13 +15,13 @@
 
 fct_label <- function(ghg_type) {
   if (ghg_type == "co2")
-    return("Carbon dioxide")
+    return("Carbon Dioxide")
   if (ghg_type == "n2o")
-    return("Carbon dioxide")
+    return("Nitrous Oxide")
   if (ghg_type == "soil.carbon.co2")
-    return("Soil carbon")
+    return("Soil Carbon")
   if (ghg_type == "total.ghg.co2")
-    return("Total GHG")
+    return("Total Greenhouse Gases")
 }
 
 fct_plot <- function(data, ghg_type) {
@@ -47,7 +47,7 @@ fct_plot <- function(data, ghg_type) {
           implementation,
           "\nCounty: ",
           county,
-          "\nGHG Coefficient: ",
+          "\nEmission Reduction Coefficient: ",
           mean
         ),
         na.rm = TRUE
@@ -56,7 +56,7 @@ fct_plot <- function(data, ghg_type) {
     coord_flip() +
     geom_col_interactive(aes(
       tooltip = glue::glue(
-        "<b>{implementation}</b>\nCounty: {county}\nGHG Estimate: {mean} (MT CO2e/ac/yr)"
+        "<b>{implementation}</b>\nCounty: {county}\nEmission Reduction Coefficient: {mean} (MT CO2e/ac/yr)"
       )
     ),
     position = position_dodge2(reverse = TRUE)) +

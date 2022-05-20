@@ -7,6 +7,8 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+#'
+#'
 
 mod_filters_ui <- function(id) {
   ns <- NS(id)
@@ -17,7 +19,8 @@ mod_filters_ui <- function(id) {
       choices = unique(comet_wa$county),
       multiple = TRUE,
       selected = unique(comet_wa$county[1]),
-      options = list(plugins = list("remove_button"))
+      options = list(
+        plugins = list("remove_button"))
     ),
     selectizeInput(
       inputId = "class",
@@ -31,50 +34,42 @@ mod_filters_ui <- function(id) {
     uiOutput("nutrient_practice"),
     uiOutput("land_use"),
     uiOutput("irrigation"),
-    actionButton("reset", "Reset")
+    actionButton("reset", "Reset All Filters")
   )
 }
 
 # Doesn't work when this is in a module.
 
-# mod_filters_server <- function(id) {
-#   moduleServer(id = id, function(input, output, session) {
-#
-#     ns <- session$ns
-#
-#     output$practice <- renderUI({
-#       choices <- unique(comet_wa
-#                         [comet_wa$class == input$class, "practice"])
-#       choices <- as.character(pull(choices))
-#
-#       selectInput(
-#         inputId = "practice",
-#         label = "Conservation Practice:",
-#         choices = choices,
-#         selected = choices[1],
-#         multiple = TRUE
-#       )
-#     })
-#
-#     output$irrigation <- renderUI({
-#       choices <- unique(comet_wa
-#                         [comet_wa$practice == input$practice, "irrigation"])
-#       choices <- as.character(pull(choices))
-#
-#       selectInput(
-#         inputId = "irrigation",
-#         label = "Irrigation Type:",
-#         choices = choices,
-#         selected = choices,
-#         multiple = TRUE
-#       )
-#     })
-#
-#     observeEvent(input$reset, {
-#       updateSelectInput(session, inputId = "county", selected = "")
-#       updateSelectInput(session, inputId = "class", selected = "")
-#       updateSelectInput(session, inputId = "practice", selected = "")
-#       updateSelectInput(session, inputId = "irrigation", selected = "")
-#     })
-#   })
-# }
+
+
+mod_filters_server <- function(id) {
+  moduleServer(id = id, function(input, output, session) {
+
+    ns <- session$ns
+
+    fct_makeUI <- function(id, subset, label, num_choice) {
+      output$id <- renderUI({
+        choices <- unique(comet_tags) %>%
+          subset(subset %in% input$subset) %>%
+          select(id)
+
+        choices <- as.character(pull(choices))
+
+        selectizeInput(
+          inputId = id,
+          label = label,
+          choices = choices,
+          selected = choices[num_choice],
+          multiple = TRUE,
+          options = list(
+            maxIttems = 3,
+            plugins = list("remove_button"))
+        )
+      })
+    }
+
+    fct_makeUI(class, practice, "Conservation Practice:", 1)
+
+
+    })
+}

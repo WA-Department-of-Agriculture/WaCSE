@@ -31,7 +31,9 @@ app_server <- function(input, output, session) {
 
   output$land_use <- renderUI({
     choices <- unique(comet_tags) %>%
-      subset(practice %in% input$practice) %>%
+      subset(class %in% input$class &
+               practice %in% input$practice
+      ) %>%
       select(current_land_use)
 
     choices <- as.character(pull(choices))
@@ -64,7 +66,7 @@ app_server <- function(input, output, session) {
   })
 
   output$nutrient_practice <- renderUI({
-    req(input$practice %in% "Nutrient Management (CPS 590)")
+    req("Nutrient Management (CPS 590)" %in% input$practice)
     choices <- unique(comet_tags) %>%
       subset(practice %in% input$practice) %>%
       select(nutrient_practice)
@@ -82,12 +84,7 @@ app_server <- function(input, output, session) {
   })
 
   observeEvent(input$reset, {
-    updateSelectizeInput(session, inputId = "county", selected = "")
-    updateSelectizeInput(session, inputId = "class", selected = "")
-    updateSelectizeInput(session, inputId = "practice", selected = "")
-    updateSelectizeInput(session, inputId = "land_use", selected = "")
-    updateSelectizeInput(session, inputId = "irrigation", selected = "")
-    updateSelectizeInput(session, inputId = "nutrient_practice", selected = "")
+    shinyjs::reset("form")
   })
 
 
@@ -133,6 +130,11 @@ app_server <- function(input, output, session) {
 
   output$plot <- ggiraph::renderGirafe({
     req(filtered_plot())
+
+    # if (nrow(filtered_plot()$implementation) > 5) {
+    #   validate("Too many practice implementations have been selected.")
+    # }
+
     fct_plot(filtered_plot(), ghg_type())
   })
 }

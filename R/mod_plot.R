@@ -11,17 +11,24 @@
 mod_plot_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    selectInput(
-      "ghg_type",
-      label = "Select a greenhouse gas to graph.",
-      choices = c(
-        "CO2" = "co2",
-        "N2O" = "n2o",
-        "Soil Carbon" = "soil.carbon.co2",
-        "Total GHG" = "total.ghg.co2"
+    fluidRow(
+      col = 12,
+      selectizeInput(
+        "ghg_type",
+        label = "Select an Emission Reduction Coefficient (ERC) to graph.",
+        choices = c(
+          "Carbon Dioxide" = "co2",
+          "Nitrous Oxide" = "n2o",
+          "Soil Carbon" = "soil.carbon.co2",
+          "Total Greenhouse Gases" = "total.ghg.co2"
+        ),
+        width = "100%"
       )
     ),
-    (ggiraph::girafeOutput("plot"))
+    fluidRow(
+      col = 12,
+      ggiraph::girafeOutput("plot")
+    )
   )
 }
 
