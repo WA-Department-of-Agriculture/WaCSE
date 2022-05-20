@@ -32,7 +32,7 @@ fct_table <- function(data) {
                 th(rowspan = 2, "Practice Implementation"),
                 th(colspan = 1, "Carbon Dioxide"),
                 th(colspan = 1, "Nitrous Oxide"),
-                th(colspan = 1, "Soil Carbon"),
+                th(colspan = 1, "Methane"),
                 th(colspan = 1, "Total Greenhouse Gases"),
               ),
               tr(th(colspan = 4,

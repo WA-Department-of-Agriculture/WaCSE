@@ -18,8 +18,8 @@ fct_label <- function(ghg_type) {
     return("Carbon Dioxide")
   if (ghg_type == "n2o")
     return("Nitrous Oxide")
-  if (ghg_type == "soil.carbon.co2")
-    return("Soil Carbon")
+  if (ghg_type == "ch4")
+    return("Methane")
   if (ghg_type == "total.ghg.co2")
     return("Total Greenhouse Gases")
 }
