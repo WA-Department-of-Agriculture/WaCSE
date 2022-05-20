@@ -7,18 +7,22 @@
 #' \describe{
 #'   \item{state}{Abbreviation for state}
 #'   \item{county}{County name}
-#'   \item{fipsint}{County fips code (unique integer identifier for all U.S. counties)}
 #'   \item{mlra}{USDA Major Land Resource Area rectified to county boundaries}
 #'   \item{lrr}{USDA Land Resource Region rectified to county boundaries}
 #'   \item{class}{Broad class of conservation practice}
-#'   \item{cpsnum}{USDA-NRCS Conservation Practice Standard number}
-#'   \item{cps_name}{USDA-NRCS Conservation Practice Standard name}
-#'   \item{planner_implementation}{The implementation scenario modeled for each conservation practice standard; implementation scenarios are described in more detail in the one-page summaries associated with each practice}
+#'   \item{practice}{USDA-NRCS Conservation Practice Standard name}
+#'   \item{implementation}{The implementation scenario modeled for each conservation practice standard; implementation scenarios are described in more detail in the one-page summaries associated with each practice}
 #'   \\item{current_land_use}{Value extracted from planner_implementation to use as filtering tag.}
 #'   \\item{irrigation}{Value extracted from planner_implementation to use as filtering tag.}
 #'   \\item{nutrient_practice}{Value extracted from planner_implementation to use as filtering tag.}
-#'   \item{n}{Sample size for COMET-Farm modeled practices}
-#'   \item{lrr_fill}{Indicator column to denote when a value is derived from the LRR average. Value of 1 indicates an LRR average}
+#'   \\item{ghg_type}{The Emission Reduction Coefficient (ERC) type: co2, n2o, ch4, or total_ghg_co2}
+#'   \\item{mean}{Mean emission reductions in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   \\item{sterr}{Standard error of the mean of emission reductions in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   \\item{lower}{Mean ERC - sterr}
+#'   \\item{upper}{Mean ERC + sterr}
+#'
+#'  The below descriptions are directly from the source metadata.
+#'
 #'   \item{co2_mean}{Mean total carbon dioxide (CO2) emission reductions (sum of all CO2 sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
 #'   \item{co2_sterr}{Standard error of the mean of total carbon dioxide (CO2) emission reductions (sum of all CO2 sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
 #'   \item{n2o_mean}{Mean total nitrous oxide (N2O) emission reductions (sum of all N2O emission sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
