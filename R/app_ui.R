@@ -15,7 +15,9 @@ app_ui <- function(request) {
       theme = bslib::bs_theme(
         version = 5,
         bootswatch = "lumen",
-        base_font = bslib::font_google("Montserrat")
+        base_font = bslib::font_google("Poppins"),
+        primary = "#253e90",
+        `enable-shadows` = TRUE
       ),
       shinyjs::useShinyjs(),
       navbarPage(
@@ -38,11 +40,19 @@ app_ui <- function(request) {
                 type = "pills",
                 tabPanel(
                   "Table",
+                  br(),
                   DT::dataTableOutput("table")
                 ),
                 tabPanel(
                   "Bar Graph",
                   mod_plot_ui("plot")
+                ),
+                tabPanel(
+                  "Map",
+                  br(),
+                  fluidRow(
+                    leaflet::leafletOutput("map", width = "100%", height = 600)
+                  )
                 )
               )
             )

@@ -3,6 +3,7 @@
 #' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
 #' @import shiny
+#' @import leaflet
 #' @noRd
 
 # TODO: keep trying to modularize the code and figure out why the server parts don't work
@@ -15,13 +16,14 @@ app_server <- function(input, output, session) {
   output$practice <- renderUI({
     choices <- unique(comet_tags) %>%
       subset(class %in% input$class) %>%
-      select(practice)
+      select(practice) %>%
+      arrange(practice)
 
     choices <- as.character(pull(choices))
 
     selectizeInput(
       inputId = "practice",
-      label = "Conservation Practice:",
+      label = "Conservation Practice",
       choices = choices,
       selected = choices[1],
       multiple = TRUE,
@@ -32,15 +34,15 @@ app_server <- function(input, output, session) {
   output$land_use <- renderUI({
     choices <- unique(comet_tags) %>%
       subset(class %in% input$class &
-               practice %in% input$practice
-      ) %>%
-      select(current_land_use)
+        practice %in% input$practice) %>%
+      select(current_land_use) %>%
+      arrange(current_land_use)
 
     choices <- as.character(pull(choices))
 
     selectizeInput(
       inputId = "land_use",
-      label = "Current Land Use:",
+      label = "Current Land Use",
       choices = choices,
       selected = choices,
       multiple = TRUE,
@@ -51,13 +53,14 @@ app_server <- function(input, output, session) {
   output$irrigation <- renderUI({
     choices <- unique(comet_tags) %>%
       subset(practice %in% input$practice) %>%
-      select(irrigation)
+      select(irrigation) %>%
+      arrange(irrigation)
 
     choices <- as.character(pull(choices))
 
     selectizeInput(
       inputId = "irrigation",
-      label = "Irrigation Type:",
+      label = "Irrigation Type",
       choices = choices,
       selected = choices,
       multiple = TRUE,
@@ -69,13 +72,14 @@ app_server <- function(input, output, session) {
     req("Nutrient Management (CPS 590)" %in% input$practice)
     choices <- unique(comet_tags) %>%
       subset(practice %in% input$practice) %>%
-      select(nutrient_practice)
+      select(nutrient_practice) %>%
+      arrange(nutrient_practice)
 
     choices <- as.character(pull(choices))
 
     selectizeInput(
       inputId = "nutrient_practice",
-      label = "Nutrient Management:",
+      label = "Nutrient Management",
       choices = choices,
       selected = choices,
       multiple = TRUE,
@@ -130,11 +134,19 @@ app_server <- function(input, output, session) {
 
   output$plot <- ggiraph::renderGirafe({
     req(filtered_plot())
-
-    # if (nrow(filtered_plot()$implementation) > 5) {
-    #   validate("Too many practice implementations have been selected.")
-    # }
-
     fct_plot(filtered_plot(), ghg_type())
+  })
+
+
+  # Render map --------------------------------------------------------------
+
+  output$map <- leaflet::renderLeaflet({
+    leaflet() %>%
+      setView(
+        lng = -119.5,
+        lat = 47,
+        zoom = 7
+      ) %>%
+      addProviderTiles(providers$Esri.WorldImagery)
   })
 }
