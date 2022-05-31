@@ -15,16 +15,17 @@ mod_filters_ui <- function(id) {
   tagList(
     selectizeInput(
       inputId = "county",
-      label = "County:",
+      label = "County",
       choices = unique(comet_wa$county),
       multiple = TRUE,
       selected = unique(comet_wa$county[1]),
       options = list(
-        plugins = list("remove_button"))
+        plugins = list("remove_button")
+      )
     ),
     selectizeInput(
       inputId = "class",
-      label = "Conservation Class:",
+      label = "Conservation Class",
       choices = unique(comet_wa$class),
       multiple = TRUE,
       selected = unique(comet_wa$class[1]),
@@ -42,34 +43,34 @@ mod_filters_ui <- function(id) {
 
 
 
-mod_filters_server <- function(id) {
-  moduleServer(id = id, function(input, output, session) {
-
-    ns <- session$ns
-
-    fct_makeUI <- function(id, subset, label, num_choice) {
-      output$id <- renderUI({
-        choices <- unique(comet_tags) %>%
-          subset(subset %in% input$subset) %>%
-          select(id)
-
-        choices <- as.character(pull(choices))
-
-        selectizeInput(
-          inputId = id,
-          label = label,
-          choices = choices,
-          selected = choices[num_choice],
-          multiple = TRUE,
-          options = list(
-            maxIttems = 3,
-            plugins = list("remove_button"))
-        )
-      })
-    }
-
-    fct_makeUI(class, practice, "Conservation Practice:", 1)
-
-
-    })
-}
+# mod_filters_server <- function(id) {
+#   moduleServer(id = id, function(input, output, session) {
+#
+#     ns <- session$ns
+#
+#     fct_makeUI <- function(id, subset, label, num_choice) {
+#       output$id <- renderUI({
+#         choices <- unique(comet_tags) %>%
+#           subset(subset %in% input$subset) %>%
+#           select(id)
+#
+#         choices <- as.character(pull(choices))
+#
+#         selectizeInput(
+#           inputId = id,
+#           label = label,
+#           choices = choices,
+#           selected = choices[num_choice],
+#           multiple = TRUE,
+#           options = list(
+#             maxIttems = 3,
+#             plugins = list("remove_button"))
+#         )
+#       })
+#     }
+#
+#     fct_makeUI(class, practice, "Conservation Practice:", 1)
+#
+#
+#     })
+# }

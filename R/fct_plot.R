@@ -12,20 +12,10 @@
 # TODO:   fix error messages if no filters are selected
 #         remove/don't plot null values (with popup message)
 #         write text desc for values of zero and negatives
+#         order x-axis alphabetical
+#         don't plot if too many rows selected
 
 # labels for y-axis
-
-fct_label <- function(ghg_type) {
-  if (ghg_type == "co2")
-    return("Carbon Dioxide")
-  if (ghg_type == "n2o")
-    return("Nitrous Oxide")
-  if (ghg_type == "ch4")
-    return("Methane")
-  if (ghg_type == "total.ghg.co2")
-    return("Total Greenhouse Gases")
-}
-
 
 fct_plot <- function(data, ghg_type) {
   # require data
@@ -43,7 +33,7 @@ fct_plot <- function(data, ghg_type) {
     ggplot(
       data,
       aes(
-        x = factor(wrap(implementation, 100)),
+        x = factor(fct_wrap(abbr, 100)),
         y = mean,
         ymin = lower,
         ymax = upper,
@@ -62,17 +52,22 @@ fct_plot <- function(data, ghg_type) {
     coord_flip() +
     geom_col_interactive(aes(
       tooltip = glue::glue(
-        "<b>{implementation}</b>\nCounty: {county}\nEmission Reduction Coefficient: {mean} (MT CO2e/ac/yr)"
+        "<b>{implementation}</b>
+        County: {county}
+        Emission Reduction Coefficient: {mean} (MT CO2e/ac/yr)"
       )
     ),
-    position = position_dodge2(reverse = TRUE)) +
+    position = position_dodge2(reverse = TRUE)
+    ) +
     geom_errorbar(position = position_dodge2(
       width = 0.01,
       padding = 0.1,
       reverse = TRUE
     )) +
-    scale_fill_viridis_d(begin = 0,
-                         end = 0.8) +
+    scale_fill_viridis_d(
+      begin = 0,
+      end = 0.8
+    ) +
     labs(
       fill = "County",
       x = NULL,
@@ -82,9 +77,14 @@ fct_plot <- function(data, ghg_type) {
         "\n(Metric tonnes CO2 equivalent per acre per year)"
       )
     ) +
-    theme_classic(base_family = "montserrat") +
-    theme(axis.text.y = element_text(margin = margin(r = 20)),
-          axis.text.x = element_text(color = x_axis_cols))
+    theme_classic(base_family = "poppins") +
+    theme(
+      axis.text.y = element_text(
+        margin = margin(r = 20),
+        hjust = 0
+      ),
+      axis.text.x = element_text(color = x_axis_cols)
+    )
 
   # plot with ggiraph
 
@@ -93,13 +93,14 @@ fct_plot <- function(data, ghg_type) {
   plot <- girafe(
     ggobj = plot,
     width_svg = 10,
-    height_svg = 4,
+    height_svg = 5,
     options = list(
-      opts_tooltip(css = tooltip_css,
-                   use_fill = TRUE),
+      opts_tooltip(
+        css = tooltip_css,
+        use_fill = TRUE
+      ),
       opts_toolbar(saveaspng = FALSE),
       opts_zoom(max = 5)
     )
   )
-
 }

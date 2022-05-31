@@ -11,6 +11,7 @@
 mod_plot_ui <- function(id) {
   ns <- NS(id)
   tagList(
+    br(),
     fluidRow(
       col = 12,
       selectizeInput(

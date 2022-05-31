@@ -75,14 +75,27 @@ comet_wa <- as.data.frame(unclass(comet_wa),
   stringsAsFactors = TRUE
 )
 
+# abbreviate implementation for improved readability in plot
+
+comet_wa$abbr <- stringr::str_replace_all(comet_wa$implementation, c(
+  "Irrigated" = "Irr",
+  "Permanent" = "Perm",
+  "Fertilizer" = "Fert",
+  "Unfertilized" = "Unfert",
+  "Synthetic" = "Synth",
+  "Management" = "Mngmt"
+))
+
+comet_wa <- comet_wa %>% relocate(abbr, .after = implementation)
+
 # create separate df for just the tags
-comet_tags <- unique(comet_wa[,4:9])
+comet_tags <- unique(comet_wa[, 4:10])
 
 # pivot to tidy data ------------------------------------------------------------
 
 comet_wa <- comet_wa %>%
   tidyr::pivot_longer(
-    cols = 10:17,
+    cols = 11:18,
     names_to = c("ghg_type", "type"),
     names_sep = "_",
     values_to = "value"

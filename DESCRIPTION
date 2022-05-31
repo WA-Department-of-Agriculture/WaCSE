@@ -14,6 +14,7 @@ Imports:
     glue,
     golem (>= 0.3.2),
     htmltools,
+    leaflet,
     shiny (>= 1.7.1),
     shinyWidgets
 Encoding: UTF-8
