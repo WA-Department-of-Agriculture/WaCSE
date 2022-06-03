@@ -12,13 +12,7 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
-      theme = bslib::bs_theme(
-        version = 5,
-        bootswatch = "lumen",
-        base_font = bslib::font_google("Poppins"),
-        primary = "#253e90",
-        `enable-shadows` = TRUE
-      ),
+      theme = theme,
       shinyjs::useShinyjs(),
       navbarPage(
         "Washington Climate Smart Estimator (WaCSE)",
@@ -32,7 +26,8 @@ app_ui <- function(request) {
               div(
                 id = "form",
                 mod_filters_ui("filters")
-              )
+              ),
+              actionButton("reset", "Reset All Filters")
             ),
             mainPanel(
               width = 9,
@@ -58,7 +53,10 @@ app_ui <- function(request) {
             )
           )
         ),
-        tabPanel("Calculate your estimate"),
+        tabPanel(
+          "Calculate your estimate",
+          mod_editableDT_ui("editableDT")
+        ),
         tabPanel("About", includeMarkdown("ABOUT.md"))
       )
     )

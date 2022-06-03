@@ -16,6 +16,18 @@ fct_font <- function(id) {
   gfonts::use_font(id = "poppins", "inst/app/www/css/poppins.css")
 }
 
+#' theme
+#' @description define theme for shiny app
+#' @noRd
+
+theme <- bslib::bs_theme(
+  version = 5,
+  bootswatch = "lumen",
+  base_font = bslib::font_google("Poppins"),
+  primary = "#253e90",
+  `enable-shadows` = TRUE
+)
+
 #' fct_wrap
 #'
 #' @description wrap text
@@ -69,24 +81,24 @@ fct_label <- function(ghg_type) {
 #'
 #' @noRd
 
-fct_makeUI <- function(id, subset, label, num_choice) {
-  output$id <- renderUI({
-    choices <- unique(comet_tags) %>%
-      subset(subset %in% input$subset) %>%
-      select(id)
-
-    choices <- as.character(pull(choices))
-
-    selectizeInput(
-      inputId = id,
-      label = label,
-      choices = choices,
-      selected = choices[num_choice],
-      multiple = TRUE,
-      options = list(
-        maxItems = 3,
-        plugins = list("remove_button")
-      )
-    )
-  })
-}
+# fct_makeUI <- function(id, subset, label, num_choice) {
+#   output$id <- renderUI({
+#     choices <- unique(comet_tags) %>%
+#       subset(subset %in% input$subset) %>%
+#       select(id)
+#
+#     choices <- as.character(pull(choices))
+#
+#     selectizeInput(
+#       inputId = id,
+#       label = label,
+#       choices = choices,
+#       selected = choices[num_choice],
+#       multiple = TRUE,
+#       options = list(
+#         maxItems = 3,
+#         plugins = list("remove_button")
+#       )
+#     )
+#   })
+# }

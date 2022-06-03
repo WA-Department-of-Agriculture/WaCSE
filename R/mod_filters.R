@@ -8,13 +8,13 @@
 #'
 #' @importFrom shiny NS tagList
 #'
-#'
+#' @return reactive filtered df
 
 mod_filters_ui <- function(id) {
   ns <- NS(id)
   tagList(
     selectizeInput(
-      inputId = "county",
+      inputId = ns("county"),
       label = "County",
       choices = unique(comet_wa$county),
       multiple = TRUE,
@@ -24,53 +24,121 @@ mod_filters_ui <- function(id) {
       )
     ),
     selectizeInput(
-      inputId = "class",
+      inputId = ns("class"),
       label = "Conservation Class",
       choices = unique(comet_wa$class),
       multiple = TRUE,
       selected = unique(comet_wa$class[1]),
       options = list(plugins = list("remove_button"))
     ),
-    uiOutput("practice"),
-    uiOutput("nutrient_practice"),
-    uiOutput("land_use"),
-    uiOutput("irrigation"),
-    actionButton("reset", "Reset All Filters")
+    uiOutput(ns("practice")),
+    uiOutput(ns("nutrient_practice")),
+    uiOutput(ns("land_use")),
+    uiOutput(ns("irrigation")),
   )
 }
 
-# Doesn't work when this is in a module.
+mod_filters_server <- function(id) {
+  moduleServer(id = id, function(input, output, session) {
+    ns <- session$ns
 
+    output$practice <- renderUI({
+      choices <- unique(comet_tags) %>%
+        subset(class %in% input$class) %>%
+        select(practice)
 
+      choices <- as.character(pull(choices))
 
-# mod_filters_server <- function(id) {
-#   moduleServer(id = id, function(input, output, session) {
-#
-#     ns <- session$ns
-#
-#     fct_makeUI <- function(id, subset, label, num_choice) {
-#       output$id <- renderUI({
-#         choices <- unique(comet_tags) %>%
-#           subset(subset %in% input$subset) %>%
-#           select(id)
-#
-#         choices <- as.character(pull(choices))
-#
-#         selectizeInput(
-#           inputId = id,
-#           label = label,
-#           choices = choices,
-#           selected = choices[num_choice],
-#           multiple = TRUE,
-#           options = list(
-#             maxIttems = 3,
-#             plugins = list("remove_button"))
-#         )
-#       })
-#     }
-#
-#     fct_makeUI(class, practice, "Conservation Practice:", 1)
-#
-#
-#     })
-# }
+      selectizeInput(
+        inputId = ns("practice"),
+        label = "Conservation Practice",
+        choices = choices,
+        selected = choices[1],
+        multiple = TRUE,
+        options = list(plugins = list("remove_button"))
+      )
+    })
+
+    output$land_use <- renderUI({
+      choices <- unique(comet_tags) %>%
+        subset(class %in% input$class &
+          practice %in% input$practice) %>%
+        select(current_land_use)
+
+      choices <- as.character(pull(choices))
+
+      selectizeInput(
+        inputId = ns("land_use"),
+        label = "Current Land Use",
+        choices = choices,
+        selected = choices,
+        multiple = TRUE,
+        options = list(plugins = list("remove_button"))
+      )
+    })
+
+    output$irrigation <- renderUI({
+      choices <- unique(comet_tags) %>%
+        subset(practice %in% input$practice) %>%
+        select(irrigation)
+
+      choices <- as.character(pull(choices))
+
+      selectizeInput(
+        inputId = ns("irrigation"),
+        label = "Irrigation Type",
+        choices = choices,
+        selected = choices,
+        multiple = TRUE,
+        options = list(plugins = list("remove_button"))
+      )
+    })
+
+    output$nutrient_practice <- renderUI({
+      req("Nutrient Management (CPS 590)" %in% input$practice)
+      choices <- unique(comet_tags) %>%
+        subset(practice %in% input$practice) %>%
+        select(nutrient_practice)
+
+      choices <- as.character(pull(choices))
+
+      selectizeInput(
+        inputId = ns("nutrient_practice"),
+        label = "Nutrient Management",
+        choices = choices,
+        selected = choices,
+        multiple = TRUE,
+        options = list(plugins = list("remove_button"))
+      )
+    })
+
+    filtered_df <- reactive({
+      if (!("Nutrient Management (CPS 590)" %in% input$practice)) {
+        subset(
+          comet_wa,
+          county %in% input$county &
+            class %in% input$class &
+            practice %in% input$practice &
+            current_land_use %in% input$land_use &
+            irrigation %in% input$irrigation
+        )
+      } else {
+        subset(
+          comet_wa,
+          county %in% input$county &
+            class %in% input$class &
+            practice %in% input$practice &
+            current_land_use %in% input$land_use &
+            irrigation %in% input$irrigation &
+            nutrient_practice %in% input$nutrient_practice
+        )
+      }
+    })
+  })
+}
+
+## To be copied in the UI
+# mod_filters_ui("filters_1")
+
+## To be copied in the server
+# mod_filters_server("filters_1")

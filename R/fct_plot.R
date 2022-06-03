@@ -15,8 +15,6 @@
 #         order x-axis alphabetical
 #         don't plot if too many rows selected
 
-# labels for y-axis
-
 fct_plot <- function(data, ghg_type) {
   # require data
   req(data)
@@ -26,7 +24,7 @@ fct_plot <- function(data, ghg_type) {
 
   # subset data based on chosen ghg type
   data <- data |>
-    subset(ghg_type = ghg_type)
+    subset(ghg_type == ghg_type)
 
   # plot data
   plot <-

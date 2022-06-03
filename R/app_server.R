@@ -11,116 +11,17 @@
 app_server <- function(input, output, session) {
   # Your application server logic
 
-  # Render UI filter elements -----------------------------------------------
+  # Render UI filter elements and reactive df-----------------------------------------------
 
-  output$practice <- renderUI({
-    choices <- unique(comet_tags) %>%
-      subset(class %in% input$class) %>%
-      select(practice) %>%
-      arrange(practice)
-
-    choices <- as.character(pull(choices))
-
-    selectizeInput(
-      inputId = "practice",
-      label = "Conservation Practice",
-      choices = choices,
-      selected = choices[1],
-      multiple = TRUE,
-      options = list(plugins = list("remove_button"))
-    )
-  })
-
-  output$land_use <- renderUI({
-    choices <- unique(comet_tags) %>%
-      subset(class %in% input$class &
-        practice %in% input$practice) %>%
-      select(current_land_use) %>%
-      arrange(current_land_use)
-
-    choices <- as.character(pull(choices))
-
-    selectizeInput(
-      inputId = "land_use",
-      label = "Current Land Use",
-      choices = choices,
-      selected = choices,
-      multiple = TRUE,
-      options = list(plugins = list("remove_button"))
-    )
-  })
-
-  output$irrigation <- renderUI({
-    choices <- unique(comet_tags) %>%
-      subset(practice %in% input$practice) %>%
-      select(irrigation) %>%
-      arrange(irrigation)
-
-    choices <- as.character(pull(choices))
-
-    selectizeInput(
-      inputId = "irrigation",
-      label = "Irrigation Type",
-      choices = choices,
-      selected = choices,
-      multiple = TRUE,
-      options = list(plugins = list("remove_button"))
-    )
-  })
-
-  output$nutrient_practice <- renderUI({
-    req("Nutrient Management (CPS 590)" %in% input$practice)
-    choices <- unique(comet_tags) %>%
-      subset(practice %in% input$practice) %>%
-      select(nutrient_practice) %>%
-      arrange(nutrient_practice)
-
-    choices <- as.character(pull(choices))
-
-    selectizeInput(
-      inputId = "nutrient_practice",
-      label = "Nutrient Management",
-      choices = choices,
-      selected = choices,
-      multiple = TRUE,
-      options = list(plugins = list("remove_button"))
-    )
-  })
+  filtered_df <- mod_filters_server("filters")
 
   observeEvent(input$reset, {
     shinyjs::reset("form")
   })
 
-
-  # Generate reactive filtered dataframe ------------------------------------
-
-  filtered_df <- reactive({
-    if (!("Nutrient Management (CPS 590)" %in% input$practice)) {
-      subset(
-        comet_wa,
-        county %in% input$county &
-          class %in% input$class &
-          practice %in% input$practice &
-          current_land_use %in% input$land_use &
-          irrigation %in% input$irrigation
-      )
-    } else {
-      subset(
-        comet_wa,
-        county %in% input$county &
-          class %in% input$class &
-          practice %in% input$practice &
-          current_land_use %in% input$land_use &
-          irrigation %in% input$irrigation &
-          nutrient_practice %in% input$nutrient_practice
-      )
-    }
-  })
-
   # Render table ------------------------------------------------------------
 
   output$table <- DT::renderDataTable(fct_table(filtered_df()))
-
 
   # Render plot -------------------------------------------------------------
 
@@ -137,16 +38,19 @@ app_server <- function(input, output, session) {
     fct_plot(filtered_plot(), ghg_type())
   })
 
-
   # Render map --------------------------------------------------------------
 
   output$map <- leaflet::renderLeaflet({
     leaflet() %>%
       setView(
         lng = -119.5,
-        lat = 47,
+        lat = 47.5,
         zoom = 7
       ) %>%
       addProviderTiles(providers$Esri.WorldImagery)
   })
+
+  # render estimate ui ------------------------------------------------------
+
+  mod_editableDT_server("editableDT")
 }

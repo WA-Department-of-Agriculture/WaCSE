@@ -13,9 +13,8 @@ mod_plot_ui <- function(id) {
   tagList(
     br(),
     fluidRow(
-      col = 12,
       selectizeInput(
-        "ghg_type",
+        inputId = "ghg_type",
         label = "Select an Emission Reduction Coefficient (ERC) to graph.",
         choices = c(
           "Total Greenhouse Gases" = "total.ghg.co2",
@@ -27,7 +26,6 @@ mod_plot_ui <- function(id) {
       )
     ),
     fluidRow(
-      col = 12,
       ggiraph::girafeOutput("plot")
     )
   )
@@ -35,10 +33,11 @@ mod_plot_ui <- function(id) {
 
 #' plot Server Functions
 #'
+#' Does not work (Warning: Error in check_aesthetics: Aesthetics must be either length 1 or the same as the data (1): tooltip, x, y, ymin, ymax and fill)
+#'
 #' @noRd
 
-
-# mod_plot_server <- function(id, data) {
+# mod_plot_server <- function(id) {
 #   moduleServer(id, function(input, output, session) {
 #     ns <- session$ns
 #
@@ -46,8 +45,16 @@ mod_plot_ui <- function(id) {
 #       input$ghg_type
 #     })
 #
-#     output$plot <-
-#       echarts4r::renderEcharts4r(fct_plot(data, ghg_type))
+#     filtered_df <- mod_filters_server("filters")
+#
+#     filtered_plot <- reactive({
+#       subset(filtered_df(), ghg_type == input$ghg_type)
+#     })
+#
+#     output$plot <- ggiraph::renderGirafe({
+#       req(filtered_df(), input$ghg_type)
+#       fct_plot(filtered_plot(), ghg_type())
+#     })
 #   })
 # }
 
