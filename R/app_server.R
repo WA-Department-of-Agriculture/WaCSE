@@ -6,7 +6,8 @@
 #' @import leaflet
 #' @noRd
 
-# TODO: keep trying to modularize the code and figure out why the server parts don't work
+# TODO: keep trying to fix server mods for table and plot
+#       create mod for map
 
 app_server <- function(input, output, session) {
   # Your application server logic
@@ -50,7 +51,7 @@ app_server <- function(input, output, session) {
       addProviderTiles(providers$Esri.WorldImagery)
   })
 
-  # render estimate ui ------------------------------------------------------
+  # render estimate DT tab ------------------------------------------------------
 
   mod_editableDT_server("editableDT")
 }
