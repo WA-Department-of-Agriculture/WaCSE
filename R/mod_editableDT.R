@@ -10,7 +10,8 @@
 #' @import dplyr
 #'
 # TODO:   split UI for this tab into a different module
-#         adding new row replaces previous row - need to fix
+#         use proxy to update table rather than render
+#         add totals row or indicators to sum emission reductions
 
 mod_editableDT_ui <- function(id) {
   ns <- NS(id)
@@ -49,6 +50,7 @@ mod_editableDT_ui <- function(id) {
         )
       ),
       mainPanel(
+        width = 9,
         DT::dataTableOutput(ns("table"))
       )
     )
@@ -136,26 +138,21 @@ mod_editableDT_server <- function(id) {
 
     # create reactive df ------------------------------------------------------
 
-    # column names
-
-    cols <- c(
-      "County",
-      "Conservation Class",
-      "Conservation Practice",
-      "Practice Implementation",
-      "Acres",
-      "Carbon Dioxide",
-      "Nitrous Oxide",
-      "Methane",
-      "Total Greenhouse Gases"
-    )
-
     # prepare data for table
 
-    df <- data.frame(matrix(ncol = 9, nrow = 0))
-    colnames(df) <- cols
+    rv <- reactiveValues()
 
-    df <- reactiveVal(df)
+    rv$df <- data.frame(
+      "County" = character(),
+      "Conservation Class" = character(),
+      "Conservation Practice" = character(),
+      "Practice Implementation" = character(),
+      "Acres" = numeric(),
+      "Carbon Dioxide" = numeric(),
+      "Nitrous Oxide" = numeric(),
+      "Methane" = numeric(),
+      "Total Greenhouse Gases" = numeric()
+    )
 
     # filter to selected row
 
@@ -181,27 +178,27 @@ mod_editableDT_server <- function(id) {
         )
       }
 
-      filtered <- filtered %>%
-        select(
-          "county",
-          "class",
-          "practice",
-          "implementation",
-          "ghg_type",
-          "mean"
-        ) %>%
-        tidyr::pivot_wider(
-          names_from = ghg_type,
-          values_from = mean
-        )
+      filtered <- fct_table_filter(filtered)
 
       return(filtered)
     })
 
+
+# add or delete rows ------------------------------------------------------
+
     # add new row to table
 
     observeEvent(input$add, {
-      new_row <- data.frame(
+      req(
+        input$county,
+        input$class,
+        input$practice,
+        input$acres,
+        filtered()$implementation,
+        filtered()$co2
+      )
+
+      tmp <- data.frame(
         "County" = filtered()$county,
         "Conservation Class" = filtered()$class,
         "Conservation Practice" = filtered()$practice,
@@ -211,20 +208,47 @@ mod_editableDT_server <- function(id) {
         "Nitrous Oxide" = input$acres * filtered()$n2o,
         "Methane" = input$acres * filtered()$ch4,
         "Total Greenhouse Gases" = input$acres * filtered()$total.ghg.co2
-      )
-
-      new_row <- new_row %>%
+      ) %>%
         mutate(across(6:9, ~ replace(., is.na(.), "Not estimated")))
 
-      rbind(df(new_row))
+      rv$df <- rbind(rv$df, tmp)
 
-      return(df)
+      rv$df <- unique(rv$df)
+
+    })
+
+    # remove row from table
+
+    observeEvent(input$remove, {
+      showModal(
+        if (length(input$table_rows_selected) >= 1) {
+          modalDialog(
+            title = "Warning",
+            paste("Are you sure you want to delete", length(input$table_rows_selected), "row(s)?"),
+            footer = tagList(
+              modalButton("Cancel"),
+              actionButton(ns("confirm"), "Yes")
+            ), easyClose = TRUE
+          )
+        } else {
+          modalDialog(
+            title = "Warning",
+            paste("Please select the row(s) that you want to delete."), easyClose = TRUE
+          )
+        }
+      )
+    })
+
+    # delete if user says okay
+    observeEvent(input$confirm, {
+      rv$df <- rv$df[-as.numeric(input$table_rows_selected), ]
+      removeModal()
     })
 
     # render table ------------------------------------------------------------
 
     output$table <- DT::renderDataTable({
-      DT::datatable(df())
+      fct_table(rv$df, "estimate")
     })
   })
 }

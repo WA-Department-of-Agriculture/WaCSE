@@ -22,7 +22,8 @@ app_server <- function(input, output, session) {
 
   # Render table ------------------------------------------------------------
 
-  output$table <- DT::renderDataTable(fct_table(filtered_df()))
+  filtered <- reactive({fct_table_filter(filtered_df())})
+  output$table <- DT::renderDataTable(fct_table(data = filtered(), type = "explore"))
 
   # Render plot -------------------------------------------------------------
 
