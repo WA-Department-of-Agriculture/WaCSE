@@ -12,7 +12,7 @@
 app_server <- function(input, output, session) {
   # Your application server logic
 
-  # Render UI filter elements and reactive df-----------------------------------------------
+  # render UI filter elements and reactive df-----------------------------------------------
 
   filtered_df <- mod_filters_server("filters")
 
@@ -20,12 +20,16 @@ app_server <- function(input, output, session) {
     shinyjs::reset("form")
   })
 
-  # Render table ------------------------------------------------------------
+  # render table ------------------------------------------------------------
 
-  filtered <- reactive({fct_table_filter(filtered_df())})
+  filtered <- reactive({
+    filtered <- fct_table_filter(filtered_df()) %>%
+      mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated")))
+    })
+
   output$table <- DT::renderDataTable(fct_table(data = filtered(), type = "explore"))
 
-  # Render plot -------------------------------------------------------------
+  # render plot -------------------------------------------------------------
 
   ghg_type <- reactive({
     input$ghg_type
@@ -40,7 +44,7 @@ app_server <- function(input, output, session) {
     fct_plot(filtered_plot(), ghg_type())
   })
 
-  # Render map --------------------------------------------------------------
+  # render map --------------------------------------------------------------
 
   output$map <- leaflet::renderLeaflet({
     leaflet() %>%
