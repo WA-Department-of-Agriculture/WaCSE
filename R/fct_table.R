@@ -7,24 +7,12 @@
 #' @noRd
 #'
 
-fct_table <- function(data) {
+fct_table <- function(data, type) {
   req(data)
-  data <-
-    dplyr::select(
-      data,
-      "county",
-      "class",
-      "practice",
-      "implementation",
-      "ghg_type",
-      "mean"
-    ) |>
-    dplyr::mutate(mean = tidyr::replace_na(as.character(mean), "Not estimated")) |>
-    tidyr::pivot_wider(
-      names_from = ghg_type,
-      values_from = mean
-    )
 
+  type <- type
+
+  if (type == "explore") {
 
   sketch <- htmltools::withTags(
     table(
@@ -47,6 +35,36 @@ fct_table <- function(data) {
       )
     )
   )
+
+  selection <- "none"
+  }
+
+  if (type == "estimate") {
+    sketch <- htmltools::withTags(
+      table(
+        class = "display",
+        thead(
+          tr(
+            th(rowspan = 2, "County"),
+            th(rowspan = 2, "Conservation Class"),
+            th(rowspan = 2, "Conservation Practice"),
+            th(rowspan = 2, "Practice Implementation"),
+            th(rowspan = 2, "Acres"),
+            th(colspan = 1, "Carbon Dioxide"),
+            th(colspan = 1, "Nitrous Oxide"),
+            th(colspan = 1, "Methane"),
+            th(colspan = 1, "Total Greenhouse Gases"),
+          ),
+          tr(th(
+            colspan = 4,
+            tags$i("(metric tonnes CO2 equivalent per acre per year)")
+          ))
+        )
+      )
+    )
+
+    selection <- "multiple"
+  }
 
   DT::datatable(
     data,
@@ -75,6 +93,6 @@ fct_table <- function(data) {
       scrollX = 400,
       scrollY = 400
     ),
-    selection = "none"
+    selection = selection
   )
 }

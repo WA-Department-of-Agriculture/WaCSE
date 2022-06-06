@@ -36,7 +36,7 @@ app_ui <- function(request) {
                 tabPanel(
                   "Table",
                   br(),
-                  DT::dataTableOutput("table")
+                  DT::dataTableOutput("table", width = "100%")
                 ),
                 tabPanel(
                   "Bar Graph",
@@ -45,9 +45,7 @@ app_ui <- function(request) {
                 tabPanel(
                   "Map",
                   br(),
-                  fluidRow(
-                    leaflet::leafletOutput("map", width = "100%", height = 600)
-                  )
+                  leaflet::leafletOutput("map", width = "100%", height = 600)
                 )
               )
             )
@@ -57,7 +55,9 @@ app_ui <- function(request) {
           "Calculate your estimate",
           mod_editableDT_ui("editableDT")
         ),
-        tabPanel("About", includeMarkdown("ABOUT.md"))
+        tabPanel("About",
+                 column(8, offset = 1,
+                        includeMarkdown("ABOUT.md")))
       )
     )
   )
