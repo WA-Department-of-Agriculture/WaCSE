@@ -11,6 +11,7 @@
 fct_table_filter <- function(data) {
   data <- data %>%
     select(
+      "mlra",
       "county",
       "class",
       "practice",

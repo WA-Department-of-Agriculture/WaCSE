@@ -9,7 +9,8 @@
 #'
 #' @noRd
 
-# TODO:   fix error messages if no filters are selected
+# TODO:   fix county text labels from overlapping with error bars
+#         fix error messages if no filters are selected
 #         remove/don't plot null values (with popup message)
 #         write text desc for values of zero and negatives
 #         order x-axis alphabetical
@@ -20,22 +21,18 @@ fct_plot <- function(data, ghg_type) {
   req(data)
 
   # color blind friendly colors for negative-bad, positive-good
-  x_axis_cols <- ifelse(data$mean > 0, "#018571", "#a6611a")
-
-  # subset data based on chosen ghg type
-  data <- data |>
-    subset(ghg_type == ghg_type)
+  # x_axis_cols <- ifelse(data$mean > 0, "#018571", "#a6611a")
 
   # plot data
   plot <-
     ggplot(
       data,
       aes(
-        x = factor(fct_wrap(abbr, 100)),
+        x = factor(fct_wrap(abbr, 25)),
         y = mean,
         ymin = lower,
         ymax = upper,
-        fill = county,
+        fill = factor(fct_wrap(mlra, 15)),
         text = paste(
           "Practice Implementation: ",
           implementation,
@@ -51,6 +48,7 @@ fct_plot <- function(data, ghg_type) {
     geom_col_interactive(aes(
       tooltip = glue::glue(
         "<b>{implementation}</b>
+        MLRA: {mlra}
         County: {county}
         Emission Reduction Coefficient: {mean} (MT CO2e/ac/yr)"
       )
@@ -66,8 +64,13 @@ fct_plot <- function(data, ghg_type) {
       begin = 0,
       end = 0.8
     ) +
+    geom_text(aes(label = county),
+      hjust = -0.02,
+      color = "black",
+      position = position_dodge2(width = 0.9, reverse = TRUE)
+    ) +
     labs(
-      fill = "County",
+      fill = "MLRA",
       x = NULL,
       y = paste(
         "\n",
@@ -81,8 +84,10 @@ fct_plot <- function(data, ghg_type) {
         margin = margin(r = 20),
         hjust = 0
       ),
-      axis.text.x = element_text(color = x_axis_cols)
-    )
+      legend.position = "bottom"
+      # axis.text.x = element_text(color = x_axis_cols) not supported in girafe
+    ) +
+    scale_y_continuous(expand = c(0.1, 0))
 
   # plot with ggiraph
 

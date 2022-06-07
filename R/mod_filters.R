@@ -10,15 +10,21 @@
 #'
 #' @return reactive filtered df
 
+# TODO: modularize selectize inputs
+
 mod_filters_ui <- function(id) {
   ns <- NS(id)
-  tagList(
+
+  county_mlra <- comet_wa %>% select(county, mlra) %>% unique()
+  cm_choices = split(county_mlra$county, county_mlra$mlra)
+
+tagList(
     selectizeInput(
       inputId = ns("county"),
       label = "County",
-      choices = unique(comet_wa$county),
+      choices = cm_choices,
       multiple = TRUE,
-      selected = unique(comet_wa$county[1]),
+      selected = "Klickitat",
       options = list(
         plugins = list("remove_button")
       )
@@ -106,7 +112,7 @@ mod_filters_server <- function(id) {
         inputId = ns("nutrient_practice"),
         label = "Nutrient Management",
         choices = choices,
-        selected = choices,
+        selected = choices[1:4],
         multiple = TRUE,
         options = list(plugins = list("remove_button"))
       )

@@ -13,8 +13,13 @@
 #         use proxy to update table rather than render
 #         add totals row or indicators to sum emission reductions
 
+
 mod_editableDT_ui <- function(id) {
   ns <- NS(id)
+
+  county_mlra <- comet_wa %>% select(county, mlra) %>% unique()
+  cm_choices = split(county_mlra$county, county_mlra$mlra)
+
   tagList(
     shinyFeedback::useShinyFeedback(),
     sidebarLayout(
@@ -23,7 +28,7 @@ mod_editableDT_ui <- function(id) {
         selectizeInput(
           inputId = ns("county"),
           label = "County",
-          choices = unique(comet_wa$county)
+          choices = cm_choices
         ),
         selectizeInput(
           inputId = ns("class"),
@@ -143,6 +148,7 @@ mod_editableDT_server <- function(id) {
     rv <- reactiveValues()
 
     rv$df <- data.frame(
+      "MLRA" = character(),
       "County" = character(),
       "Conservation Class" = character(),
       "Conservation Practice" = character(),
@@ -199,6 +205,7 @@ mod_editableDT_server <- function(id) {
       )
 
       tmp <- data.frame(
+        "MLRA" = filtered()$mlra,
         "County" = filtered()$county,
         "Conservation Class" = filtered()$class,
         "Conservation Practice" = filtered()$practice,

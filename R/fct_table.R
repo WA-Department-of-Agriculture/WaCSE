@@ -13,30 +13,30 @@ fct_table <- function(data, type) {
   type <- type
 
   if (type == "explore") {
-
-  sketch <- htmltools::withTags(
-    table(
-      class = "display",
-      thead(
-        tr(
-          th(rowspan = 2, "County"),
-          th(rowspan = 2, "Conservation Class"),
-          th(rowspan = 2, "Conservation Practice"),
-          th(rowspan = 2, "Practice Implementation"),
-          th(colspan = 1, "Carbon Dioxide"),
-          th(colspan = 1, "Nitrous Oxide"),
-          th(colspan = 1, "Methane"),
-          th(colspan = 1, "Total Greenhouse Gases"),
-        ),
-        tr(th(
-          colspan = 4,
-          tags$i("(metric tonnes CO2 equivalent per acre per year)")
-        ))
+    sketch <- htmltools::withTags(
+      table(
+        class = "display",
+        thead(
+          tr(
+            th(rowspan = 2, "MLRA"),
+            th(rowspan = 2, "County"),
+            th(rowspan = 2, "Conservation Class"),
+            th(rowspan = 2, "Conservation Practice"),
+            th(rowspan = 2, "Practice Implementation"),
+            th(colspan = 1, "Carbon Dioxide"),
+            th(colspan = 1, "Nitrous Oxide"),
+            th(colspan = 1, "Methane"),
+            th(colspan = 1, "Total Greenhouse Gases"),
+          ),
+          tr(th(
+            colspan = 4,
+            tags$i("(metric tonnes CO2 equivalent per acre per year)")
+          ))
+        )
       )
     )
-  )
 
-  selection <- "none"
+    selection <- "none"
   }
 
   if (type == "estimate") {
@@ -45,6 +45,7 @@ fct_table <- function(data, type) {
         class = "display",
         thead(
           tr(
+            th(rowspan = 2, "MLRA"),
             th(rowspan = 2, "County"),
             th(rowspan = 2, "Conservation Class"),
             th(rowspan = 2, "Conservation Practice"),
@@ -71,15 +72,21 @@ fct_table <- function(data, type) {
     class = "table-condensed",
     container = sketch,
     rownames = FALSE,
-    extensions = c("Buttons", "Scroller", "RowGroup"),
+    extensions = c("Buttons", "Scroller", "RowGroup", "Responsive"),
     options = list(
       autoWidth = TRUE,
-      columnDefs = list(list(
-        className = "dt-head-center",
-        targets = 0:7
-      )),
+      columnDefs = list(
+        list(
+          className = "dt-head-center",
+          targets = 0:7
+        ),
+        list(
+          visible = FALSE,
+          targets = 0:1
+        )
+      ),
       dom = "B, t, p",
-      rowGroup = list(dataSrc = 0),
+      rowGroup = list(dataSrc = 0:1),
       pageLength = 10,
       buttons = list(list(
         extend = "collection",

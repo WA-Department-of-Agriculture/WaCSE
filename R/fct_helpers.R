@@ -40,7 +40,7 @@ theme <- bslib::bs_theme(
 #' @noRd
 
 fct_wrap <- function(x, width) {
-  stringr::str_wrap(x, width = 25)
+  stringr::str_wrap(x, width = width)
 }
 
 #' fct_label

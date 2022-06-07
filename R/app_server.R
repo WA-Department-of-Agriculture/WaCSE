@@ -12,6 +12,7 @@
 app_server <- function(input, output, session) {
   # Your application server logic
 
+
   # render UI filter elements and reactive df-----------------------------------------------
 
   filtered_df <- mod_filters_server("filters")
@@ -25,7 +26,7 @@ app_server <- function(input, output, session) {
   filtered <- reactive({
     filtered <- fct_table_filter(filtered_df()) %>%
       mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated")))
-    })
+  })
 
   output$table <- DT::renderDataTable(fct_table(data = filtered(), type = "explore"))
 
@@ -36,7 +37,8 @@ app_server <- function(input, output, session) {
   })
 
   filtered_plot <- reactive({
-    subset(filtered_df(), ghg_type == input$ghg_type)
+    filtered_df() %>%
+      subset(ghg_type == input$ghg_type)
   })
 
   output$plot <- ggiraph::renderGirafe({

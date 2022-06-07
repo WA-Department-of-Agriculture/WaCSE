@@ -10,6 +10,10 @@ comet_all <- vroom::vroom("data-raw/US_COMET-Planner_Download.csv",
   # keep only GHG variables that have data. Soil carbon equals CO2.
 )
 
+mlra <- vroom::vroom("data-raw/MLRA.csv",
+                     col_select = c(MLRARSYM, MLRA_NAME)) %>%
+  unique()
+
 # rename columns ----------------------------------------------------------
 
 comet_all <- comet_all %>%
@@ -27,6 +31,12 @@ comet_wa <- comet_all %>%
   dplyr::filter(state == "WA") %>%
   dplyr::filter(!(practice == "Multiple Conservation Practices"))
 
+
+# join comet with MLRA to get MLRA names ----------------------------------
+
+comet_wa <- dplyr::left_join(comet_wa, mlra, by = c("mlra" = "MLRARSYM")) %>%
+  relocate(mlra = MLRA_NAME, .after = county) %>%
+  subset(select = -c(1,4))
 
 # parse out CPS implementations -------------------------------------------
 
@@ -89,13 +99,13 @@ comet_wa$abbr <- stringr::str_replace_all(comet_wa$implementation, c(
 comet_wa <- comet_wa %>% relocate(abbr, .after = implementation)
 
 # create separate df for just the tags
-comet_tags <- unique(comet_wa[, 4:10])
+comet_tags <- unique(comet_wa[, 3:9])
 
 # pivot to tidy data ------------------------------------------------------------
 
 comet_wa <- comet_wa %>%
   tidyr::pivot_longer(
-    cols = 11:18,
+    cols = 10:17,
     names_to = c("ghg_type", "type"),
     names_sep = "_",
     values_to = "value"
