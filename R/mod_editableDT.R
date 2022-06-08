@@ -83,7 +83,8 @@ mod_editableDT_server <- function(id) {
       selectizeInput(
         inputId = ns("practice"),
         label = "Conservation Practice",
-        choices = choices
+        choices = choices,
+        selected = choices[1]
       )
     })
 
@@ -99,7 +100,8 @@ mod_editableDT_server <- function(id) {
       selectizeInput(
         inputId = ns("land_use"),
         label = "Current Land Use",
-        choices = choices
+        choices = choices,
+        selected = choices[1]
       )
     })
 
@@ -114,7 +116,8 @@ mod_editableDT_server <- function(id) {
       selectizeInput(
         inputId = ns("irrigation"),
         label = "Irrigation Type",
-        choices = choices
+        choices = choices,
+        selected = choices[1]
       )
     })
 
@@ -130,7 +133,8 @@ mod_editableDT_server <- function(id) {
       selectizeInput(
         inputId = ns("nutrient_practice"),
         label = "Nutrient Management",
-        choices = choices
+        choices = choices,
+        selected = choices[1]
       )
     })
 
@@ -216,7 +220,7 @@ mod_editableDT_server <- function(id) {
         "Methane" = input$acres * filtered()$ch4,
         "Total Greenhouse Gases" = input$acres * filtered()$total.ghg.co2
       ) %>%
-        mutate(across(6:9, ~ replace(., is.na(.), "Not estimated")))
+        mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated")))
 
       rv$df <- rbind(rv$df, tmp)
 

@@ -22,12 +22,12 @@ app_ui <- function(request) {
           "Explore the data",
           sidebarLayout(
             sidebarPanel(
-              width = 3,
+              width = 3, style = "overflow: auto; max-height: 675px; position: relative;",
               div(
                 id = "form",
                 mod_filters_ui("filters")
               ),
-              actionButton("reset", "Reset All Filters")
+              actionButton("reset", "Reset Selection")
             ),
             mainPanel(
               width = 9,

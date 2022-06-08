@@ -12,20 +12,20 @@ mod_plot_ui <- function(id) {
   ns <- NS(id)
   tagList(
     br(),
-    fluidRow(
-      selectizeInput(
-        inputId = "ghg_type",
-        label = "Select an Emission Reduction Coefficient (ERC) to graph.",
-        choices = c(
-          "Total Greenhouse Gases" = "total.ghg.co2",
-          "Carbon Dioxide" = "co2",
-          "Nitrous Oxide" = "n2o",
-          "Methane" = "ch4"
-        ),
-        width = "100%"
-      )
-    ),
-    fluidRow(
+    fluidPage(
+    #   selectizeInput(
+    #     inputId = "ghg_type",
+    #     label = "Select an Emission Reduction Coefficient (ERC) to graph.",
+    #     choices = c(
+    #       "Total Greenhouse Gases" = "total.ghg.co2",
+    #       "Carbon Dioxide" = "co2",
+    #       "Nitrous Oxide" = "n2o",
+    #       "Methane" = "ch4"
+    #     ),
+    #     width = "100%"
+    #   )
+    # ),
+    # fluidRow(
       ggiraph::girafeOutput("plot")
     )
   )

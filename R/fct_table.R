@@ -37,6 +37,7 @@ fct_table <- function(data, type) {
     )
 
     selection <- "none"
+    targets <- 0:8
   }
 
   if (type == "estimate") {
@@ -65,6 +66,7 @@ fct_table <- function(data, type) {
     )
 
     selection <- "multiple"
+    targets <- 0:9
   }
 
   DT::datatable(
@@ -77,8 +79,12 @@ fct_table <- function(data, type) {
       autoWidth = TRUE,
       columnDefs = list(
         list(
-          className = "dt-head-center",
-          targets = 0:7
+          class = "dt-head-left",
+          targets = targets
+        ),
+        list(
+          class = "dt-right",
+          targets = targets
         ),
         list(
           visible = FALSE,
@@ -87,7 +93,7 @@ fct_table <- function(data, type) {
       ),
       dom = "B, t, p",
       rowGroup = list(dataSrc = 0:1),
-      pageLength = 10,
+      pageLength = 100,
       buttons = list(list(
         extend = "collection",
         buttons = list(

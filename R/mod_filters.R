@@ -112,13 +112,14 @@ mod_filters_server <- function(id) {
         inputId = ns("nutrient_practice"),
         label = "Nutrient Management",
         choices = choices,
-        selected = choices[1:4],
+        selected = c(choices["Not applicable"], choices[1:3]),
         multiple = TRUE,
         options = list(plugins = list("remove_button"))
       )
     })
 
     filtered_df <- reactive({
+      req(input$county, input$class, input$practice, input$land_use, input$irrigation)
       if (!("Nutrient Management (CPS 590)" %in% input$practice)) {
         subset(
           comet_wa,
@@ -129,6 +130,7 @@ mod_filters_server <- function(id) {
             irrigation %in% input$irrigation
         )
       } else {
+        req(input$nutrient_practice)
         subset(
           comet_wa,
           county %in% input$county &

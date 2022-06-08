@@ -32,18 +32,18 @@ app_server <- function(input, output, session) {
 
   # render plot -------------------------------------------------------------
 
-  ghg_type <- reactive({
-    input$ghg_type
-  })
-
   filtered_plot <- reactive({
     filtered_df() %>%
-      subset(ghg_type == input$ghg_type)
+      filter(ghg_type == "total.ghg.co2")
   })
 
   output$plot <- ggiraph::renderGirafe({
     req(filtered_plot())
-    fct_plot(filtered_plot(), ghg_type())
+    if (dplyr::n_distinct(filtered_plot()$implementation) > 10 ||
+        nrow(filtered_plot()) > 40) {
+      validate("The plot is too cluttered. Please remove some selections.")
+    }
+    fct_plot(filtered_plot(), "total.ghg.co2")
   })
 
   # render map --------------------------------------------------------------

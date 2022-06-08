@@ -9,13 +9,6 @@
 #'
 #' @noRd
 
-# TODO:   fix county text labels from overlapping with error bars
-#         fix error messages if no filters are selected
-#         remove/don't plot null values (with popup message)
-#         write text desc for values of zero and negatives
-#         order x-axis alphabetical
-#         don't plot if too many rows selected
-
 fct_plot <- function(data, ghg_type) {
   # require data
   req(data)
@@ -28,11 +21,11 @@ fct_plot <- function(data, ghg_type) {
     ggplot(
       data,
       aes(
-        x = factor(fct_wrap(abbr, 25)),
+        x = factor(fct_wrap(abbr, 30)),
         y = mean,
         ymin = lower,
         ymax = upper,
-        fill = factor(fct_wrap(mlra, 15)),
+        fill = factor(fct_wrap(mlra, 20)),
         text = paste(
           "Practice Implementation: ",
           implementation,
@@ -40,8 +33,7 @@ fct_plot <- function(data, ghg_type) {
           county,
           "\nEmission Reduction Coefficient: ",
           mean
-        ),
-        na.rm = TRUE
+        )
       )
     ) +
     coord_flip() +
@@ -53,7 +45,8 @@ fct_plot <- function(data, ghg_type) {
         Emission Reduction Coefficient: {mean} (MT CO2e/ac/yr)"
       )
     ),
-    position = position_dodge2(reverse = TRUE)
+    position = position_dodge2(reverse = TRUE),
+    na.rm = TRUE
     ) +
     geom_errorbar(position = position_dodge2(
       width = 0.01,
@@ -61,16 +54,17 @@ fct_plot <- function(data, ghg_type) {
       reverse = TRUE
     )) +
     scale_fill_viridis_d(
-      begin = 0,
+      begin = 0.3,
       end = 0.8
     ) +
-    geom_text(aes(label = county),
-      hjust = -0.02,
+    geom_text(aes(y = ifelse(!is.na(upper), upper, mean), label = county),
+      hjust = -0.1,
       color = "black",
-      position = position_dodge2(width = 0.9, reverse = TRUE)
+      position = position_dodge2(width = 0.9, reverse = TRUE),
+      na.rm = TRUE
     ) +
     labs(
-      fill = "MLRA",
+      fill = "MLRA Legend",
       x = NULL,
       y = paste(
         "\n",
@@ -84,18 +78,19 @@ fct_plot <- function(data, ghg_type) {
         margin = margin(r = 20),
         hjust = 0
       ),
-      legend.position = "bottom"
+      legend.title = element_text(face = "bold"),
+      legend.text = element_text(margin = margin(t = 5, b = 5, unit = "pt"))
       # axis.text.x = element_text(color = x_axis_cols) not supported in girafe
     ) +
-    scale_y_continuous(expand = c(0.1, 0))
+    scale_y_continuous(expand = c(0.3, 0))
 
   # plot with ggiraph
 
-  tooltip_css <- "color:white;padding:8px;border-radius:6px;"
+  tooltip_css <- "color:black;padding:8px;border-radius:6px;"
 
   plot <- girafe(
     ggobj = plot,
-    width_svg = 10,
+    width_svg = 12,
     height_svg = 5,
     options = list(
       opts_tooltip(
