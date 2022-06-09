@@ -81,3 +81,9 @@ report to <http://www.comet-planner.com>.
 WSDA. 2020. Agricultural Land Use \| Washington State Department of
 Agriculture.
 <https://agr.wa.gov/departments/land-and-water/natural-resources/agricultural-land-use>.
+
+## Contact
+
+If you have any feedback or would like to report a bug, please contact
+the app author Jadey Ryan at
+[jryan@agr.wa.gov](mailto:jryan@agr.wa.gov?subject=WaCSE).

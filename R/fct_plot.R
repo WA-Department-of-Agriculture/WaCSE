@@ -26,14 +26,6 @@ fct_plot <- function(data, ghg_type) {
         ymin = lower,
         ymax = upper,
         fill = factor(fct_wrap(mlra, 20)),
-        text = paste(
-          "Practice Implementation: ",
-          implementation,
-          "\nCounty: ",
-          county,
-          "\nEmission Reduction Coefficient: ",
-          mean
-        )
       )
     ) +
     coord_flip() +
@@ -53,17 +45,21 @@ fct_plot <- function(data, ghg_type) {
       padding = 0.1,
       reverse = TRUE
     )) +
-    scale_fill_viridis_d(
-      begin = 0.3,
-      end = 0.8
-    ) +
-    geom_text(aes(y = ifelse(!is.na(upper), upper, mean), label = county),
-      hjust = -0.1,
-      color = "black",
-      position = position_dodge2(width = 0.9, reverse = TRUE),
-      na.rm = TRUE
+    scale_fill_viridis_d() +
+    shadowtext::geom_shadowtext(aes(
+      y = ifelse(!is.na(upper), upper, mean),
+      label = county
+    ),
+    hjust = -0.1,
+    color = "black",
+    fontface = "bold",
+    bg.color = "white",
+    bg.r = 0.1,
+    position = position_dodge2(width = 0.9, reverse = TRUE),
+    na.rm = TRUE
     ) +
     labs(
+      title = "Total Greenhouse Gas Emission Reduction Coefficients",
       fill = "MLRA Legend",
       x = NULL,
       y = paste(
@@ -74,6 +70,7 @@ fct_plot <- function(data, ghg_type) {
     ) +
     theme_classic(base_family = "poppins") +
     theme(
+      plot.title = element_text(face = "bold"),
       axis.text.y = element_text(
         margin = margin(r = 20),
         hjust = 0
@@ -82,11 +79,14 @@ fct_plot <- function(data, ghg_type) {
       legend.text = element_text(margin = margin(t = 5, b = 5, unit = "pt"))
       # axis.text.x = element_text(color = x_axis_cols) not supported in girafe
     ) +
-    scale_y_continuous(expand = c(0.3, 0))
+    scale_y_continuous(
+      labels = scales::label_number(accuracy = 0.001),
+      expand = expansion(mult = c(0.03, 0.3))
+    )
 
   # plot with ggiraph
 
-  tooltip_css <- "color:black;padding:8px;border-radius:6px;"
+  tooltip_css <- "font-size:0.8rem; color:black; background:white; padding:8px; border-radius:6px;"
 
   plot <- girafe(
     ggobj = plot,
@@ -94,8 +94,7 @@ fct_plot <- function(data, ghg_type) {
     height_svg = 5,
     options = list(
       opts_tooltip(
-        css = tooltip_css,
-        use_fill = TRUE
+        css = tooltip_css
       ),
       opts_toolbar(saveaspng = FALSE),
       opts_zoom(max = 5)

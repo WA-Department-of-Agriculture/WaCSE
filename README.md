@@ -35,4 +35,7 @@ You can install the development version of WaCSEshiny from
 ``` r
 # install.packages("devtools")
 devtools::install_github("WA-Department-of-Agriculture/WaCSEshiny")
+
+# Run
+WaCSEshiny::run_app()
 ```

@@ -54,3 +54,7 @@ Technical guides for NRCS conservation practices standards (CPS) are found [here
 Amy Swan, Mark Easter, Adam Chambers, Kevin Brown, Stephen A. Williams, Jeff Creque, John Wick, Keith Paustian. 2020. COMET-Planner Dataset, Version 2.1, Build 1, and COMET-Planner Report: Carbon and Greenhouse Gas Evaluation for NRCS Conservation Practice Planning. A Companion report to [http://www.comet-planner.com](http://www.comet-planner.com). [http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf](http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf). 
 
 WSDA. 2020. Agricultural Land Use | Washington State Department of Agriculture. [https://agr.wa.gov/departments/land-and-water/natural-resources/agricultural-land-use](https://agr.wa.gov/departments/land-and-water/natural-resources/agricultural-land-use). 
+
+## Contact
+
+If you have any feedback or would like to report a bug, please contact the app author Jadey Ryan at [jryan@agr.wa.gov](mailto:jryan@agr.wa.gov?subject=WaCSE).

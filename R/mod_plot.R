@@ -26,7 +26,7 @@ mod_plot_ui <- function(id) {
     #   )
     # ),
     # fluidRow(
-      ggiraph::girafeOutput("plot")
+      ggiraph::girafeOutput("plot", width = "100%")
     )
   )
 }
