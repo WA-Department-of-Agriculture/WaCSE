@@ -15,7 +15,6 @@ fct_table <- function(data, type) {
   if (type == "explore") {
     sketch <- htmltools::withTags(
       table(
-        class = "display",
         thead(
           tr(
             th(rowspan = 2, "MLRA"),
@@ -43,7 +42,6 @@ fct_table <- function(data, type) {
   if (type == "estimate") {
     sketch <- htmltools::withTags(
       table(
-        class = "display",
         thead(
           tr(
             th(rowspan = 2, "MLRA"),
@@ -71,10 +69,10 @@ fct_table <- function(data, type) {
 
   DT::datatable(
     data,
-    class = "table-condensed",
+    class = "compact row-border",
     container = sketch,
     rownames = FALSE,
-    extensions = c("Buttons", "Scroller", "RowGroup", "Responsive"),
+    extensions = c("Buttons", "Scroller", "RowGroup", "Responsive", "FixedHeader"),
     options = list(
       autoWidth = TRUE,
       columnDefs = list(
@@ -83,7 +81,7 @@ fct_table <- function(data, type) {
           targets = targets
         ),
         list(
-          class = "dt-right",
+          class = "dt-body-right",
           targets = targets
         ),
         list(
