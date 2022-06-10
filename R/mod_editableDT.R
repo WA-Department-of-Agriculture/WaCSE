@@ -17,8 +17,10 @@
 mod_editableDT_ui <- function(id) {
   ns <- NS(id)
 
-  county_mlra <- comet_wa %>% select(county, mlra) %>% unique()
-  cm_choices = split(county_mlra$county, county_mlra$mlra)
+  county_mlra <- comet_wa %>%
+    select(county, mlra) %>%
+    unique()
+  cm_choices <- split(county_mlra$county, county_mlra$mlra)
 
   tagList(
     shinyFeedback::useShinyFeedback(),
@@ -33,12 +35,24 @@ mod_editableDT_ui <- function(id) {
         selectizeInput(
           inputId = ns("class"),
           label = "Conservation Class",
-          choices = unique(comet_wa$class)
+          choices = unique(comet_tags$class)
         ),
-        uiOutput(ns("practice")),
+        selectizeInput(
+          inputId = ns("practice"),
+          label = "Conservation Practice",
+          choices = unique(comet_tags$practice)
+        ),
         uiOutput(ns("nutrient_practice")),
-        uiOutput(ns("land_use")),
-        uiOutput(ns("irrigation")),
+        selectizeInput(
+          inputId = ns("land_use"),
+          label = "Current Land Use",
+          choices = unique(comet_tags$current_land_use)
+        ),
+        selectizeInput(
+          inputId = ns("irrigation"),
+          label = "Irrigation Type",
+          choices = unique(comet_tags$irrigation)
+        ),
         numericInput(
           inputId = ns("acres"),
           label = "Number of Acres",
@@ -56,7 +70,18 @@ mod_editableDT_ui <- function(id) {
       ),
       mainPanel(
         width = 9,
-        DT::dataTableOutput(ns("table"))
+        tabsetPanel(
+          type = "pills",
+          tabPanel(
+            "Table",
+            br(),
+            DT::DTOutput(ns("table"), width = "100%")
+          ),
+          tabPanel(
+            "Bar Graph",
+            ggiraph::girafeOutput(ns("plot"), width = "100%")
+          )
+        )
       )
     )
   )
@@ -66,13 +91,13 @@ mod_editableDT_ui <- function(id) {
 #'
 #' @noRd
 mod_editableDT_server <- function(id) {
-  moduleServer(id = id, function(input, output, session) {
+  moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
 
-    # render UI inputs --------------------------------------------------------
+    # update or render UI inputs --------------------------------------------------------
 
-    output$practice <- renderUI({
+    observeEvent(input$class, {
       choices <- unique(comet_tags) %>%
         subset(class %in% input$class) %>%
         select(practice) %>%
@@ -80,45 +105,7 @@ mod_editableDT_server <- function(id) {
 
       choices <- as.character(pull(choices))
 
-      selectizeInput(
-        inputId = ns("practice"),
-        label = "Conservation Practice",
-        choices = choices,
-        selected = choices[1]
-      )
-    })
-
-    output$land_use <- renderUI({
-      choices <- unique(comet_tags) %>%
-        subset(class %in% input$class &
-          practice %in% input$practice) %>%
-        select(current_land_use) %>%
-        arrange(current_land_use)
-
-      choices <- as.character(pull(choices))
-
-      selectizeInput(
-        inputId = ns("land_use"),
-        label = "Current Land Use",
-        choices = choices,
-        selected = choices[1]
-      )
-    })
-
-    output$irrigation <- renderUI({
-      choices <- unique(comet_tags) %>%
-        subset(practice %in% input$practice) %>%
-        select(irrigation) %>%
-        arrange(irrigation)
-
-      choices <- as.character(pull(choices))
-
-      selectizeInput(
-        inputId = ns("irrigation"),
-        label = "Irrigation Type",
-        choices = choices,
-        selected = choices[1]
-      )
+      updateSelectizeInput(session, "practice", choices = choices)
     })
 
     output$nutrient_practice <- renderUI({
@@ -138,9 +125,48 @@ mod_editableDT_server <- function(id) {
       )
     })
 
+    observeEvent(
+      eventExpr = {
+        input$class
+        input$practice
+        },
+
+      handlerExpr = {
+      choices <- unique(comet_tags) %>%
+        subset(class %in% input$class &
+                 practice %in% input$practice) %>%
+        select(current_land_use) %>%
+        arrange(current_land_use)
+
+      choices <- as.character(pull(choices))
+
+      updateSelectizeInput(session, "land_use", choices = choices)
+      })
+
+    observeEvent(
+      eventExpr = {
+        input$class
+        input$practice
+        },
+
+      handlerExpr = {
+        choices <- unique(comet_tags) %>%
+        subset(class %in% input$class &
+                 practice %in% input$practice) %>%
+        select(irrigation) %>%
+        arrange(irrigation)
+
+      choices <- as.character(pull(choices))
+
+      updateSelectizeInput(session, "irrigation", choices = choices)
+    })
+
     observeEvent(input$acres, {
       positive <- input$acres >= 1
-      shinyFeedback::feedbackWarning("acres", !positive, "Please select at least one acre.")
+      shinyFeedback::feedbackWarning(
+        "acres", !positive,
+        "Please select at least one acre."
+      )
       req(input$acres)
       return(input$acres)
     })
@@ -194,7 +220,7 @@ mod_editableDT_server <- function(id) {
     })
 
 
-# add or delete rows ------------------------------------------------------
+    # add, edit, or delete rows ------------------------------------------------------
 
     # add new row to table
 
@@ -235,7 +261,10 @@ mod_editableDT_server <- function(id) {
         if (length(input$table_rows_selected) >= 1) {
           modalDialog(
             title = "Warning",
-            paste("Are you sure you want to delete", length(input$table_rows_selected), "row(s)?"),
+            paste(
+              "Are you sure you want to delete",
+              length(input$table_rows_selected), "row(s)?"
+            ),
             footer = tagList(
               modalButton("Cancel"),
               actionButton(ns("confirm"), "Yes")
@@ -251,6 +280,7 @@ mod_editableDT_server <- function(id) {
     })
 
     # delete if user says okay
+
     observeEvent(input$confirm, {
       rv$df <- rv$df[-as.numeric(input$table_rows_selected), ]
       removeModal()
@@ -258,8 +288,31 @@ mod_editableDT_server <- function(id) {
 
     # render table ------------------------------------------------------------
 
-    output$table <- DT::renderDataTable({
+    output$table <- DT::renderDT({
       fct_table(rv$df, "estimate")
+    })
+
+
+    # render plot -------------------------------------------------------------
+    filtered_plot <- reactive({
+      rv$df %>%
+        select(
+          mlra = MLRA,
+          county = County,
+          abbr = Practice.Implementation,
+          implementation = Practice.Implementation,
+          mean = Total.Greenhouse.Gases
+        ) %>%
+        mutate(mean = as.numeric(mean))
+    })
+
+    output$plot <- ggiraph::renderGirafe({
+      req(filtered_plot())
+      if (dplyr::n_distinct(filtered_plot()$implementation) > 10 ||
+        nrow(filtered_plot()) > 40) {
+        validate("The plot is too cluttered. Please remove some selections.")
+      }
+      fct_plot(filtered_plot(), "total.ghg.co2", error_bar = FALSE)
     })
   })
 }

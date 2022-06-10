@@ -32,9 +32,9 @@ tagList(
     selectizeInput(
       inputId = ns("class"),
       label = "Conservation Class",
-      choices = unique(comet_wa$class),
+      choices = unique(comet_tags$class),
       multiple = TRUE,
-      selected = unique(comet_wa$class[1]),
+      selected = unique(comet_tags$class[1]),
       options = list(plugins = list("remove_button"))
     ),
     uiOutput(ns("practice")),
@@ -85,7 +85,8 @@ mod_filters_server <- function(id) {
 
     output$irrigation <- renderUI({
       choices <- unique(comet_tags) %>%
-        subset(practice %in% input$practice) %>%
+        subset(class %in% input$class &
+                 practice %in% input$practice) %>%
         select(irrigation)
 
       choices <- as.character(pull(choices))

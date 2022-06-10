@@ -9,7 +9,7 @@
 #'
 #' @noRd
 
-fct_plot <- function(data, ghg_type) {
+fct_plot <- function(data, ghg_type, error_bar) {
   # require data
   req(data)
 
@@ -23,8 +23,6 @@ fct_plot <- function(data, ghg_type) {
       aes(
         x = factor(fct_wrap(abbr, 30)),
         y = mean,
-        ymin = lower,
-        ymax = upper,
         fill = factor(fct_wrap(mlra, 20)),
       )
     ) +
@@ -40,24 +38,7 @@ fct_plot <- function(data, ghg_type) {
     position = position_dodge2(reverse = TRUE),
     na.rm = TRUE
     ) +
-    geom_errorbar(position = position_dodge2(
-      width = 0.01,
-      padding = 0.1,
-      reverse = TRUE
-    )) +
     scale_fill_viridis_d() +
-    shadowtext::geom_shadowtext(aes(
-      y = ifelse(!is.na(upper), upper, mean),
-      label = county
-    ),
-    hjust = -0.1,
-    color = "black",
-    fontface = "bold",
-    bg.color = "white",
-    bg.r = 0.1,
-    position = position_dodge2(width = 0.9, reverse = TRUE),
-    na.rm = TRUE
-    ) +
     labs(
       title = "Total Greenhouse Gas Emission Reduction Coefficients",
       fill = "MLRA Legend",
@@ -83,6 +64,48 @@ fct_plot <- function(data, ghg_type) {
       labels = scales::label_number(accuracy = 0.001),
       expand = expansion(mult = c(0.03, 0.3))
     )
+
+  # add error bars if error_bar = TRUE
+
+  if (error_bar == TRUE) {
+    plot <- plot +
+      geom_errorbar(aes(
+        ymin = lower,
+        ymax = upper
+      ),
+      position = position_dodge2(
+        width = 0.01,
+        padding = 0.1,
+        reverse = TRUE
+      )
+      ) +
+      shadowtext::geom_shadowtext(aes(
+        y = ifelse(!is.na(upper), upper, mean),
+        label = county
+      ),
+      hjust = -0.1,
+      color = "black",
+      fontface = "bold",
+      bg.color = "white",
+      bg.r = 0.1,
+      position = position_dodge2(width = 0.9, reverse = TRUE),
+      na.rm = TRUE
+      )
+  }
+
+  if (error_bar == FALSE) {
+    plot <- plot +
+      shadowtext::geom_shadowtext(aes(
+        label = county
+      ),
+      hjust = -0.1,
+      color = "black",
+      fontface = "bold",
+      bg.color = "white",
+      bg.r = 0.1,
+      position = position_dodge2(width = 0.9, reverse = TRUE),
+      na.rm = TRUE)
+  }
 
   # plot with ggiraph
 

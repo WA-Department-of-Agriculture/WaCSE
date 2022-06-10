@@ -28,7 +28,7 @@ app_server <- function(input, output, session) {
       mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated")))
   })
 
-  output$table <- DT::renderDataTable(fct_table(data = filtered(), type = "explore"))
+  output$table <- DT::renderDT(fct_table(data = filtered(), type = "explore"))
 
   # render plot -------------------------------------------------------------
 
@@ -43,7 +43,7 @@ app_server <- function(input, output, session) {
         nrow(filtered_plot()) > 40) {
       validate("The plot is too cluttered. Please remove some selections.")
     }
-    fct_plot(filtered_plot(), "total.ghg.co2")
+    fct_plot(filtered_plot(), "total.ghg.co2", error_bar = TRUE)
   })
 
   # render map --------------------------------------------------------------

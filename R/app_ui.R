@@ -36,7 +36,7 @@ app_ui <- function(request) {
                 tabPanel(
                   "Table",
                   br(),
-                  DT::dataTableOutput("table", width = "100%")
+                  DT::DTOutput("table", width = "100%")
                 ),
                 tabPanel(
                   "Bar Graph",
