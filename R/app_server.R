@@ -40,10 +40,10 @@ app_server <- function(input, output, session) {
   output$plot <- ggiraph::renderGirafe({
     req(filtered_plot())
     if (dplyr::n_distinct(filtered_plot()$implementation) > 10 ||
-        nrow(filtered_plot()) > 40) {
+      nrow(filtered_plot()) > 40) {
       validate("The plot is too cluttered. Please remove some selections.")
     }
-    fct_plot(filtered_plot(), "total.ghg.co2", error_bar = TRUE)
+    fct_plot(filtered_plot(), "total.ghg.co2", error_bar = TRUE, tt = "noAcres")
   })
 
   # render map --------------------------------------------------------------

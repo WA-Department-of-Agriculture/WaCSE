@@ -9,9 +9,28 @@
 #'
 #' @noRd
 
-fct_plot <- function(data, ghg_type, error_bar) {
+fct_plot <- function(data, ghg_type, error_bar, tt) {
   # require data
   req(data)
+
+  if (tt == "noAcres") {
+    tt <- glue::glue(
+      "<b>{data$implementation}</b>
+        MLRA: {data$mlra}
+        County: {data$county}
+        Emission Reduction Coefficient: {data$mean} (MT CO2e/ac/yr)"
+    )
+  }
+
+  if (tt == "acres") {
+    tt <- glue::glue(
+      "<b>{data$implementation}</b>
+        MLRA: {data$mlra}
+        County: {data$county}
+        Acres: {data$acres}
+        Emission Reduction Coefficient: {data$mean} (MT CO2e/ac/yr)"
+    )
+  }
 
   # color blind friendly colors for negative-bad, positive-good
   # x_axis_cols <- ifelse(data$mean > 0, "#018571", "#a6611a")
@@ -28,12 +47,7 @@ fct_plot <- function(data, ghg_type, error_bar) {
     ) +
     coord_flip() +
     geom_col_interactive(aes(
-      tooltip = glue::glue(
-        "<b>{implementation}</b>
-        MLRA: {mlra}
-        County: {county}
-        Emission Reduction Coefficient: {mean} (MT CO2e/ac/yr)"
-      )
+      tooltip = tt
     ),
     position = position_dodge2(reverse = TRUE),
     na.rm = TRUE
@@ -98,13 +112,14 @@ fct_plot <- function(data, ghg_type, error_bar) {
       shadowtext::geom_shadowtext(aes(
         label = county
       ),
-      hjust = -0.1,
+      hjust = -0.05,
       color = "black",
       fontface = "bold",
       bg.color = "white",
       bg.r = 0.1,
       position = position_dodge2(width = 0.9, reverse = TRUE),
-      na.rm = TRUE)
+      na.rm = TRUE
+      )
   }
 
   # plot with ggiraph

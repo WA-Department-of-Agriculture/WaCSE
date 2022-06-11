@@ -29,14 +29,17 @@ fct_table <- function(data, type) {
           ),
           tr(th(
             colspan = 4,
-            tags$i("(metric tonnes CO2 equivalent per acre per year)")
+            class = "dt-head-center",
+            tags$i("(Metric tonnes CO2 equivalent per acre per year)")
           ))
         )
       )
     )
 
     selection <- "none"
+    hide_targets <- 0:2
     targets <- 0:8
+    rowGrp <- list(dataSrc = 0:1)
   }
 
   if (type == "estimate") {
@@ -57,22 +60,78 @@ fct_table <- function(data, type) {
           ),
           tr(th(
             colspan = 4,
-            tags$i("(metric tonnes CO2 equivalent per acre per year)")
+            class = "dt-head-center",
+            tags$i("(Metric tonnes CO2 equivalent per acre per year)")
           ))
         )
       )
     )
 
     selection <- "multiple"
+    hide_targets <- 0:2
     targets <- 0:9
+    rowGrp <- list(dataSrc = 0:1)
   }
+
+  if (type == "summary_county") {
+    sketch <- htmltools::withTags(
+      table(
+        thead(
+          tr(
+            th(rowspan = 2, "MLRA"),
+            th(rowspan = 2, "County"),
+            th(rowspan = 2, "Acres"),
+            th("Total Greenhouse Gases")
+          ),
+          tr(
+            th(
+              colspan = 1,
+              tags$i("(MT CO2eq/ac/yr)")
+            )
+          )
+        )
+      )
+    )
+
+    selection <- "none"
+    hide_targets <- 0
+    targets <- 0:3
+    rowGrp <- NULL
+  }
+
+  if (type == "summary_practice") {
+    sketch <- htmltools::withTags(
+      table(
+        thead(
+          tr(
+            th(rowspan = 2, "Practice"),
+            th(rowspan = 2, "Practice Implementation"),
+            th(rowspan = 2, "Acres"),
+            th("Total Greenhouse Gases")
+          ),
+          tr(
+            th(
+              colspan = 1,
+              tags$i("(MT CO2eq/ac/yr)")
+            )
+          )
+        )
+      )
+    )
+
+    selection <- "none"
+    hide_targets <- 0
+    targets <- 0:3
+    rowGrp <- list(dataSrc = 0)
+  }
+
 
   DT::datatable(
     data,
     class = "compact row-border",
     container = sketch,
     rownames = FALSE,
-    extensions = c("Buttons", "Scroller", "RowGroup", "Responsive", "FixedHeader"),
+    extensions = c("Buttons", "Scroller", "RowGroup", "FixedHeader"),
     options = list(
       autoWidth = TRUE,
       columnDefs = list(
@@ -81,17 +140,13 @@ fct_table <- function(data, type) {
           targets = targets
         ),
         list(
-          class = "dt-body-right",
-          targets = targets
-        ),
-        list(
           visible = FALSE,
-          targets = 0:1
+          targets = hide_targets
         )
       ),
-      dom = "B, t, p",
-      rowGroup = list(dataSrc = 0:1),
-      pageLength = 100,
+      dom = "B, t",
+      rowGroup = rowGrp,
+      pageLength = 500,
       buttons = list(list(
         extend = "collection",
         buttons = list(
@@ -100,9 +155,7 @@ fct_table <- function(data, type) {
           list(extend = "pdf", filename = "WaCSE_download")
         ),
         text = "Download"
-      )),
-      scrollX = 400,
-      scrollY = 400
+      ))
     ),
     selection = selection
   )

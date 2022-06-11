@@ -15,10 +15,12 @@
 mod_filters_ui <- function(id) {
   ns <- NS(id)
 
-  county_mlra <- comet_wa %>% select(county, mlra) %>% unique()
-  cm_choices = split(county_mlra$county, county_mlra$mlra)
+  county_mlra <- comet_wa %>%
+    select(county, mlra) %>%
+    unique()
+  cm_choices <- split(county_mlra$county, county_mlra$mlra)
 
-tagList(
+  tagList(
     selectizeInput(
       inputId = ns("county"),
       label = "County",
@@ -86,7 +88,7 @@ mod_filters_server <- function(id) {
     output$irrigation <- renderUI({
       choices <- unique(comet_tags) %>%
         subset(class %in% input$class &
-                 practice %in% input$practice) %>%
+          practice %in% input$practice) %>%
         select(irrigation)
 
       choices <- as.character(pull(choices))

@@ -22,7 +22,8 @@ app_ui <- function(request) {
           "Explore the data",
           sidebarLayout(
             sidebarPanel(
-              width = 3, style = "overflow: auto; max-height: 675px; position: relative;",
+              width = 3,
+              style = "overflow: auto; max-height: 675px; position: relative;",
               div(
                 id = "form",
                 mod_filters_ui("filters")
@@ -30,7 +31,6 @@ app_ui <- function(request) {
               actionButton("reset", "Reset Selection")
             ),
             mainPanel(
-              width = 9,
               tabsetPanel(
                 type = "pills",
                 tabPanel(
@@ -55,9 +55,13 @@ app_ui <- function(request) {
           "Calculate your estimate",
           mod_editableDT_ui("editableDT")
         ),
-        tabPanel("About",
-                 column(8, offset = 1,
-                        includeMarkdown("ABOUT.md")))
+        tabPanel(
+          "About",
+          column(8,
+            offset = 1,
+            includeMarkdown("ABOUT.md")
+          )
+        )
       )
     )
   )
