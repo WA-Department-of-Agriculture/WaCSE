@@ -8,28 +8,44 @@
 #' @return The return value, if any, from executing the function.
 #'
 #' @noRd
+#'
+# TODO: calculate error bars when there are acres
+#        fix tt error if statement
 
-fct_plot <- function(data, ghg_type, error_bar, tt) {
+fct_plot <- function(data, type, error_bar) {
   # require data
   req(data)
 
-  if (tt == "noAcres") {
+  if (type == "explore") {
     tt <- glue::glue(
       "<b>{data$implementation}</b>
         MLRA: {data$mlra}
         County: {data$county}
         Emission Reduction Coefficient: {data$mean} (MT CO2e/ac/yr)"
     )
+
+    ylab <- paste(
+      "\n",
+      "Total Greenhouse Gases",
+      "\n(Metric tonnes CO2 equivalent per acre per year)"
+    )
   }
 
-  if (tt == "acres") {
+  if (type == "estimate") {
     tt <- glue::glue(
       "<b>{data$implementation}</b>
         MLRA: {data$mlra}
         County: {data$county}
         Acres: {data$acres}
-        Emission Reduction Coefficient: {data$mean} (MT CO2e/ac/yr)"
+        Estimated Emission Reduction: {data$mean} (MT CO2e/yr)"
     )
+
+    ylab <- paste(
+      "\n",
+      "Total Greenhouse Gases",
+      "\n(Metric tonnes CO2 equivalent per year)"
+    )
+
   }
 
   # color blind friendly colors for negative-bad, positive-good
@@ -54,14 +70,9 @@ fct_plot <- function(data, ghg_type, error_bar, tt) {
     ) +
     scale_fill_viridis_d() +
     labs(
-      title = "Total Greenhouse Gas Emission Reduction Coefficients",
       fill = "MLRA Legend",
       x = NULL,
-      y = paste(
-        "\n",
-        fct_label(ghg_type),
-        "\n(Metric tonnes CO2 equivalent per acre per year)"
-      )
+      y = ylab
     ) +
     theme_classic(base_family = "poppins") +
     theme(

@@ -40,6 +40,7 @@ fct_table <- function(data, type) {
     hide_targets <- 0:2
     targets <- 0:8
     rowGrp <- list(dataSrc = 0:1)
+    scroll <- 400
   }
 
   if (type == "estimate") {
@@ -61,7 +62,7 @@ fct_table <- function(data, type) {
           tr(th(
             colspan = 4,
             class = "dt-head-center",
-            tags$i("(Metric tonnes CO2 equivalent per acre per year)")
+            tags$i("(Metric tonnes CO2 equivalent per year)")
           ))
         )
       )
@@ -71,6 +72,7 @@ fct_table <- function(data, type) {
     hide_targets <- 0:2
     targets <- 0:9
     rowGrp <- list(dataSrc = 0:1)
+    scroll <- 300
   }
 
   if (type == "summary_county") {
@@ -78,16 +80,11 @@ fct_table <- function(data, type) {
       table(
         thead(
           tr(
-            th(rowspan = 2, "MLRA"),
-            th(rowspan = 2, "County"),
-            th(rowspan = 2, "Acres"),
-            th("Total Greenhouse Gases")
-          ),
-          tr(
-            th(
-              colspan = 1,
-              tags$i("(MT CO2eq/ac/yr)")
-            )
+            th("MLRA"),
+            th("County"),
+            th("# of Practice Implementations"),
+            th("Total Acres"),
+            th("Total Greenhouse Gases (MT CO2eq/yr)")
           )
         )
       )
@@ -97,34 +94,8 @@ fct_table <- function(data, type) {
     hide_targets <- 0
     targets <- 0:3
     rowGrp <- NULL
+    scroll <- NULL
   }
-
-  if (type == "summary_practice") {
-    sketch <- htmltools::withTags(
-      table(
-        thead(
-          tr(
-            th(rowspan = 2, "Practice"),
-            th(rowspan = 2, "Practice Implementation"),
-            th(rowspan = 2, "Acres"),
-            th("Total Greenhouse Gases")
-          ),
-          tr(
-            th(
-              colspan = 1,
-              tags$i("(MT CO2eq/ac/yr)")
-            )
-          )
-        )
-      )
-    )
-
-    selection <- "none"
-    hide_targets <- 0
-    targets <- 0:3
-    rowGrp <- list(dataSrc = 0)
-  }
-
 
   DT::datatable(
     data,
@@ -144,7 +115,7 @@ fct_table <- function(data, type) {
           targets = hide_targets
         )
       ),
-      dom = "B, t",
+      dom = "B,t",
       rowGroup = rowGrp,
       pageLength = 500,
       buttons = list(list(
@@ -155,7 +126,8 @@ fct_table <- function(data, type) {
           list(extend = "pdf", filename = "WaCSE_download")
         ),
         text = "Download"
-      ))
+      )),
+      scrollY = scroll
     ),
     selection = selection
   )

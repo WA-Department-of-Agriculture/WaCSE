@@ -43,7 +43,7 @@ app_server <- function(input, output, session) {
       nrow(filtered_plot()) > 40) {
       validate("The plot is too cluttered. Please remove some selections.")
     }
-    fct_plot(filtered_plot(), "total.ghg.co2", error_bar = TRUE, tt = "noAcres")
+    fct_plot(filtered_plot(), type = "explore", error_bar = TRUE)
   })
 
   # render map --------------------------------------------------------------

@@ -1298,6 +1298,17 @@
         "cli"
       ]
     },
+    "shadowtext": {
+      "Package": "shadowtext",
+      "Version": "0.1.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e639c0fa75fc71085c37e21e05a06e41",
+      "Requirements": [
+        "ggplot2",
+        "scales"
+      ]
+    },
     "shiny": {
       "Package": "shiny",
       "Version": "1.7.1",

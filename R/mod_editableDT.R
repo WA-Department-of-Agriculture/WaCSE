@@ -77,13 +77,9 @@ mod_editableDT_ui <- function(id) {
         tabsetPanel(
           type = "pills",
           tabPanel(
-            "Table", br(),
-            DT::DTOutput(ns("table"))
-          ),
-          tabPanel(
-            "Summaries", br(),
+            "Tables", br(),
             DT::DTOutput(ns("summary_county")), br(),
-            DT::DTOutput(ns("summary_practice"))
+            DT::DTOutput(ns("table")),
           ),
           tabPanel(
             "Bar Graph", br(),
@@ -348,28 +344,12 @@ mod_editableDT_server <- function(id) {
         ) %>%
         group_by(MLRA, County) %>%
         summarize(
+          "# of Practice Implementations" = n_distinct(Practice.Implementation),
           "Total Acres" = sum(Acres),
           "Total Greenhouse Gases" = sum(Total.Greenhouse.Gases)
         ) %>%
         as.data.frame()
       return(summary_county)
-    })
-
-    # by implementation
-
-    summary_practice <- reactive({
-      summary_practice <- rv$df %>%
-        mutate(
-          Acres = as.numeric(Acres),
-          Total.Greenhouse.Gases = as.numeric(Total.Greenhouse.Gases)
-        ) %>%
-        group_by(Conservation.Practice, Practice.Implementation) %>%
-        summarize(
-          "Total Acres" = sum(Acres),
-          "Total Greenhouse Gases" = sum(Total.Greenhouse.Gases)
-        ) %>%
-        as.data.frame()
-      return(summary_practice)
     })
 
     # render tables ------------------------------------------------------------
@@ -385,11 +365,6 @@ mod_editableDT_server <- function(id) {
     output$summary_county <- DT::renderDT({
       fct_table(summary_county(), "summary_county")
     })
-
-    output$summary_practice <- DT::renderDT({
-      fct_table(summary_practice(), "summary_practice")
-    })
-
 
     # render plot -------------------------------------------------------------
 
@@ -412,7 +387,7 @@ mod_editableDT_server <- function(id) {
         nrow(filtered_plot()) > 40) {
         validate("The plot is too cluttered. Please remove some selections.")
       }
-      fct_plot(filtered_plot(), "total.ghg.co2", error_bar = FALSE, tt = "acres")
+      fct_plot(filtered_plot(), type = "estimate", error_bar = FALSE)
     })
   })
 }
