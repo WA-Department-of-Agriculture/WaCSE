@@ -7,11 +7,14 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+#' @import shinycssloaders
 #' @import dplyr
 #'
 # TODO:   split UI for this tab into a different module
 #         use proxy to update table rather than render
 #         hide remove button from Summaries and Bar Graph tabs
+#         edit df so SE is multiplied by acres
+#         edit selectize inputs so user can type value
 
 
 mod_editableDT_ui <- function(id) {
@@ -30,34 +33,23 @@ mod_editableDT_ui <- function(id) {
         selectizeInput(
           inputId = ns("county"),
           label = "County",
-          choices = cm_choices
+          choices = cm_choices,
         ),
         selectizeInput(
           inputId = ns("class"),
           label = "Conservation Class",
-          choices = unique(comet_tags$class)
+          choices = unique(comet_tags$class),
         ),
         selectizeInput(
           inputId = ns("practice"),
           label = "Conservation Practice",
-          choices = unique(comet_tags$practice)
+          choices = unique(comet_tags$practice),
         ),
         selectizeInput(
           inputId = ns("implementation"),
           label = "Practice Implementation",
-          choices = unique(comet_tags$implementation)
+          choices = unique(comet_tags$implementation),
         ),
-        # uiOutput(ns("nutrient_practice")),
-        # selectizeInput(
-        #   inputId = ns("land_use"),
-        #   label = "Current Land Use",
-        #   choices = unique(comet_tags$current_land_use)
-        # ),
-        # selectizeInput(
-        #   inputId = ns("irrigation"),
-        #   label = "Irrigation Type",
-        #   choices = unique(comet_tags$irrigation)
-        # ),
         numericInput(
           inputId = ns("acres"),
           label = "Number of Acres",
@@ -77,13 +69,15 @@ mod_editableDT_ui <- function(id) {
         tabsetPanel(
           type = "pills",
           tabPanel(
-            "Tables", br(),
-            DT::DTOutput(ns("summary_county")), br(),
-            DT::DTOutput(ns("table")),
+            "Tables",
+            h4("Full Table"),
+            withSpinner(DT::DTOutput(ns("table"))),
+            h4("Summary Table"),
+            withSpinner(DT::DTOutput(ns("summary_county")))
           ),
           tabPanel(
             "Bar Graph", br(),
-            ggiraph::girafeOutput(ns("plot"), width = "100%")
+            withSpinner(ggiraph::girafeOutput(ns("plot"), width = "100%"))
           )
         )
       )
@@ -97,7 +91,6 @@ mod_editableDT_ui <- function(id) {
 mod_editableDT_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
 
     # update or render UI inputs --------------------------------------------------------
 
@@ -120,17 +113,12 @@ mod_editableDT_server <- function(id) {
       eventExpr = {
         input$class
         input$practice
-        # input$land_use
-        # input$irrigation
-        # input$nutrient_practice
       },
       handlerExpr = {
         choices <- unique(comet_tags) %>%
           subset(
             class %in% input$class &
               practice %in% input$practice
-            # & current_land_use %in% input$land_use &
-            # irrigation %in% input$irrigation
           ) %>%
           select(implementation) %>%
           arrange(implementation)
@@ -141,67 +129,7 @@ mod_editableDT_server <- function(id) {
       }
     )
 
-    # # render nutrient practice ui
-    #
-    # output$nutrient_practice <- renderUI({
-    #   req("Nutrient Management (CPS 590)" %in% input$practice)
-    #   choices <- unique(comet_tags) %>%
-    #     subset(practice %in% input$practice) %>%
-    #     select(nutrient_practice) %>%
-    #     arrange(nutrient_practice)
-    #
-    #   choices <- as.character(pull(choices))
-    #
-    #   selectizeInput(
-    #     inputId = ns("nutrient_practice"),
-    #     label = "Nutrient Management",
-    #     choices = choices,
-    #     selected = choices[1]
-    #   )
-    # })
-    #
-    # # update land use input
-    #
-    # observeEvent(
-    #   eventExpr = {
-    #     input$class
-    #     input$practice
-    #   },
-    #   handlerExpr = {
-    #     choices <- unique(comet_tags) %>%
-    #       subset(class %in% input$class &
-    #         practice %in% input$practice) %>%
-    #       select(current_land_use) %>%
-    #       arrange(current_land_use)
-    #
-    #     choices <- as.character(pull(choices))
-    #
-    #     updateSelectizeInput(session, "land_use", choices = choices)
-    #   }
-    # )
-    #
-    # # update irrigation input
-    #
-    # observeEvent(
-    #   eventExpr = {
-    #     input$class
-    #     input$practice
-    #   },
-    #   handlerExpr = {
-    #     choices <- unique(comet_tags) %>%
-    #       subset(class %in% input$class &
-    #         practice %in% input$practice) %>%
-    #       select(irrigation) %>%
-    #       arrange(irrigation)
-    #
-    #     choices <- as.character(pull(choices))
-    #
-    #     updateSelectizeInput(session, "irrigation", choices = choices)
-    #   }
-    # )
-
     # give warning if user selects acres <1
-
 
     observeEvent(input$acres, {
       positive <- input$acres >= 1
@@ -241,8 +169,6 @@ mod_editableDT_server <- function(id) {
           county %in% input$county &
             class %in% input$class &
             practice %in% input$practice &
-            # current_land_use %in% input$land_use &
-            # irrigation %in% input$irrigation &
             implementation %in% input$implementation
         )
       } else {
@@ -251,9 +177,6 @@ mod_editableDT_server <- function(id) {
           county %in% input$county &
             class %in% input$class &
             practice %in% input$practice &
-            # current_land_use %in% input$land_use &
-            # irrigation %in% input$irrigation &
-            # nutrient_practice %in% input$nutrient_practice &
             implementation %in% input$implementation
         )
       }
@@ -262,7 +185,6 @@ mod_editableDT_server <- function(id) {
 
       return(filtered)
     })
-
 
     # add, edit, or delete rows ------------------------------------------------------
 

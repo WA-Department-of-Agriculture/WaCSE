@@ -14,6 +14,8 @@ mlra <- vroom::vroom("data-raw/MLRA.csv",
                      col_select = c(MLRARSYM, MLRA_NAME)) %>%
   unique()
 
+crop_data <- vroom::vroom("data-raw/2021WSDACropData.csv")
+
 # rename columns ----------------------------------------------------------
 
 comet_all <- comet_all %>%
@@ -138,3 +140,4 @@ write.csv(comet_tags, "data-raw/comet_tags.csv")
 
 usethis::use_data(comet_wa, overwrite = TRUE)
 usethis::use_data(comet_tags, overwrite = TRUE)
+usethis::use_data(crop_data, overwrite = TRUE)

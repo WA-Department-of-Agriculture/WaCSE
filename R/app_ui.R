@@ -4,6 +4,7 @@
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @import dplyr
+#' @import shinycssloaders
 #' @noRd
 
 app_ui <- function(request) {
@@ -13,7 +14,6 @@ app_ui <- function(request) {
     # Your application UI logic
     fluidPage(
       theme = theme,
-      shinyjs::useShinyjs(),
       navbarPage(
         "Washington Climate Smart Estimator (WaCSE)",
         inverse = TRUE,
@@ -36,16 +36,11 @@ app_ui <- function(request) {
                 tabPanel(
                   "Table",
                   br(),
-                  DT::DTOutput("table", width = "100%")
+                  withSpinner(DT::DTOutput("table", width = "100%"))
                 ),
                 tabPanel(
                   "Bar Graph",
-                  mod_plot_ui("plot")
-                ),
-                tabPanel(
-                  "Map",
-                  br(),
-                  leaflet::leafletOutput("map", width = "100%", height = 600)
+                  withSpinner(ggiraph::girafeOutput("plot", width = "100%"))
                 )
               )
             )
@@ -54,6 +49,10 @@ app_ui <- function(request) {
         tabPanel(
           "Calculate your estimate",
           mod_editableDT_ui("editableDT")
+        ),
+        tabPanel(
+          "Agricultural Land Use",
+          mod_land_use_ui("land_use_tab")
         ),
         tabPanel(
           "About",
@@ -87,8 +86,14 @@ golem_add_external_resources <- function() {
     bundle_resources(
       path = app_sys("app/www"),
       app_title = "WaCSEshiny"
-    )
+    ),
+    shinyjs::useShinyjs(),
+    shinyFeedback::useShinyFeedback()
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
   )
 }
+
+# set global spinner options
+
+options(spinner.type = 5, spinner.color = "#489739")

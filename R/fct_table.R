@@ -72,7 +72,7 @@ fct_table <- function(data, type) {
     hide_targets <- 0:2
     targets <- 0:9
     rowGrp <- list(dataSrc = 0:1)
-    scroll <- 300
+    scroll <- 200
   }
 
   if (type == "summary_county") {

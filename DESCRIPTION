@@ -9,12 +9,10 @@ Imports:
     config (>= 0.3.1),
     dplyr,
     DT,
-    echarts4r,
     ggplot2,
     glue,
     golem (>= 0.3.2),
     htmltools,
-    leaflet,
     shiny (>= 1.7.1),
     shinyWidgets
 Encoding: UTF-8

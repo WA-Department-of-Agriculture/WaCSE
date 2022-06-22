@@ -43,62 +43,48 @@ fct_wrap <- function(x, width) {
   stringr::str_wrap(x, width = width)
 }
 
-#' fct_label
+#' fct_sumAcres
 #'
-#' @description label y-axis of plot
+#' @description sum acres
 #'
-#' @param ghg_type from the comet_wa df and selectize input from mod_plot
+#' @param county which counties the user selects
+#' @param type cropland, pasture, or other. Other contains conservation, fallow, research, unknown, and wildlife feed.
 #'
 #' @return The return value, if any, from executing the utility.
 #'
 #' @noRd
-#'
-fct_label <- function(ghg_type) {
-  if (ghg_type == "co2") {
-    return("Carbon Dioxide")
-  }
-  if (ghg_type == "n2o") {
-    return("Nitrous Oxide")
-  }
-  if (ghg_type == "ch4") {
-    return("Methane")
-  }
-  if (ghg_type == "total.ghg.co2") {
-    return("Total Greenhouse Gases")
-  }
+
+fct_sumAcres <- function(county, type) {
+
+  # subset by county
+
+  filterCounty <- crop_data %>%
+    subset(County %in% county)
+
+  # subset by type
+
+  filtered_df <- switch(type,
+    cropland = {
+      subset(
+        filterCounty,
+        !CropGroup %in% c("Developed", "Other", "Pasture", "Shellfish", "Turfgrass")
+      )
+    },
+    pasture = {
+      subset(
+        filterCounty,
+        CropGroup == "Pasture"
+      )
+    },
+    other = {
+      subset(
+        filterCounty,
+        CropGroup == "Other"
+      )
+    }
+  )
+
+  totalAcres <- format(round(sum(filtered_df$ExactAcres), 0), big.mark = ",")
+
+  totalAcres
 }
-
-#' make UI. doesn't work.
-#'
-#' @description make a selectize UI
-#'
-#' @param id unique id
-#' @param subset which column to subset
-#' @param label for selectize input
-#' @param num_choice how many choices to select
-#'
-#' @return The return value, if any, from executing the utility.
-#'
-#' @noRd
-
-# fct_makeUI <- function(id, subset, label, num_choice) {
-#   output$id <- renderUI({
-#     choices <- unique(comet_tags) %>%
-#       subset(subset %in% input$subset) %>%
-#       select(id)
-#
-#     choices <- as.character(pull(choices))
-#
-#     selectizeInput(
-#       inputId = id,
-#       label = label,
-#       choices = choices,
-#       selected = choices[num_choice],
-#       multiple = TRUE,
-#       options = list(
-#         maxItems = 3,
-#         plugins = list("remove_button")
-#       )
-#     )
-#   })
-# }

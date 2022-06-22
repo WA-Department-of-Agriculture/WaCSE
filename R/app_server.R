@@ -46,17 +46,9 @@ app_server <- function(input, output, session) {
     fct_plot(filtered_plot(), type = "explore", error_bar = TRUE)
   })
 
-  # render map --------------------------------------------------------------
+  # render ag land use tab --------------------------------------------------------------
 
-  output$map <- leaflet::renderLeaflet({
-    leaflet() %>%
-      setView(
-        lng = -119.5,
-        lat = 47.5,
-        zoom = 7
-      ) %>%
-      addProviderTiles(providers$Esri.WorldImagery)
-  })
+  mod_land_use_server("land_use_tab")
 
   # render estimate DT tab ------------------------------------------------------
 
