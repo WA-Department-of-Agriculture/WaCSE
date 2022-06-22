@@ -20,35 +20,11 @@ app_ui <- function(request) {
         collapsible = TRUE,
         tabPanel(
           "Explore the data",
-          sidebarLayout(
-            sidebarPanel(
-              width = 3,
-              style = "overflow: auto; max-height: 675px; position: relative;",
-              div(
-                id = "form",
-                mod_filters_ui("filters")
-              ),
-              actionButton("reset", "Reset Selection")
-            ),
-            mainPanel(
-              tabsetPanel(
-                type = "pills",
-                tabPanel(
-                  "Table",
-                  br(),
-                  withSpinner(DT::DTOutput("table", width = "100%"))
-                ),
-                tabPanel(
-                  "Bar Graph",
-                  withSpinner(ggiraph::girafeOutput("plot", width = "100%"))
-                )
-              )
-            )
-          )
+          mod_explore_ui("explore_tab")
         ),
         tabPanel(
           "Calculate your estimate",
-          mod_editableDT_ui("editableDT")
+          mod_estimate_ui("estimate_tab")
         ),
         tabPanel(
           "Agricultural Land Use",
@@ -74,6 +50,7 @@ app_ui <- function(request) {
 #' @import shiny
 #' @importFrom golem add_resource_path activate_js favicon bundle_resources
 #' @noRd
+
 golem_add_external_resources <- function() {
   add_resource_path(
     "www",

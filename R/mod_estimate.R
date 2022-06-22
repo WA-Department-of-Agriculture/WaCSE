@@ -1,4 +1,4 @@
-#' editableDT UI Function
+#' estimate UI Function
 #'
 #' @description A shiny Module.
 #'
@@ -14,10 +14,8 @@
 #         use proxy to update table rather than render
 #         hide remove button from Summaries and Bar Graph tabs
 #         edit df so SE is multiplied by acres
-#         edit selectize inputs so user can type value
 
-
-mod_editableDT_ui <- function(id) {
+mod_estimate_ui <- function(id) {
   ns <- NS(id)
 
   county_mlra <- comet_wa %>%
@@ -85,10 +83,10 @@ mod_editableDT_ui <- function(id) {
   )
 }
 
-#' editableDT Server Functions
+#' estimate Server Functions
 #'
 #' @noRd
-mod_editableDT_server <- function(id) {
+mod_estimate_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
@@ -239,7 +237,7 @@ mod_editableDT_server <- function(id) {
           modalDialog(
             title = "Warning",
             paste("Please select the row(s) that you want to remove.
-                  You can only select rows from the Table tab."),
+                  You can only select rows from the Full Table."),
             easyClose = TRUE
           )
         }
@@ -315,7 +313,7 @@ mod_editableDT_server <- function(id) {
 }
 
 ## To be copied in the UI
-# mod_editableDT_ui("editableDT_1")
+# mod_estimate_ui("estimate_1")
 
 ## To be copied in the server
-# mod_editableDT_server("editableDT_1")
+# mod_estimate_server("estimate_1")

@@ -1,0 +1,12 @@
+.bs-select-all {
+  display: none;
+}
+
+.bs-deselect-all {
+  width: 100%;
+}
+
+.selectize-control .selectize-input {
+  max-height: 100px;
+  overflow-y: auto;
+}

@@ -6,51 +6,19 @@
 #' @import leaflet
 #' @noRd
 
-# TODO: keep trying to fix server mods for table and plot
-#       create mod for map
-
 app_server <- function(input, output, session) {
   # Your application server logic
 
+  # render explore tab ------------------------------------------------------
 
-  # render UI filter elements and reactive df-----------------------------------------------
+  mod_explore_server("explore_tab")
 
-  filtered_df <- mod_filters_server("filters")
+  # render estimate tab ------------------------------------------------------
 
-  observeEvent(input$reset, {
-    shinyjs::reset("form")
-  })
-
-  # render table ------------------------------------------------------------
-
-  filtered <- reactive({
-    filtered <- fct_table_filter(filtered_df()) %>%
-      mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated")))
-  })
-
-  output$table <- DT::renderDT(fct_table(data = filtered(), type = "explore"))
-
-  # render plot -------------------------------------------------------------
-
-  filtered_plot <- reactive({
-    filtered_df() %>%
-      filter(ghg_type == "total.ghg.co2")
-  })
-
-  output$plot <- ggiraph::renderGirafe({
-    req(filtered_plot())
-    if (dplyr::n_distinct(filtered_plot()$implementation) > 10 ||
-      nrow(filtered_plot()) > 40) {
-      validate("The plot is too cluttered. Please remove some selections.")
-    }
-    fct_plot(filtered_plot(), type = "explore", error_bar = TRUE)
-  })
+  mod_estimate_server("estimate_tab")
 
   # render ag land use tab --------------------------------------------------------------
 
   mod_land_use_server("land_use_tab")
 
-  # render estimate DT tab ------------------------------------------------------
-
-  mod_editableDT_server("editableDT")
 }

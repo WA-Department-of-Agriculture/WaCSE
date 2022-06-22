@@ -7,36 +7,43 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-#' @import shinydashboard
+#' @import shinyBS
 
 # TODO: add tooptip info boxes for valueBox to list what each category includes
-#       create select/deselect all buttons for county
+
 
 mod_land_use_ui <- function(id) {
   ns <- NS(id)
 
-  county_mlra <- comet_wa %>%
-    select(county, mlra) %>%
-    unique()
-  cm_choices <- split(county_mlra$county, county_mlra$mlra)
+counties <- as.character(unique(comet_wa$county))
+choices <- c("All Counties", counties)
 
-  tagList(fluidRow(
-    column(
-      3,
-      selectizeInput(
-        inputId = ns("county"),
-        label = "County",
-        choices = cm_choices,
-        multiple = TRUE,
-        options = list(plugins = list("remove_button"),
-                       placeholder = "Pick your counties")
-      )
-    ),
-    column(3, htmlOutput(ns("cropland"))),
-    column(3, htmlOutput(ns("pasture"))),
-    column(3, htmlOutput(ns("other")))
-  ), hr(),
-  fluidRow(htmlOutput(ns("map"))))
+  tagList(
+    includeCSS("inst/app/www/css/style.css"),
+    fluidRow(
+      column(
+        3, selectizeInput(
+          inputId = ns("county"),
+          label = "County",
+          choices = choices,
+          multiple = TRUE,
+          options = list(
+            plugins = list("remove_button"),
+            placeholder = "Pick your counties"
+          )
+        ),
+        actionButton(ns("reset"), "Reset")
+      ),
+      column(3, wellPanel(style = "height:100%", htmlOutput(ns("cropland")))),
+      column(3, wellPanel(style = "height:100%", htmlOutput(ns("pasture")))),
+      column(3, wellPanel(style = "height:100%", htmlOutput(ns("other"))))
+    ), hr(),
+    tabsetPanel(
+      type = "pills",
+      tabPanel("Crop Group Map", br(), htmlOutput(ns("crop_map"))),
+      tabPanel("Major Land Resource Area Map", br(), htmlOutput(ns("mlra_map")))
+    )
+  )
 }
 
 #' land_use Server Functions
@@ -45,6 +52,26 @@ mod_land_use_ui <- function(id) {
 mod_land_use_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+
+    counties <- as.character(unique(comet_wa$county))
+    choices <- c("All Counties", counties)
+
+    # if user selects "All Counties", input will update to select all choices besides "All Counties"
+
+    observe({
+      if ("All Counties" %in% input$county) {
+        selected_choices <- setdiff(choices, "All Counties")
+        updateSelectizeInput(session, "county", selected = selected_choices)
+      }
+    })
+
+    # reset filter on Reset button click
+
+    observeEvent(input$reset, {
+      shinyjs::reset("county")
+    })
+
+    # cropland indicator
 
     output$cropland <- renderText({
       paste(
@@ -56,6 +83,8 @@ mod_land_use_server <- function(id) {
       )
     })
 
+    # pasture indicator
+
     output$pasture <- renderText({
       paste(
         "<b><center>Pasture Acres</b>",
@@ -66,6 +95,7 @@ mod_land_use_server <- function(id) {
       )
     })
 
+    # other indicator
 
     output$other <- renderText({
       paste(
@@ -77,10 +107,24 @@ mod_land_use_server <- function(id) {
       )
     })
 
-    output$map <- renderUI({
-      tags$iframe(src = "https://arcg.is/18iDi1",
-                  width = "100%",
-                  height = "600px")
+    # ArcGIS crops iframe
+
+    output$crop_map <- renderUI({
+      tags$iframe(
+        src = "https://arcg.is/18iDi1",
+        height = "400px",
+        width = "100%"
+      )
+    })
+
+    # ArcGIS MLRA iframe
+
+    output$mlra_map <- renderUI({
+      tags$iframe(
+        src = "https://arcg.is/LqziH",
+        height = "400px",
+        width = "100%"
+      )
     })
   })
 }
