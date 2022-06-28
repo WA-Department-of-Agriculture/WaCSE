@@ -3,7 +3,6 @@
 #' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
 #' @import shiny
-#' @import leaflet
 #' @noRd
 
 app_server <- function(input, output, session) {
@@ -21,4 +20,7 @@ app_server <- function(input, output, session) {
 
   mod_land_use_server("land_use_tab")
 
+  # render download tab -----------------------------------------------------
+
+  mod_download_server("download_tab")
 }

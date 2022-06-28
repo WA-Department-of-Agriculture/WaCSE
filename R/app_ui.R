@@ -27,8 +27,11 @@ app_ui <- function(request) {
           mod_estimate_ui("estimate_tab")
         ),
         tabPanel(
-          "Agricultural Land Use",
+          "Agricultural land use",
           mod_land_use_ui("land_use_tab")
+        ),
+        tabPanel("Bookmark and Download",
+          mod_download_ui("download_tab")
         ),
         tabPanel(
           "About",

@@ -11,7 +11,6 @@
 
 # TODO: add tooptip info boxes for valueBox to list what each category includes
 
-
 mod_land_use_ui <- function(id) {
   ns <- NS(id)
 
@@ -20,26 +19,27 @@ choices <- c("All Counties", counties)
 
   tagList(
     includeCSS("inst/app/www/css/style.css"),
-    fluidRow(
-      column(
-        3, selectizeInput(
-          inputId = ns("county"),
-          label = "County",
-          choices = choices,
-          multiple = TRUE,
-          options = list(
-            plugins = list("remove_button"),
-            placeholder = "Pick your counties"
-          )
-        ),
-        actionButton(ns("reset"), "Reset")
-      ),
-      column(3, wellPanel(style = "height:100%", htmlOutput(ns("cropland")))),
-      column(3, wellPanel(style = "height:100%", htmlOutput(ns("pasture")))),
-      column(3, wellPanel(style = "height:100%", htmlOutput(ns("other"))))
-    ), hr(),
     tabsetPanel(
       type = "pills",
+      tabPanel("Total Acres by County", br(),
+          fluidRow(column(
+            3, selectizeInput(
+              inputId = ns("county"),
+              label = "County",
+              choices = choices,
+              multiple = TRUE,
+              options = list(
+                plugins = list("remove_button"),
+                placeholder = "Pick your counties"
+              )
+            ),
+            actionButton(ns("reset"), "Reset")
+          ),
+          column(3, wellPanel(style = "height:100%", htmlOutput(ns("cropland")))),
+          column(3, wellPanel(style = "height:100%", htmlOutput(ns("pasture")))),
+          column(3, wellPanel(style = "height:100%", htmlOutput(ns("other")))),
+               )
+          ),
       tabPanel("Crop Group Map", br(), htmlOutput(ns("crop_map"))),
       tabPanel("Major Land Resource Area Map", br(), htmlOutput(ns("mlra_map")))
     )
@@ -111,8 +111,8 @@ mod_land_use_server <- function(id) {
 
     output$crop_map <- renderUI({
       tags$iframe(
-        src = "https://arcg.is/18iDi1",
-        height = "400px",
+        src = "https://nras.maps.arcgis.com/apps/instant/interactivelegend/index.html?appid=1e0f1a416e1b4f9ea0dfb10b82e53da7",
+        height = "600px",
         width = "100%"
       )
     })
@@ -121,8 +121,8 @@ mod_land_use_server <- function(id) {
 
     output$mlra_map <- renderUI({
       tags$iframe(
-        src = "https://arcg.is/LqziH",
-        height = "400px",
+        src = "https://nras.maps.arcgis.com/apps/instant/interactivelegend/index.html?appid=47fe1baea32e46248c3fb8e6958a1c30",
+        height = "600px",
         width = "100%"
       )
     })

@@ -25,7 +25,7 @@ golem::fill_desc(
   author_first_name = "Jadey", # Your First Name
   author_last_name = "Ryan", # Your Last Name
   author_email = "jryan@agr.wa.gov", # Your Email
-  repo_url = "https://github.com/WA-Department-of-Agriculture/WaCSEshiny" # The URL of the GitHub Repo (optional)
+  repo_url = "https://github.com/WA-Department-of-Agriculture/WaCSE" # The URL of the GitHub Repo (optional)
 )
 
 ## Set {golem} options ----

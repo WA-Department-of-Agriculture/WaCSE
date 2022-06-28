@@ -7,7 +7,7 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-mod_explore_ui <- function(id){
+mod_explore_ui <- function(id) {
   ns <- NS(id)
 
   county_mlra <- comet_wa %>%
@@ -68,8 +68,8 @@ mod_explore_ui <- function(id){
 #' explore Server Functions
 #'
 #' @noRd
-mod_explore_server <- function(id){
-  moduleServer( id, function(input, output, session){
+mod_explore_server <- function(id) {
+  moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
     # render UI filter elements and reactive df-----------------------------------------------
@@ -94,7 +94,7 @@ mod_explore_server <- function(id){
     output$land_use <- renderUI({
       choices <- unique(comet_tags) %>%
         subset(class %in% input$class &
-                 practice %in% input$practice) %>%
+          practice %in% input$practice) %>%
         select(current_land_use)
 
       choices <- as.character(pull(choices))
@@ -112,7 +112,7 @@ mod_explore_server <- function(id){
     output$irrigation <- renderUI({
       choices <- unique(comet_tags) %>%
         subset(class %in% input$class &
-                 practice %in% input$practice) %>%
+          practice %in% input$practice) %>%
         select(irrigation)
 
       choices <- as.character(pull(choices))
@@ -148,7 +148,7 @@ mod_explore_server <- function(id){
     filtered_df <- reactive({
       req(input$county, input$class, input$practice, input$land_use, input$irrigation)
       if (!("Nutrient Management (CPS 590)" %in% input$practice)) {
-        subset(
+        filtered_df <- subset(
           comet_wa,
           county %in% input$county &
             class %in% input$class &
@@ -156,9 +156,10 @@ mod_explore_server <- function(id){
             current_land_use %in% input$land_use &
             irrigation %in% input$irrigation
         )
+        return(filtered_df)
       } else {
         req(input$nutrient_practice)
-        subset(
+        filtered_df <- subset(
           comet_wa,
           county %in% input$county &
             class %in% input$class &
@@ -167,6 +168,7 @@ mod_explore_server <- function(id){
             irrigation %in% input$irrigation &
             nutrient_practice %in% input$nutrient_practice
         )
+        return(filtered_df)
       }
     })
 
@@ -176,29 +178,29 @@ mod_explore_server <- function(id){
 
     # render table ------------------------------------------------------------
 
-    filtered <- reactive({
-      filtered <- fct_table_filter(filtered_df()) %>%
-        mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated")))
+    explore_table <- reactive({
+      explore_table <- fct_table_filter(filtered_df()) %>%
+        mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated"))) %>%
+      fct_table(type = "explore")
+      return(explore_table)
     })
 
-    output$table <- DT::renderDT(fct_table(data = filtered(), type = "explore"))
+    output$table <- DT::renderDT(explore_table())
 
     # render plot -------------------------------------------------------------
 
-    filtered_plot <- reactive({
-      filtered_df() %>%
-        filter(ghg_type == "total.ghg.co2")
+    explore_plot <- reactive({
+        if (dplyr::n_distinct(filtered_df()$implementation) > 10 ||
+            nrow(filtered_df()) > 40) {
+          validate("The plot is too cluttered. Please remove some selections.")
+        }
+      explore_plot <- filtered_df() %>%
+        filter(ghg_type == "total.ghg.co2") %>%
+        fct_plot(type = "explore", error_bar = TRUE)
+      return(explore_plot)
     })
 
-    output$plot <- ggiraph::renderGirafe({
-      req(filtered_plot())
-      if (dplyr::n_distinct(filtered_plot()$implementation) > 10 ||
-          nrow(filtered_plot()) > 40) {
-        validate("The plot is too cluttered. Please remove some selections.")
-      }
-      fct_plot(filtered_plot(), type = "explore", error_bar = TRUE)
-    })
-
+    output$plot <- ggiraph::renderGirafe({explore_plot()})
   })
 }
 
