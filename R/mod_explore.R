@@ -7,6 +7,9 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
+#' @importFrom shinyWidgets virtualSelectInput
+#' @importFrom shinydashboard box
+
 mod_explore_ui <- function(id) {
   ns <- NS(id)
 
@@ -16,48 +19,49 @@ mod_explore_ui <- function(id) {
   cm_choices <- split(county_mlra$county, county_mlra$mlra)
 
   tagList(
-    sidebarLayout(
-      sidebarPanel(
-        width = 3,
-        style = "overflow: auto; max-height: 675px; position: relative;",
-        div(
-          id = ns("form"),
-          selectizeInput(
-            inputId = ns("county"),
-            label = "County",
-            choices = cm_choices,
-            multiple = TRUE,
-            selected = "Klickitat",
-            options = list(
-              plugins = list("remove_button")
-            )
-          ),
-          selectizeInput(
-            inputId = ns("class"),
-            label = "Conservation Class",
-            choices = unique(comet_tags$class),
-            multiple = TRUE,
-            selected = unique(comet_tags$class[1]),
-            options = list(plugins = list("remove_button"))
-          ),
-          uiOutput(ns("practice")),
-          uiOutput(ns("nutrient_practice")),
-          uiOutput(ns("land_use")),
-          uiOutput(ns("irrigation"))
+    fluidRow(
+      box(
+        status = "warning",
+        width = 4,
+        virtualSelectInput(
+          inputId = ns("county"),
+          label = strong("1. County"),
+          choices = cm_choices,
+          selected = "Klickitat",
+          multiple = TRUE,
+          search = TRUE,
+          showValueAsTags = TRUE,
+          position = "bottom",
+          optionsCount = 5
         ),
-        actionButton(ns("reset"), "Reset Selection")
+        virtualSelectInput(
+          inputId = ns("class"),
+          label = strong("2. Conservation Class"),
+          choices = unique(comet_tags$class),
+          multiple = TRUE,
+          position = "bottom",
+          optionsCount = 5,
+          showValueAsTags = TRUE,
+          autoSelectFirstOption = TRUE
+        ),
+        uiOutput(ns("practice")),
+        uiOutput(ns("land_use")),
+        uiOutput(ns("irrigation")),
+        uiOutput(ns("nutrient_practice"))
       ),
-      mainPanel(
+      box(
+        status = "warning",
+        width = 8,
         tabsetPanel(
           type = "pills",
           tabPanel(
             "Table",
             br(),
-            withSpinner(DT::DTOutput(ns("table"), width = "100%"))
+            DT::DTOutput(ns("table"))
           ),
           tabPanel(
             "Bar Graph",
-            withSpinner(ggiraph::girafeOutput(ns("plot"), width = "100%"))
+            ggiraph::girafeOutput(ns("plot"))
           )
         )
       )
@@ -72,7 +76,7 @@ mod_explore_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    # render UI filter elements and reactive df-----------------------------------------------
+    # render UI filter elements -----------------------------------------------
 
     output$practice <- renderUI({
       choices <- unique(comet_tags) %>%
@@ -81,13 +85,17 @@ mod_explore_server <- function(id) {
 
       choices <- as.character(pull(choices))
 
-      selectizeInput(
+      virtualSelectInput(
         inputId = ns("practice"),
-        label = "Conservation Practice",
-        choices = choices,
-        selected = choices[1],
+        label = strong("3. Conservation Practice"),
+        choices = sort(unique(choices)),
         multiple = TRUE,
-        options = list(plugins = list("remove_button"))
+        disableSelectAll = TRUE,
+        search = TRUE,
+        position = "bottom",
+        optionsCount = 5,
+        showValueAsTags = TRUE,
+        autoSelectFirstOption = TRUE
       )
     })
 
@@ -99,13 +107,16 @@ mod_explore_server <- function(id) {
 
       choices <- as.character(pull(choices))
 
-      selectizeInput(
+      virtualSelectInput(
         inputId = ns("land_use"),
-        label = "Current Land Use",
-        choices = choices,
-        selected = choices,
+        label = strong("4. Current Land Use"),
+        choices = sort(unique(choices)),
         multiple = TRUE,
-        options = list(plugins = list("remove_button"))
+        selected = choices,
+        position = "bottom",
+        optionsCount = 5,
+        showValueAsTags = TRUE,
+        autoSelectFirstOption = TRUE
       )
     })
 
@@ -117,13 +128,15 @@ mod_explore_server <- function(id) {
 
       choices <- as.character(pull(choices))
 
-      selectizeInput(
+      virtualSelectInput(
         inputId = ns("irrigation"),
-        label = "Irrigation Type",
-        choices = choices,
+        label = strong("5. Irrigation Type"),
+        choices = sort(unique(choices)),
         selected = choices,
         multiple = TRUE,
-        options = list(plugins = list("remove_button"))
+        position = "bottom",
+        optionsCount = 5,
+        showValueAsTags = TRUE,
       )
     })
 
@@ -135,15 +148,36 @@ mod_explore_server <- function(id) {
 
       choices <- as.character(pull(choices))
 
-      selectizeInput(
-        inputId = ns("nutrient_practice"),
-        label = "Nutrient Management",
-        choices = choices,
-        selected = c(choices["Not applicable"], choices[1:3]),
-        multiple = TRUE,
-        options = list(plugins = list("remove_button"))
+      tagList(
+        virtualSelectInput(
+          inputId = ns("nutrient_practice"),
+          label = strong("6. Nutrient Management*"),
+          choices = sort(unique(choices)),
+          selected = c(choices["Not Applicable"], choices[1:3]),
+          multiple = TRUE,
+          position = "bottom",
+          optionsCount = 5,
+          showValueAsTags = TRUE,
+        ),
+        p("* If you selected multiple practices in Step 3, select 'Not Applicable' in Step 6 to include all practices.")
       )
     })
+
+    # render df for proxy -----------------------------------------------------
+
+    df <- data.frame(
+      "MLRA" = character(),
+      "County" = character(),
+      "Conservation Class" = character(),
+      "Conservation Practice" = character(),
+      "Practice Implementation" = character(),
+      "Carbon Dioxide" = numeric(),
+      "Nitrous Oxide" = numeric(),
+      "Methane" = numeric(),
+      "Total Greenhouse Gases" = numeric()
+    )
+
+    # render reactive df ------------------------------------------------------
 
     filtered_df <- reactive({
       req(input$county, input$class, input$practice, input$land_use, input$irrigation)
@@ -172,35 +206,40 @@ mod_explore_server <- function(id) {
       }
     })
 
-    observeEvent(input$reset, {
-      shinyjs::reset("form")
-    })
-
     # render table ------------------------------------------------------------
 
     explore_table <- reactive({
       explore_table <- fct_table_filter(filtered_df()) %>%
-        mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated"))) %>%
-      fct_table(type = "explore")
+        mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated")))
       return(explore_table)
     })
 
-    output$table <- DT::renderDT(explore_table())
+    output$table <- DT::renderDT({
+      fct_table(df, type = "explore")
+    })
+
+    proxy <- DT::dataTableProxy("table")
+
+    observe({
+      DT::replaceData(proxy, explore_table(), rownames = FALSE)
+    })
 
     # render plot -------------------------------------------------------------
 
     explore_plot <- reactive({
-        if (dplyr::n_distinct(filtered_df()$implementation) > 10 ||
-            nrow(filtered_df()) > 40) {
-          validate("The plot is too cluttered. Please remove some selections.")
-        }
+      if (dplyr::n_distinct(filtered_df()$implementation) > 20 ||
+        nrow(filtered_df()) > 60) {
+        validate("The plot is too cluttered. Please remove some selections.")
+      }
       explore_plot <- filtered_df() %>%
         filter(ghg_type == "total.ghg.co2") %>%
         fct_plot(type = "explore", error_bar = TRUE)
       return(explore_plot)
     })
 
-    output$plot <- ggiraph::renderGirafe({explore_plot()})
+    output$plot <- ggiraph::renderGirafe({
+      explore_plot()
+    })
   })
 }
 

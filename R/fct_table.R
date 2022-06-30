@@ -48,6 +48,7 @@ fct_table <- function(data, type) {
       table(
         thead(
           tr(
+            class = "dt-head-left",
             th(rowspan = 2, "MLRA"),
             th(rowspan = 2, "County"),
             th(rowspan = 2, "Conservation Class"),
@@ -75,7 +76,7 @@ fct_table <- function(data, type) {
     scroll <- 200
   }
 
-  if (type == "summary_county") {
+  if (type == "summary") {
     sketch <- htmltools::withTags(
       table(
         thead(
@@ -99,7 +100,7 @@ fct_table <- function(data, type) {
 
   DT::datatable(
     data,
-    class = "compact row-border",
+    class = "table-compact row-border",
     container = sketch,
     rownames = FALSE,
     extensions = c("Buttons", "Scroller", "RowGroup", "FixedHeader"),
@@ -115,7 +116,7 @@ fct_table <- function(data, type) {
           targets = hide_targets
         )
       ),
-      dom = "B,t",
+      dom = "B,t,p",
       rowGroup = rowGrp,
       pageLength = 500,
       buttons = list(list(
@@ -127,7 +128,8 @@ fct_table <- function(data, type) {
         ),
         text = "Download"
       )),
-      scrollY = scroll
+      scrollY = scroll,
+      scrollCollapse = TRUE
     ),
     selection = selection
   )

@@ -7,13 +7,12 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-#' @import shinycssloaders
 #' @import dplyr
+#' @importFrom shinyWidgets virtualSelectInput updateVirtualSelect actionBttn
+#' @importFrom shinydashboard box
 #'
 # TODO:   split UI for this tab into a different module
-#         use proxy to update table rather than render
 #         hide remove button from Summaries and Bar Graph tabs
-#         edit df so SE is multiplied by acres
 
 mod_estimate_ui <- function(id) {
   ns <- NS(id)
@@ -24,59 +23,73 @@ mod_estimate_ui <- function(id) {
   cm_choices <- split(county_mlra$county, county_mlra$mlra)
 
   tagList(
-    shinyFeedback::useShinyFeedback(),
-    sidebarLayout(
-      sidebarPanel(
-        width = 3,
-        selectizeInput(
-          inputId = ns("county"),
-          label = "County",
-          choices = cm_choices,
-        ),
-        selectizeInput(
-          inputId = ns("class"),
-          label = "Conservation Class",
-          choices = unique(comet_tags$class),
-        ),
-        selectizeInput(
-          inputId = ns("practice"),
-          label = "Conservation Practice",
-          choices = unique(comet_tags$practice),
-        ),
-        selectizeInput(
-          inputId = ns("implementation"),
-          label = "Practice Implementation",
-          choices = unique(comet_tags$implementation),
-        ),
-        numericInput(
-          inputId = ns("acres"),
-          label = "Number of Acres",
-          value = "1",
-          min = 1
-        ),
-        actionButton(
-          inputId = ns("add"),
-          label = "Add"
-        ),
-        actionButton(
-          inputId = ns("remove"),
-          label = "Remove"
-        )
-      ),
-      mainPanel(
-        tabsetPanel(
-          type = "pills",
-          tabPanel(
-            "Tables",
-            h4("Full Table"),
-            withSpinner(DT::DTOutput(ns("table"))),
-            h4("Summary Table"),
-            withSpinner(DT::DTOutput(ns("summary_county")))
+    fluidRow(
+      column(
+        width = 4,
+        box(
+          width = NULL, status = "warning",
+          virtualSelectInput(
+            inputId = ns("county"),
+            label = strong("1. County"),
+            choices = cm_choices,
+            multiple = FALSE,
+            position = "bottom",
+            optionsCount = 5,
+            search = TRUE,
+            autoSelectFirstOption = FALSE
           ),
-          tabPanel(
-            "Bar Graph", br(),
-            withSpinner(ggiraph::girafeOutput(ns("plot"), width = "100%"))
+          virtualSelectInput(
+            inputId = ns("class"),
+            label = strong("2. Conservation Class"),
+            choices = unique(comet_tags$class),
+            multiple = FALSE,
+            position = "bottom",
+            optionsCount = 5,
+            autoSelectFirstOption = FALSE
+          ),
+          uiOutput(ns("practice")),
+          uiOutput(ns("land_use")),
+          uiOutput(ns("irrigation")),
+          uiOutput(ns("implementation")),
+          numericInput(
+            inputId = ns("acres"),
+            label = strong("7. Number of Acres"),
+            value = "1",
+            min = 1
+          ),
+          actionBttn(
+            inputId = ns("add"),
+            label = "Add",
+            style = "simple",
+            color = "success"
+          ),
+          actionBttn(
+            inputId = ns("remove"),
+            label = "Remove",
+            style = "simple",
+            color = "danger"
           )
+        )
+      ), column(
+        width = 8,
+        box(
+          width = NULL,
+          title = "Full Table", status = "warning", solidHeader = TRUE,
+          collapsible = TRUE,
+          DT::DTOutput(ns("table"))
+        ),
+        box(
+          width = NULL,
+          title = "Summary Table", status = "warning", solidHeader = TRUE,
+          collapsible = TRUE,
+          DT::DTOutput(ns("summary"))
+        ),
+        box(
+          width = NULL,
+          title = "Bar Graph", status = "warning", solidHeader = TRUE,
+          collapsible = TRUE,
+          collapsed = TRUE,
+          ggiraph::girafeOutput(ns("plot"))
         )
       )
     )
@@ -92,40 +105,92 @@ mod_estimate_server <- function(id) {
 
     # update or render UI inputs --------------------------------------------------------
 
-    # update practice input
+    # render practice input
 
-    observeEvent(input$class, {
+    output$practice <- renderUI({
       choices <- unique(comet_tags) %>%
         subset(class %in% input$class) %>%
-        select(practice) %>%
-        arrange(practice)
+        select(practice)
 
       choices <- as.character(pull(choices))
 
-      updateSelectizeInput(session, "practice", choices = choices)
+      virtualSelectInput(
+        inputId = ns("practice"),
+        label = strong("3. Conservation Practice"),
+        choices = sort(unique(choices)),
+        multiple = FALSE,
+        position = "bottom",
+        optionsCount = 5,
+        search = TRUE,
+        autoSelectFirstOption = FALSE
+      )
     })
 
-    # update implementation input
+    # render land use input
 
-    observeEvent(
-      eventExpr = {
-        input$class
-        input$practice
-      },
-      handlerExpr = {
-        choices <- unique(comet_tags) %>%
-          subset(
-            class %in% input$class &
-              practice %in% input$practice
-          ) %>%
-          select(implementation) %>%
-          arrange(implementation)
+    output$land_use <- renderUI({
+      choices <- unique(comet_tags) %>%
+        subset(class %in% input$class &
+          practice %in% input$practice) %>%
+        select(current_land_use)
 
-        choices <- as.character(pull(choices))
+      choices <- as.character(pull(choices))
 
-        updateSelectizeInput(session, "implementation", choices = choices)
-      }
-    )
+      virtualSelectInput(
+        inputId = ns("land_use"),
+        label = strong("4. Current Land Use"),
+        choices = sort(unique(choices)),
+        multiple = FALSE,
+        position = "bottom",
+        optionsCount = 5,
+        autoSelectFirstOption = FALSE
+      )
+    })
+
+    # render irrigation input
+
+    output$irrigation <- renderUI({
+      choices <- unique(comet_tags) %>%
+        subset(class %in% input$class &
+          practice %in% input$practice) %>%
+        select(irrigation)
+
+      choices <- as.character(pull(choices))
+
+      virtualSelectInput(
+        inputId = ns("irrigation"),
+        label = strong("5. Irrigation Type"),
+        choices = sort(unique(choices)),
+        multiple = FALSE,
+        position = "bottom",
+        optionsCount = 5,
+        autoSelectFirstOption = FALSE
+      )
+    })
+
+    # render implementation input
+
+    output$implementation <- renderUI({
+      choices <- unique(comet_tags) %>%
+        subset(class %in% input$class &
+          practice %in% input$practice &
+          current_land_use %in% input$land_use &
+          irrigation %in% input$irrigation) %>%
+        select(implementation)
+
+      choices <- as.character(pull(choices))
+
+      virtualSelectInput(
+        inputId = ns("implementation"),
+        label = strong("6. Practice Implementation"),
+        choices = sort(unique(choices)),
+        multiple = FALSE,
+        position = "bottom",
+        optionsCount = 5,
+        search = TRUE,
+        autoSelectFirstOption = FALSE
+      )
+    })
 
     # give warning if user selects acres <1
 
@@ -143,9 +208,7 @@ mod_estimate_server <- function(id) {
 
     # prepare data for table
 
-    rv <- reactiveValues()
-
-    rv$df <- data.frame(
+    df <- data.frame(
       "MLRA" = character(),
       "County" = character(),
       "Conservation Class" = character(),
@@ -157,6 +220,8 @@ mod_estimate_server <- function(id) {
       "Methane" = numeric(),
       "Total Greenhouse Gases" = numeric()
     )
+
+    rv <- reactiveValues(x = df)
 
     # filter to selected row
 
@@ -184,6 +249,33 @@ mod_estimate_server <- function(id) {
       return(filtered)
     })
 
+    # summarize by county ------------------------------------------
+
+    summary_df <- data.frame(
+      "MLRA" = character(),
+      "County" = character(),
+      "# of Practice Implementations" = numeric(),
+      "Total Acres" = numeric(),
+      "Total Greenhouse Gases" = numeric()
+    )
+
+    summary_county <- reactive({
+      req(rv$df)
+      summary_county <- rv$df %>%
+        mutate(
+          Acres = as.numeric(Acres),
+          Total.Greenhouse.Gases = as.numeric(Total.Greenhouse.Gases)
+        ) %>%
+        group_by(MLRA, County) %>%
+        summarize(
+          "# of Practice Implementations" = n_distinct(Practice.Implementation),
+          "Total Acres" = sum(Acres),
+          "Total Greenhouse Gases" = sum(Total.Greenhouse.Gases)
+        ) %>%
+        as.data.frame()
+      return(summary_county)
+    })
+
     # add, edit, or delete rows ------------------------------------------------------
 
     # add new row to table
@@ -193,7 +285,7 @@ mod_estimate_server <- function(id) {
         input$county,
         input$class,
         input$practice,
-        input$acres,
+        input$acres >= 1,
         filtered()$implementation,
         filtered()$co2
       )
@@ -230,7 +322,7 @@ mod_estimate_server <- function(id) {
             ),
             footer = tagList(
               modalButton("Cancel"),
-              actionButton(ns("confirm"), "Yes")
+              actionButton(ns("confirm"), label = "Yes")
             ), easyClose = TRUE
           )
         } else {
@@ -251,44 +343,38 @@ mod_estimate_server <- function(id) {
       removeModal()
     })
 
-
-    # summarize by county and practice ------------------------------------------
-
-    # by county
-
-    summary_county <- reactive({
-      summary_county <- rv$df %>%
-        mutate(
-          Acres = as.numeric(Acres),
-          Total.Greenhouse.Gases = as.numeric(Total.Greenhouse.Gases)
-        ) %>%
-        group_by(MLRA, County) %>%
-        summarize(
-          "# of Practice Implementations" = n_distinct(Practice.Implementation),
-          "Total Acres" = sum(Acres),
-          "Total Greenhouse Gases" = sum(Total.Greenhouse.Gases)
-        ) %>%
-        as.data.frame()
-      return(summary_county)
-    })
-
     # render tables ------------------------------------------------------------
 
     # full table
 
     output$table <- DT::renderDT({
-      fct_table(rv$df, "estimate")
+      isolate(rv$df)
+      fct_table(df, type = "estimate")
     })
 
-    # summary tables
+    proxy_full <- DT::dataTableProxy("table")
 
-    output$summary_county <- DT::renderDT({
-      fct_table(summary_county(), "summary_county")
+    observe({
+      DT::replaceData(proxy_full, rv$df, rownames = FALSE)
+    })
+
+    # summary table
+
+    output$summary <- DT::renderDT({
+      isolate(rv$df)
+      fct_table(summary_df, type = "summary")
+    })
+
+    proxy_summary <- DT::dataTableProxy("summary")
+
+    observe({
+      DT::replaceData(proxy_summary, summary_county(), rownames = FALSE)
     })
 
     # render plot -------------------------------------------------------------
 
     filtered_plot <- reactive({
+      req(rv$df)
       rv$df %>%
         select(
           mlra = MLRA,
@@ -303,8 +389,8 @@ mod_estimate_server <- function(id) {
 
     output$plot <- ggiraph::renderGirafe({
       req(filtered_plot())
-      if (dplyr::n_distinct(filtered_plot()$implementation) > 10 ||
-        nrow(filtered_plot()) > 40) {
+      if (dplyr::n_distinct(filtered_plot()$implementation) > 20 ||
+        nrow(filtered_plot()) > 60) {
         validate("The plot is too cluttered. Please remove some selections.")
       }
       fct_plot(filtered_plot(), type = "estimate", error_bar = FALSE)

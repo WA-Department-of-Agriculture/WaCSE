@@ -22,10 +22,10 @@ fct_font <- function(id) {
 
 theme <- bslib::bs_theme(
   version = 5,
-  bootswatch = "lumen",
-  base_font = bslib::font_google("Poppins"),
-  primary = "#253e90",
-  `enable-shadows` = TRUE
+  primary = "#253e90", secondary = "#61c3ee", success = "#489739", warning = "#ffb04c",
+  base_font = bslib::font_google("Poppins"), font_scale = NULL,
+  `enable-shadows` = TRUE, `enable-rounded` = TRUE,
+  bootswatch = "lumen"
 )
 
 #' fct_wrap

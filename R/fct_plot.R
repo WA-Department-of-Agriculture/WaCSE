@@ -45,7 +45,6 @@ fct_plot <- function(data, type, error_bar) {
       "Total Greenhouse Gases",
       "\n(Metric tonnes CO2 equivalent per year)"
     )
-
   }
 
   # color blind friendly colors for negative-bad, positive-good

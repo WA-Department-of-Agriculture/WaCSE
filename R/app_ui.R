@@ -30,7 +30,8 @@ app_ui <- function(request) {
           "Agricultural land use",
           mod_land_use_ui("land_use_tab")
         ),
-        tabPanel("Bookmark and Download",
+        tabPanel(
+          "Bookmark and download",
           mod_download_ui("download_tab")
         ),
         tabPanel(
@@ -68,7 +69,10 @@ golem_add_external_resources <- function() {
       app_title = "WaCSEshiny"
     ),
     shinyjs::useShinyjs(),
-    shinyFeedback::useShinyFeedback()
+    shinyFeedback::useShinyFeedback(),
+    shinyWidgets::useShinydashboard(),
+    shinyWidgets::setBackgroundColor(color = "#D9E2E7")
+
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
   )

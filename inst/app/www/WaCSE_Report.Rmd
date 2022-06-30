@@ -8,6 +8,7 @@ mainfont: Arial
 params: 
   name: NA
   project: NA
+  explore_table: NA
 ---
 
 ```{r setup, include = FALSE}
@@ -23,7 +24,7 @@ knitr::opts_chunk$set(echo = FALSE)
 Insert text.
 
 ```{r, echo = FALSE}
-"Insert code."
+params$explore_table
 ```
 
 ## Calculate your Estimate
