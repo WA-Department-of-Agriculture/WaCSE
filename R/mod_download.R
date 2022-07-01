@@ -47,7 +47,8 @@ mod_download_server <- function(id) {
         # Set up parameters to pass to Rmd document
         params <- list(
           name = input$name,
-          project = input$project
+          project = input$project,
+          explore_table = explore_table()
           )
 
         # Knit the document, passing in the `params` list, and eval it in a

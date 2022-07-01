@@ -23,8 +23,8 @@
   justify-content: space-evenly;
 }
 
-.bg-blue {
-    background-color: #253e90 !important;
+.bg-teal {
+    background-color: #00819c !important;
 }
 
 .vscomp-value {
@@ -101,6 +101,11 @@ table.dataTable thead th.dt-head-center, table.dataTable thead td.dt-head-center
     text-align: center;
     background-color: #489739;
     color: white;
+}
+
+table.dataTable thead .sorting {
+  background-color: #489739;
+  color: white;
 }
 
 table.dataTable thead th.dt-head-left, table.dataTable thead td.dt-head-left, table.dataTable tfoot th.dt-head-left, table.dataTable tfoot td.dt-head-left {

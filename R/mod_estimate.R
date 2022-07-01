@@ -26,7 +26,8 @@ mod_estimate_ui <- function(id) {
     fluidRow(
       column(
         width = 4,
-        box(title = strong("Add Practices by County and Acres"),
+        box(
+          title = strong("Add Practices by County and Acres"),
           width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
           virtualSelectInput(
             inputId = ns("county"),
@@ -72,7 +73,8 @@ mod_estimate_ui <- function(id) {
       ), column(
         width = 8,
         fluidRow(
-          box(title = strong("View your Estimate"),
+          box(
+            title = strong("View your Estimate"),
             width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
             tabsetPanel(
               type = "pills",
@@ -90,7 +92,8 @@ mod_estimate_ui <- function(id) {
           infoBoxOutput(ns("total_acres")),
           infoBoxOutput(ns("total_ghg"))
         )),
-        box(title = strong("Summary by County"),
+        box(
+          title = strong("Summary by County"),
           width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
           DT::DTOutput(ns("summary"))
         )
@@ -203,7 +206,7 @@ mod_estimate_server <- function(id) {
       return(input$acres)
     })
 
-    # create reactive df ------------------------------------------------------
+    # create reactive df for full table and plot ---------------------------------------------
 
     # prepare data for table
 
@@ -248,7 +251,7 @@ mod_estimate_server <- function(id) {
       return(filtered)
     })
 
-    # summarize by county ------------------------------------------
+    # prepare data for summarize by county table ------------------------------------------
 
     summary_df <- data.frame(
       "MLRA" = character(),
@@ -309,7 +312,7 @@ mod_estimate_server <- function(id) {
       infoBox("Total GHG Reductions",
         value = paste(value_ghg(), "MT CO2eq/yr"),
         icon = icon("globe"),
-        color = "blue",
+        color = "teal",
         fill = TRUE,
         width = 6
       )

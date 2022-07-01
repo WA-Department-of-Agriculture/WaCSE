@@ -42,6 +42,8 @@ fct_table <- function(data, type) {
     targets <- 0:8
     rowGrp <- list(dataSrc = 0:1)
     scroll <- 500
+    numeric_cols <- c(6, 9)
+    acre_col <- 1
   }
 
   if (type == "estimate") {
@@ -75,6 +77,8 @@ fct_table <- function(data, type) {
     targets <- 0:9
     rowGrp <- list(dataSrc = 0:1)
     scroll <- 200
+    numeric_cols <- c(6:7, 10)
+    acre_col <- 6
   }
 
   if (type == "summary") {
@@ -98,6 +102,8 @@ fct_table <- function(data, type) {
     targets <- 0:4
     rowGrp <- NULL
     scroll <- 200
+    numeric_cols <- 4:5
+    acre_col <- 4
   }
 
   DT::datatable(
@@ -108,10 +114,6 @@ fct_table <- function(data, type) {
     extensions = c("Buttons", "Scroller", "RowGroup", "FixedHeader"),
     options = list(
       columnDefs = list(
-        list(
-          class = "dt-head-left",
-          targets = targets
-        ),
         list(
           visible = FALSE,
           targets = hide_targets
@@ -143,5 +145,7 @@ fct_table <- function(data, type) {
       scrollCollapse = TRUE
     ),
     selection = selection
-  )
+  ) %>%
+    DT::formatCurrency(columns = numeric_cols, currency = "") %>%
+    DT::formatRound(columns = acre_col, digits = 0)
 }

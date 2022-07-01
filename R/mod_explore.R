@@ -20,7 +20,8 @@ mod_explore_ui <- function(id) {
 
   tagList(
     fluidRow(
-      box(title = strong("Filter the Data"),
+      box(
+        title = strong("Filter the Data"),
         width = 4, status = "primary", collapsible = TRUE, solidHeader = TRUE,
         virtualSelectInput(
           inputId = ns("county"),
@@ -46,7 +47,8 @@ mod_explore_ui <- function(id) {
         uiOutput(ns("irrigation")),
         uiOutput(ns("nutrient_practice"))
       ),
-      box(title = strong("Explore the Data"),
+      box(
+        title = strong("Explore the Data"),
         width = 8, status = "primary", collapsible = TRUE, solidHeader = TRUE,
         tabsetPanel(
           type = "pills",
