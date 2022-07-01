@@ -16,7 +16,6 @@ app_ui <- function(request) {
       theme = theme,
       navbarPage(
         "Washington Climate Smart Estimator (WaCSE)",
-        inverse = TRUE,
         collapsible = TRUE,
         tabPanel(
           "Explore the data",

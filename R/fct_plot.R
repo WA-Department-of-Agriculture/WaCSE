@@ -9,8 +9,6 @@
 #'
 #' @noRd
 #'
-# TODO: calculate error bars when there are acres
-#        fix tt error if statement
 
 fct_plot <- function(data, type, error_bar) {
   # require data
@@ -73,7 +71,7 @@ fct_plot <- function(data, type, error_bar) {
       x = NULL,
       y = ylab
     ) +
-    theme_classic(base_family = "poppins") +
+    theme_classic(base_family = "Helvetica") +
     theme(
       plot.title = element_text(face = "bold"),
       axis.text.y = element_text(
@@ -134,18 +132,16 @@ fct_plot <- function(data, type, error_bar) {
 
   # plot with ggiraph
 
-  tooltip_css <- "font-size:0.8rem; color:black; background:white; padding:8px; border-radius:6px;"
+  tooltip_css <- "font-size:1rem; color:black; background:white; padding:8px; border-radius:6px;"
 
   plot <- girafe(
     ggobj = plot,
-    width_svg = 12,
-    height_svg = 5,
+    width_svg = 9,
     options = list(
       opts_tooltip(
         css = tooltip_css
       ),
-      opts_toolbar(saveaspng = FALSE),
-      opts_zoom(max = 5)
+      opts_toolbar(saveaspng = TRUE, pngname = paste(Sys.Date(), "_WaCSE_Plot"))
     )
   )
 }

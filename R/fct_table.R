@@ -17,6 +17,7 @@ fct_table <- function(data, type) {
       table(
         thead(
           tr(
+            class = "dt-head-left",
             th(rowspan = 2, "MLRA"),
             th(rowspan = 2, "County"),
             th(rowspan = 2, "Conservation Class"),
@@ -30,7 +31,7 @@ fct_table <- function(data, type) {
           tr(th(
             colspan = 4,
             class = "dt-head-center",
-            tags$i("(Metric tonnes CO2 equivalent per acre per year)")
+            em("(Metric tonnes CO2 equivalent per acre per year)")
           ))
         )
       )
@@ -40,7 +41,7 @@ fct_table <- function(data, type) {
     hide_targets <- 0:2
     targets <- 0:8
     rowGrp <- list(dataSrc = 0:1)
-    scroll <- 400
+    scroll <- 500
   }
 
   if (type == "estimate") {
@@ -63,7 +64,7 @@ fct_table <- function(data, type) {
           tr(th(
             colspan = 4,
             class = "dt-head-center",
-            tags$i("(Metric tonnes CO2 equivalent per year)")
+            em("(Metric tonnes CO2 equivalent per year)")
           ))
         )
       )
@@ -81,11 +82,12 @@ fct_table <- function(data, type) {
       table(
         thead(
           tr(
+            class = "dt-head-left",
             th("MLRA"),
             th("County"),
-            th("# of Practice Implementations"),
+            th("Unique Practice Implementations"),
             th("Total Acres"),
-            th("Total Greenhouse Gases (MT CO2eq/yr)")
+            th("Total GHG", em("(MT CO2eq/yr)"))
           )
         )
       )
@@ -93,9 +95,9 @@ fct_table <- function(data, type) {
 
     selection <- "none"
     hide_targets <- 0
-    targets <- 0:3
+    targets <- 0:4
     rowGrp <- NULL
-    scroll <- NULL
+    scroll <- 200
   }
 
   DT::datatable(
@@ -105,7 +107,6 @@ fct_table <- function(data, type) {
     rownames = FALSE,
     extensions = c("Buttons", "Scroller", "RowGroup", "FixedHeader"),
     options = list(
-      autoWidth = TRUE,
       columnDefs = list(
         list(
           class = "dt-head-left",
@@ -118,17 +119,27 @@ fct_table <- function(data, type) {
       ),
       dom = "B,t,p",
       rowGroup = rowGrp,
-      pageLength = 500,
+      pageLength = 25,
       buttons = list(list(
         extend = "collection",
         buttons = list(
-          list(extend = "csv", filename = "WaCSE_download"),
-          list(extend = "excel", filename = "WacSE_download"),
-          list(extend = "pdf", filename = "WaCSE_download")
+          list(
+            extend = "csv", filename = paste(Sys.Date(), "_WaCSE_Download"),
+            title = paste("Downloaded from WaCSE on", Sys.Date())
+          ),
+          list(
+            extend = "excel", filename = paste(Sys.Date(), "_WacSE_Download"),
+            title = paste("Downloaded from WaCSE on", Sys.Date())
+          ),
+          list(
+            extend = "pdf", filename = paste(Sys.Date(), "_WaCSE_Download"),
+            title = paste("Downloaded from WaCSE on", Sys.Date())
+          )
         ),
         text = "Download"
       )),
       scrollY = scroll,
+      scrollX = TRUE,
       scrollCollapse = TRUE
     ),
     selection = selection

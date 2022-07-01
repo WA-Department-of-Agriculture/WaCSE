@@ -95,7 +95,8 @@ comet_wa$abbr <- stringr::str_replace_all(comet_wa$implementation, c(
   "Fertilizer" = "Fert",
   "Unfertilized" = "Unfert",
   "Synthetic" = "Synth",
-  "Management" = "Mngmt"
+  "Management" = "Mngmt",
+  "with" = "w/"
 ))
 
 comet_wa <- comet_wa %>% relocate(abbr, .after = implementation)

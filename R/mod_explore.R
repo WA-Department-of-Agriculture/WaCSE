@@ -20,9 +20,8 @@ mod_explore_ui <- function(id) {
 
   tagList(
     fluidRow(
-      box(
-        status = "warning",
-        width = 4,
+      box(title = strong("Filter the Data"),
+        width = 4, status = "primary", collapsible = TRUE, solidHeader = TRUE,
         virtualSelectInput(
           inputId = ns("county"),
           label = strong("1. County"),
@@ -30,7 +29,6 @@ mod_explore_ui <- function(id) {
           selected = "Klickitat",
           multiple = TRUE,
           search = TRUE,
-          showValueAsTags = TRUE,
           position = "bottom",
           optionsCount = 5
         ),
@@ -41,7 +39,6 @@ mod_explore_ui <- function(id) {
           multiple = TRUE,
           position = "bottom",
           optionsCount = 5,
-          showValueAsTags = TRUE,
           autoSelectFirstOption = TRUE
         ),
         uiOutput(ns("practice")),
@@ -49,18 +46,19 @@ mod_explore_ui <- function(id) {
         uiOutput(ns("irrigation")),
         uiOutput(ns("nutrient_practice"))
       ),
-      box(
-        status = "warning",
-        width = 8,
+      box(title = strong("Explore the Data"),
+        width = 8, status = "primary", collapsible = TRUE, solidHeader = TRUE,
         tabsetPanel(
           type = "pills",
           tabPanel(
             "Table",
+            icon = icon("table"),
             br(),
             DT::DTOutput(ns("table"))
           ),
           tabPanel(
             "Bar Graph",
+            icon = icon("chart-bar"),
             ggiraph::girafeOutput(ns("plot"))
           )
         )
@@ -90,11 +88,9 @@ mod_explore_server <- function(id) {
         label = strong("3. Conservation Practice"),
         choices = sort(unique(choices)),
         multiple = TRUE,
-        disableSelectAll = TRUE,
         search = TRUE,
         position = "bottom",
         optionsCount = 5,
-        showValueAsTags = TRUE,
         autoSelectFirstOption = TRUE
       )
     })
@@ -115,7 +111,6 @@ mod_explore_server <- function(id) {
         selected = choices,
         position = "bottom",
         optionsCount = 5,
-        showValueAsTags = TRUE,
         autoSelectFirstOption = TRUE
       )
     })
@@ -135,8 +130,7 @@ mod_explore_server <- function(id) {
         selected = choices,
         multiple = TRUE,
         position = "bottom",
-        optionsCount = 5,
-        showValueAsTags = TRUE,
+        optionsCount = 5
       )
     })
 
@@ -156,10 +150,9 @@ mod_explore_server <- function(id) {
           selected = c(choices["Not Applicable"], choices[1:3]),
           multiple = TRUE,
           position = "bottom",
-          optionsCount = 5,
-          showValueAsTags = TRUE,
+          optionsCount = 5
         ),
-        p("* If you selected multiple practices in Step 3, select 'Not Applicable' in Step 6 to include all practices.")
+        p("*", em("If you selected multiple practices in Step 3, select 'Not Applicable' in Step 6 to include all practices."))
       )
     })
 
@@ -227,8 +220,8 @@ mod_explore_server <- function(id) {
     # render plot -------------------------------------------------------------
 
     explore_plot <- reactive({
-      if (dplyr::n_distinct(filtered_df()$implementation) > 20 ||
-        nrow(filtered_df()) > 60) {
+      if (dplyr::n_distinct(filtered_df()$implementation) > 12 ||
+        nrow(filtered_df()) > 100) {
         validate("The plot is too cluttered. Please remove some selections.")
       }
       explore_plot <- filtered_df() %>%

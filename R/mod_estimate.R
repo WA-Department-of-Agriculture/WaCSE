@@ -9,7 +9,7 @@
 #' @importFrom shiny NS tagList
 #' @import dplyr
 #' @importFrom shinyWidgets virtualSelectInput updateVirtualSelect actionBttn
-#' @importFrom shinydashboard box
+#' @importFrom shinydashboard box infoBoxOutput renderInfoBox infoBox
 #'
 # TODO:   split UI for this tab into a different module
 #         hide remove button from Summaries and Bar Graph tabs
@@ -26,17 +26,17 @@ mod_estimate_ui <- function(id) {
     fluidRow(
       column(
         width = 4,
-        box(
-          width = NULL, status = "warning",
+        box(title = strong("Add Practices by County and Acres"),
+          width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
           virtualSelectInput(
             inputId = ns("county"),
             label = strong("1. County"),
             choices = cm_choices,
+            selected = "Klickitat",
             multiple = FALSE,
             position = "bottom",
             optionsCount = 5,
-            search = TRUE,
-            autoSelectFirstOption = FALSE
+            search = TRUE
           ),
           virtualSelectInput(
             inputId = ns("class"),
@@ -44,8 +44,7 @@ mod_estimate_ui <- function(id) {
             choices = unique(comet_tags$class),
             multiple = FALSE,
             position = "bottom",
-            optionsCount = 5,
-            autoSelectFirstOption = FALSE
+            optionsCount = 5
           ),
           uiOutput(ns("practice")),
           uiOutput(ns("land_use")),
@@ -72,24 +71,28 @@ mod_estimate_ui <- function(id) {
         )
       ), column(
         width = 8,
-        box(
-          width = NULL,
-          title = "Full Table", status = "warning", solidHeader = TRUE,
-          collapsible = TRUE,
-          DT::DTOutput(ns("table"))
+        fluidRow(
+          box(title = strong("View your Estimate"),
+            width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
+            tabsetPanel(
+              type = "pills",
+              tabPanel(
+                "Table",
+                icon = icon("table"), br(),
+                DT::DTOutput(ns("table"))
+              ),
+              tabPanel("Bar Graph", icon = icon("chart-bar"), ggiraph::girafeOutput(ns("plot")))
+            )
+          )
         ),
-        box(
-          width = NULL,
-          title = "Summary Table", status = "warning", solidHeader = TRUE,
-          collapsible = TRUE,
+        fluidRow(div(
+          class = "infoBoxes",
+          infoBoxOutput(ns("total_acres")),
+          infoBoxOutput(ns("total_ghg"))
+        )),
+        box(title = strong("Summary by County"),
+          width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
           DT::DTOutput(ns("summary"))
-        ),
-        box(
-          width = NULL,
-          title = "Bar Graph", status = "warning", solidHeader = TRUE,
-          collapsible = TRUE,
-          collapsed = TRUE,
-          ggiraph::girafeOutput(ns("plot"))
         )
       )
     )
@@ -121,8 +124,7 @@ mod_estimate_server <- function(id) {
         multiple = FALSE,
         position = "bottom",
         optionsCount = 5,
-        search = TRUE,
-        autoSelectFirstOption = FALSE
+        search = TRUE
       )
     })
 
@@ -142,8 +144,7 @@ mod_estimate_server <- function(id) {
         choices = sort(unique(choices)),
         multiple = FALSE,
         position = "bottom",
-        optionsCount = 5,
-        autoSelectFirstOption = FALSE
+        optionsCount = 5
       )
     })
 
@@ -163,8 +164,7 @@ mod_estimate_server <- function(id) {
         choices = sort(unique(choices)),
         multiple = FALSE,
         position = "bottom",
-        optionsCount = 5,
-        autoSelectFirstOption = FALSE
+        optionsCount = 5
       )
     })
 
@@ -187,8 +187,7 @@ mod_estimate_server <- function(id) {
         multiple = FALSE,
         position = "bottom",
         optionsCount = 5,
-        search = TRUE,
-        autoSelectFirstOption = FALSE
+        search = TRUE
       )
     })
 
@@ -276,6 +275,46 @@ mod_estimate_server <- function(id) {
       return(summary_county)
     })
 
+    # total acres info box ----------------------------------------------------------
+
+    value_acres <- reactive({
+      value_acres <- summary_county() %>%
+        select("Total Acres") %>%
+        as.vector() %>%
+        sum() %>%
+        prettyNum(big.mark = ",")
+    })
+
+    output$total_acres <- renderInfoBox({
+      infoBox("Total Acres",
+        value = paste(value_acres(), "Acres"),
+        icon = icon("seedling"),
+        color = "yellow",
+        fill = TRUE,
+        width = 6
+      )
+    })
+
+    # total ghg info box ----------------------------------------------------------
+
+    value_ghg <- reactive({
+      value_ghg <- summary_county() %>%
+        select("Total Greenhouse Gases") %>%
+        as.vector() %>%
+        sum() %>%
+        prettyNum(big.mark = ",")
+    })
+
+    output$total_ghg <- renderInfoBox({
+      infoBox("Total GHG Reductions",
+        value = paste(value_ghg(), "MT CO2eq/yr"),
+        icon = icon("globe"),
+        color = "blue",
+        fill = TRUE,
+        width = 6
+      )
+    })
+
     # add, edit, or delete rows ------------------------------------------------------
 
     # add new row to table
@@ -329,7 +368,7 @@ mod_estimate_server <- function(id) {
           modalDialog(
             title = "Warning",
             paste("Please select the row(s) that you want to remove.
-                  You can only select rows from the Full Table."),
+                  You can only select rows from the table."),
             easyClose = TRUE
           )
         }
@@ -388,7 +427,9 @@ mod_estimate_server <- function(id) {
     })
 
     output$plot <- ggiraph::renderGirafe({
-      req(filtered_plot())
+      if (is.null(rv$df)) {
+        validate("Add some data to see the graph.")
+      }
       if (dplyr::n_distinct(filtered_plot()$implementation) > 20 ||
         nrow(filtered_plot()) > 60) {
         validate("The plot is too cluttered. Please remove some selections.")
