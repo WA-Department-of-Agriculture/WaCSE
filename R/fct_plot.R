@@ -17,9 +17,9 @@ fct_plot <- function(data, type, error_bar) {
   if (type == "explore") {
     tt <- glue::glue(
       "<b>{data$implementation}</b>
-        MLRA: {data$mlra}
-        County: {data$county}
-        Emission Reduction Coefficient: {data$mean} (MT CO2e/ac/yr)"
+        <b>MLRA:</b> {data$mlra}
+        <b>County:</b> {data$county}
+        <b>Emission Reduction Coefficient:</b> {data$mean} (MT CO2e/ac/yr)"
     )
 
     ylab <- paste(
@@ -32,10 +32,10 @@ fct_plot <- function(data, type, error_bar) {
   if (type == "estimate") {
     tt <- glue::glue(
       "<b>{data$implementation}</b>
-        MLRA: {data$mlra}
-        County: {data$county}
-        Acres: {data$acres}
-        Estimated Emission Reduction: {data$mean} (MT CO2e/yr)"
+        <b>MLRA:</b> {data$mlra}
+        <b>County:</b> {data$county}
+        <b>Acres:</b> {format(round(data$acres, 0), big.mark = ',')}
+        <b>Estimated Emission Reduction:</b> {format(round(data$mean, 2), big.mark = ',')} (MT CO2e/yr)"
     )
 
     ylab <- paste(
@@ -44,9 +44,6 @@ fct_plot <- function(data, type, error_bar) {
       "\n(Metric tonnes CO2 equivalent per year)"
     )
   }
-
-  # color blind friendly colors for negative-bad, positive-good
-  # x_axis_cols <- ifelse(data$mean > 0, "#018571", "#a6611a")
 
   # plot data
   plot <-
@@ -65,13 +62,14 @@ fct_plot <- function(data, type, error_bar) {
     position = position_dodge2(reverse = TRUE),
     na.rm = TRUE
     ) +
-    scale_fill_viridis_d() +
+    geom_hline(yintercept = 0, linetype = "dashed") +
+    scale_fill_viridis_d(begin = 0.2) +
     labs(
       fill = "MLRA Legend",
       x = NULL,
       y = ylab
     ) +
-    theme_classic(base_family = "Helvetica") +
+    theme_minimal(base_family = "Poppins") +
     theme(
       plot.title = element_text(face = "bold"),
       axis.text.y = element_text(
@@ -80,7 +78,6 @@ fct_plot <- function(data, type, error_bar) {
       ),
       legend.title = element_text(face = "bold"),
       legend.text = element_text(margin = margin(t = 5, b = 5, unit = "pt"))
-      # axis.text.x = element_text(color = x_axis_cols) not supported in girafe
     ) +
     scale_y_continuous(
       labels = scales::label_number(accuracy = 0.001),
@@ -132,7 +129,7 @@ fct_plot <- function(data, type, error_bar) {
 
   # plot with ggiraph
 
-  tooltip_css <- "font-size:1rem; color:black; background:white; padding:8px; border-radius:6px;"
+  tooltip_css <- "font-size:1rem; color:black; background:#D9E2E7; padding:8px; border-radius:6px;"
 
   plot <- girafe(
     ggobj = plot,

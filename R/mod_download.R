@@ -10,10 +10,11 @@
 mod_download_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    textInput(ns("name"), "Organization or Farm Name"),
-    textInput(ns("project"), "Project Name"),
-    downloadButton(ns("report")),
-    bookmarkButton()
+    box(width = 8, status = "primary",
+      textInput(ns("name"), "Organization or Farm Name"),
+      textInput(ns("project"), "Project Name"),
+      downloadButton(ns("report")),
+      bookmarkButton())
   )
 }
 
@@ -41,14 +42,14 @@ mod_download_server <- function(id) {
                          Sys.sleep(0.01)
                        }
           tempReport <- file.path(tempdir(), "WaCSE_Report.Rmd")
-          file.copy(normalizePath("inst/app/www/WaCSE_Report.Rmd"), tempReport, overwrite = TRUE)
+          file.copy(normalizePath("inst/app/www/WaCSE_Report.Rmd"),
+                    tempReport, overwrite = TRUE)
         })
 
         # Set up parameters to pass to Rmd document
         params <- list(
           name = input$name,
-          project = input$project,
-          explore_table = explore_table()
+          project = input$project
           )
 
         # Knit the document, passing in the `params` list, and eval it in a

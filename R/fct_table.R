@@ -119,9 +119,8 @@ fct_table <- function(data, type) {
           targets = hide_targets
         )
       ),
-      dom = "B,t,p",
+      dom = "Blfrtip",
       rowGroup = rowGrp,
-      pageLength = 25,
       buttons = list(list(
         extend = "collection",
         buttons = list(

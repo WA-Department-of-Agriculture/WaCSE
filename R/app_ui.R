@@ -4,7 +4,7 @@
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @import dplyr
-#' @import shinycssloaders
+#' @import waiter
 #' @noRd
 
 app_ui <- function(request) {
@@ -37,7 +37,7 @@ app_ui <- function(request) {
           "About",
           column(8,
             offset = 1,
-            includeMarkdown("ABOUT.md")
+            box(width = NULL, status = "success", includeMarkdown("ABOUT.md"))
           )
         )
       )
@@ -70,13 +70,11 @@ golem_add_external_resources <- function() {
     shinyjs::useShinyjs(),
     shinyFeedback::useShinyFeedback(),
     shinyWidgets::useShinydashboard(),
-    shinyWidgets::setBackgroundColor(color = "#D9E2E7")
+    shinyWidgets::setBackgroundColor(color = "#D9E2E7"),
+    waiter::useWaiter(),
+    waiter::waiterPreloader(html = spin_hexdots())
 
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
   )
 }
-
-# set global spinner options
-
-options(spinner.type = 5, spinner.color = "#489739")

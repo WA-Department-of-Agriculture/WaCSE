@@ -62,6 +62,11 @@ mod_explore_ui <- function(id) {
             "Bar Graph",
             icon = icon("chart-bar"),
             ggiraph::girafeOutput(ns("plot"))
+          ),
+          tabPanel(
+            "MLRA Map",
+            icon = icon("map"), br(),
+            htmlOutput(ns("mlra_map"))
           )
         )
       )
@@ -224,7 +229,7 @@ mod_explore_server <- function(id) {
     explore_plot <- reactive({
       if (dplyr::n_distinct(filtered_df()$implementation) > 12 ||
         nrow(filtered_df()) > 100) {
-        validate("The plot is too cluttered. Please remove some selections.")
+        validate("The graph is too cluttered. Please remove some selections.")
       }
       explore_plot <- filtered_df() %>%
         filter(ghg_type == "total.ghg.co2") %>%
@@ -234,6 +239,16 @@ mod_explore_server <- function(id) {
 
     output$plot <- ggiraph::renderGirafe({
       explore_plot()
+    })
+
+    # ArcGIS MLRA iframe
+
+    output$mlra_map <- renderUI({
+      tags$iframe(
+        src = "https://nras.maps.arcgis.com/apps/instant/basic/index.html?appid=4233536b08044da7a9bc32c7040418be",
+        height = "600px",
+        width = "100%"
+      )
     })
   })
 }

@@ -9,7 +9,7 @@
 #' @importFrom shiny NS tagList
 #' @import dplyr
 #' @importFrom shinyWidgets virtualSelectInput updateVirtualSelect actionBttn
-#' @importFrom shinydashboard box infoBoxOutput renderInfoBox infoBox
+#' @importFrom shinydashboard box valueBoxOutput renderValueBox valueBox
 #'
 # TODO:   split UI for this tab into a different module
 #         hide remove button from Summaries and Bar Graph tabs
@@ -57,17 +57,21 @@ mod_estimate_ui <- function(id) {
             value = "1",
             min = 1
           ),
-          actionBttn(
-            inputId = ns("add"),
-            label = "Add",
-            style = "simple",
-            color = "success"
-          ),
-          actionBttn(
-            inputId = ns("remove"),
-            label = "Remove",
-            style = "simple",
-            color = "danger"
+          div(
+            class = "group",
+            actionButton(
+              inputId = ns("add"),
+              label = "Add",
+              class = "btn-success",
+              icon = icon("plus")
+            ),
+            actionButton(
+              inputId = ns("remove"),
+              label = "Remove",
+              class = "btn-danger",
+              icon = icon("minus")
+            ),
+            downloadButton(ns("report"))
           )
         )
       ), column(
@@ -78,25 +82,26 @@ mod_estimate_ui <- function(id) {
             width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
             tabsetPanel(
               type = "pills",
-              tabPanel(
-                "Table",
+              tabPanel("Table",
                 icon = icon("table"), br(),
                 DT::DTOutput(ns("table"))
               ),
-              tabPanel("Bar Graph", icon = icon("chart-bar"), ggiraph::girafeOutput(ns("plot")))
+              tabPanel("Summary",
+                icon = icon("list"), br(),
+                DT::DTOutput(ns("summary"))
+              ),
+              tabPanel("Bar Graph",
+                icon = icon("chart-bar"), br(),
+                ggiraph::girafeOutput(ns("plot"))
+              )
             )
           )
         ),
         fluidRow(div(
-          class = "infoBoxes",
-          infoBoxOutput(ns("total_acres")),
-          infoBoxOutput(ns("total_ghg"))
-        )),
-        box(
-          title = strong("Summary by County"),
-          width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
-          DT::DTOutput(ns("summary"))
-        )
+          class = "group",
+          valueBoxOutput(ns("total_acres")),
+          valueBoxOutput(ns("total_ghg"))
+        ))
       )
     )
   )
@@ -251,73 +256,6 @@ mod_estimate_server <- function(id) {
       return(filtered)
     })
 
-    # prepare data for summarize by county table ------------------------------------------
-
-    summary_df <- data.frame(
-      "MLRA" = character(),
-      "County" = character(),
-      "# of Practice Implementations" = numeric(),
-      "Total Acres" = numeric(),
-      "Total Greenhouse Gases" = numeric()
-    )
-
-    summary_county <- reactive({
-      req(rv$df)
-      summary_county <- rv$df %>%
-        mutate(
-          Acres = as.numeric(Acres),
-          Total.Greenhouse.Gases = as.numeric(Total.Greenhouse.Gases)
-        ) %>%
-        group_by(MLRA, County) %>%
-        summarize(
-          "# of Practice Implementations" = n_distinct(Practice.Implementation),
-          "Total Acres" = sum(Acres),
-          "Total Greenhouse Gases" = sum(Total.Greenhouse.Gases)
-        ) %>%
-        as.data.frame()
-      return(summary_county)
-    })
-
-    # total acres info box ----------------------------------------------------------
-
-    value_acres <- reactive({
-      value_acres <- summary_county() %>%
-        select("Total Acres") %>%
-        as.vector() %>%
-        sum() %>%
-        prettyNum(big.mark = ",")
-    })
-
-    output$total_acres <- renderInfoBox({
-      infoBox("Total Acres",
-        value = paste(value_acres(), "Acres"),
-        icon = icon("seedling"),
-        color = "yellow",
-        fill = TRUE,
-        width = 6
-      )
-    })
-
-    # total ghg info box ----------------------------------------------------------
-
-    value_ghg <- reactive({
-      value_ghg <- summary_county() %>%
-        select("Total Greenhouse Gases") %>%
-        as.vector() %>%
-        sum() %>%
-        prettyNum(big.mark = ",")
-    })
-
-    output$total_ghg <- renderInfoBox({
-      infoBox("Total GHG Reductions",
-        value = paste(value_ghg(), "MT CO2eq/yr"),
-        icon = icon("globe"),
-        color = "teal",
-        fill = TRUE,
-        width = 6
-      )
-    })
-
     # add, edit, or delete rows ------------------------------------------------------
 
     # add new row to table
@@ -364,14 +302,14 @@ mod_estimate_server <- function(id) {
             ),
             footer = tagList(
               modalButton("Cancel"),
-              actionButton(ns("confirm"), label = "Yes")
+              actionButton(ns("confirm"), label = "Yes", class = "btn-danger")
             ), easyClose = TRUE
           )
         } else {
           modalDialog(
             title = "Warning",
             paste("Please select the row(s) that you want to remove.
-                  You can only select rows from the table."),
+                  You can only select rows from the Table Tab."),
             easyClose = TRUE
           )
         }
@@ -383,6 +321,70 @@ mod_estimate_server <- function(id) {
     observeEvent(input$confirm, {
       rv$df <- rv$df[-as.numeric(input$table_rows_selected), ]
       removeModal()
+    })
+
+    # prepare summary data  ------------------------------------------
+    summary_df <- data.frame(
+      "MLRA" = character(),
+      "County" = character(),
+      "# of Practice Implementations" = numeric(),
+      "Total Acres" = numeric(),
+      "Total Greenhouse Gases" = numeric()
+    )
+
+    summary_county <- reactive({
+      req(rv$df)
+      summary_county <- rv$df %>%
+        mutate(
+          Acres = as.numeric(Acres),
+          Total.Greenhouse.Gases = as.numeric(Total.Greenhouse.Gases)
+        ) %>%
+        group_by(MLRA, County) %>%
+        summarize(
+          "# of Practice Implementations" = n_distinct(Practice.Implementation),
+          "Total Acres" = sum(Acres),
+          "Total Greenhouse Gases" = sum(Total.Greenhouse.Gases)
+        ) %>%
+        as.data.frame()
+      return(summary_county)
+    })
+
+    # total acres info box ----------------------------------------------------------
+
+    value_acres <- reactive({
+      value_acres <- summary_county() %>%
+        select("Total Acres") %>%
+        as.vector() %>%
+        sum() %>%
+        prettyNum(big.mark = ",")
+    })
+
+    output$total_acres <- renderValueBox({
+      valueBox("Total Acres",
+        value = paste(value_acres(), "Ac"),
+        icon = icon("seedling"),
+        color = "yellow",
+        width = NULL
+      )
+    })
+
+    # total ghg info box ----------------------------------------------------------
+
+    value_ghg <- reactive({
+      value_ghg <- summary_county() %>%
+        select("Total Greenhouse Gases") %>%
+        as.vector() %>%
+        sum() %>%
+        prettyNum(big.mark = ",")
+    })
+
+    output$total_ghg <- renderValueBox({
+      valueBox("Total GHG Reductions",
+        value = paste(value_ghg(), "MT CO2eq/yr"),
+        icon = icon("globe-americas"),
+        color = "teal",
+        width = NULL
+      )
     })
 
     # render tables ------------------------------------------------------------
@@ -426,7 +428,10 @@ mod_estimate_server <- function(id) {
           acres = Acres,
           mean = Total.Greenhouse.Gases
         ) %>%
-        mutate(mean = as.numeric(mean))
+        mutate(
+          acres = as.numeric(acres),
+          mean = as.numeric(mean)
+        )
     })
 
     output$plot <- ggiraph::renderGirafe({
@@ -435,10 +440,58 @@ mod_estimate_server <- function(id) {
       }
       if (dplyr::n_distinct(filtered_plot()$implementation) > 20 ||
         nrow(filtered_plot()) > 60) {
-        validate("The plot is too cluttered. Please remove some selections.")
+        validate("The graph is too cluttered. Please remove some selections.")
       }
       fct_plot(filtered_plot(), type = "estimate", error_bar = FALSE)
     })
+
+
+    # download report ---------------------------------------------------------
+
+    output$report <- downloadHandler(
+      filename = function() {
+        paste0(Sys.Date(), "_WaCSE_Report.pdf")
+      },
+      content = function(file) {
+        # Copy the report file to a temporary directory before processing it, in
+        # case we don't have write permissions to the current working dir (which
+        # can happen when deployed).
+        withProgress(
+          message = "Download in progress",
+          detail = "This may take a while...",
+          value = 0,
+          {
+            for (i in 1:15) {
+              incProgress(1 / 15)
+              Sys.sleep(0.01)
+            }
+            tempReport <- file.path(tempdir(), "WaCSE_Report.Rmd")
+            file.copy(normalizePath("inst/app/www/WaCSE_Report.Rmd"),
+              tempReport,
+              overwrite = TRUE
+            )
+          }
+        )
+
+        # Set up parameters to pass to Rmd document
+        params <- list(
+          name = input$name,
+          project = input$project,
+          table = rv$df,
+          summary = summary_county(),
+          plot = fct_plot(filtered_plot(), type = "estimate", error_bar = FALSE)
+        )
+
+        # Knit the document, passing in the `params` list, and eval it in a
+        # child of the global environment (this isolates the code in the document
+        # from the code in this app).
+        rmarkdown::render(tempReport,
+          output_file = file,
+          params = params,
+          envir = new.env(parent = globalenv())
+        )
+      }
+    )
   })
 }
 

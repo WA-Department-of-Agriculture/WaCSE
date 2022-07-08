@@ -47,7 +47,7 @@ usethis::use_test("app")
 # Documentation
 
 ## Vignette ----
-usethis::use_vignette("WaCSEshiny")
+usethis::use_vignette("WaCSE")
 devtools::build_vignettes()
 
 ## Code Coverage----
