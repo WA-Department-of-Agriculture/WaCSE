@@ -11,8 +11,6 @@
 #' @importFrom shinyWidgets virtualSelectInput updateVirtualSelect actionBttn
 #' @importFrom shinydashboard box valueBoxOutput renderValueBox valueBox
 #'
-# TODO:   split UI for this tab into a different module
-#         hide remove button from Summaries and Bar Graph tabs
 
 mod_estimate_ui <- function(id) {
   ns <- NS(id)
@@ -31,7 +29,7 @@ mod_estimate_ui <- function(id) {
           width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
           virtualSelectInput(
             inputId = ns("county"),
-            label = strong("1. County"),
+            label = strong("1. County (grouped by MLRA)"),
             choices = cm_choices,
             selected = "Klickitat",
             multiple = FALSE,
@@ -74,9 +72,9 @@ mod_estimate_ui <- function(id) {
         width = 8,
         fluidRow(
           box(
-            title = strong("View your Estimate"),
+            title = strong("View and Download your Estimate"),
             width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
-            tabsetPanel(
+            tabsetPanel(id = ns("tabs"),
               type = "pills",
               tabPanel("Table",
                 icon = icon("table"), br(),
@@ -213,6 +211,23 @@ mod_estimate_server <- function(id) {
       return(input$acres)
     })
 
+    # only show Remove action button on the Table tab
+
+    observeEvent(input$tabs, {
+      if (input$tabs == "Table")
+      {
+        shinyjs::runjs(
+          "document.getElementById('estimate_tab-remove').style.visibility = 'visible';"
+        )
+      }
+      else
+      {
+        shinyjs::runjs(
+          "document.getElementById('estimate_tab-remove').style.visibility = 'hidden';"
+        )
+      }
+    })
+
     # create reactive df for full table and plot ---------------------------------------------
 
     # prepare data for table
@@ -288,6 +303,9 @@ mod_estimate_server <- function(id) {
       rv$df <- rbind(rv$df, tmp)
 
       rv$df <- unique(rv$df)
+
+      return(rv$df)
+
     })
 
     # remove row from table
@@ -309,8 +327,7 @@ mod_estimate_server <- function(id) {
         } else {
           modalDialog(
             title = "Warning",
-            paste("Please select the row(s) that you want to remove.
-                  You can only select rows from the Table Tab."),
+            paste("Please select the row(s) that you want to remove."),
             easyClose = TRUE
           )
         }
@@ -353,8 +370,9 @@ mod_estimate_server <- function(id) {
     # total acres info box ----------------------------------------------------------
 
     value_acres <- reactive({
-      value_acres <- summary_county() %>%
-        select("Total Acres") %>%
+      req(rv$df)
+      value_acres <- rv$df %>%
+        select("Acres") %>%
         as.vector() %>%
         sum() %>%
         prettyNum(big.mark = ",")
@@ -364,7 +382,7 @@ mod_estimate_server <- function(id) {
       valueBox("Total Acres",
         value = paste(value_acres(), "Ac"),
         icon = icon("seedling"),
-        color = "yellow",
+        color = "blue",
         width = NULL
       )
     })
@@ -372,8 +390,9 @@ mod_estimate_server <- function(id) {
     # total ghg info box ----------------------------------------------------------
 
     value_ghg <- reactive({
-      value_ghg <- summary_county() %>%
-        select("Total Greenhouse Gases") %>%
+      req(rv$df)
+      value_ghg <- rv$df %>%
+        select("Total.Greenhouse.Gases") %>%
         as.vector() %>%
         sum() %>%
         prettyNum(big.mark = ",")
@@ -393,7 +412,7 @@ mod_estimate_server <- function(id) {
     # full table
 
     output$table <- DT::renderDT({
-      isolate(rv$df)
+      isolate(rv)
       fct_table(df, type = "estimate")
     })
 
@@ -401,8 +420,8 @@ mod_estimate_server <- function(id) {
 
     observe({
       req(rv$df)
-      data <- rv$df %>%
-      mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated")))
+      data <- as.data.frame(rv$df) %>%
+        mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated")))
       DT::replaceData(proxy_full, data, rownames = FALSE)
     })
 
@@ -417,6 +436,17 @@ mod_estimate_server <- function(id) {
 
     observe({
       DT::replaceData(proxy_summary, summary_county(), rownames = FALSE)
+    })
+
+    # there is a bug that requires the add button be clicked when the
+    # summary tab is active to render the summary table
+    # this is a workaround
+
+    observeEvent(input$tabs, {
+      if (input$tabs == "Summary")
+      {
+        shinyjs::click("estimate_tab-add")
+      }
     })
 
     # render plot -------------------------------------------------------------
@@ -461,38 +491,39 @@ mod_estimate_server <- function(id) {
         # case we don't have write permissions to the current working dir (which
         # can happen when deployed).
         withProgress(
-          message = "Download in progress",
-          detail = "This may take a while...",
-          value = 0,
+          message = "Preparing your report",
           {
-            for (i in 1:15) {
-              incProgress(1 / 15)
-              Sys.sleep(0.01)
-            }
+
             tempReport <- file.path(tempdir(), "WaCSE_Report.Rmd")
             file.copy(normalizePath("inst/app/www/WaCSE_Report.Rmd"),
               tempReport,
               overwrite = TRUE
             )
+
+            incProgress(0.1)
+
+            # Set up parameters to pass to Rmd document
+            params <- list(
+              name = input$name,
+              project = input$project,
+              table = rv$df,
+              summary = summary_county(),
+              plot = fct_plot(filtered_plot(), type = "download", error_bar = FALSE)
+            )
+
+            incProgress(0.5)
+
+            # Knit the document, passing in the `params` list, and eval it in a
+            # child of the global environment (this isolates the code in the document
+            # from the code in this app).
+            rmarkdown::render(tempReport,
+              output_file = file,
+              params = params,
+              envir = new.env(parent = globalenv())
+            )
+
+            incProgress(1)
           }
-        )
-
-        # Set up parameters to pass to Rmd document
-        params <- list(
-          name = input$name,
-          project = input$project,
-          table = rv$df,
-          summary = summary_county(),
-          plot = fct_plot(filtered_plot(), type = "download", error_bar = FALSE)
-        )
-
-        # Knit the document, passing in the `params` list, and eval it in a
-        # child of the global environment (this isolates the code in the document
-        # from the code in this app).
-        rmarkdown::render(tempReport,
-          output_file = file,
-          params = params,
-          envir = new.env(parent = globalenv())
         )
       }
     )

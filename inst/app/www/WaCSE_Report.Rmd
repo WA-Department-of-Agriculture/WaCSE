@@ -5,10 +5,11 @@ geometry: "left=1cm,right=1cm,top=2cm,bottom=2cm"
 mainfont: Arial
 header-includes:
   - \usepackage{fancyhdr}
-  - \usepackage{lipsum}
   - \pagestyle{fancy}
-  - \fancyhead[LE, LO]{WaCSE reported generated on `r Sys.Date()`}
-  - \fancyhead[RE, RO]{`r paste(tools::toTitleCase(params$name), tools::toTitleCase(params$project))`}
+  - \fancyhf{}
+  - \lhead{WaCSE reported generated on `r Sys.Date()`}
+  - \rhead{`r paste(tools::toTitleCase(params$name), tools::toTitleCase(params$project))`}
+  - \rfoot{Page \thepage}
 
 output: 
   pdf_document:
@@ -30,11 +31,13 @@ library(dplyr)
 library(ggplot2)
 ```
 
-```{r}
 
+```{r table}
 options(knitr.kable.NA = "Not estimated")
 
-kbl_all <- kbl(params$table,
+df <- janitor::adorn_totals(params$table)
+
+kbl_all <- kbl(df,
     col.names = c("MLRA",
                   "County",
                   "Class",
@@ -57,11 +60,18 @@ kbl_all <- kbl(params$table,
   column_spec(column = c(1:2), width = "0.8in") %>%
   column_spec(column = c(3:5), width = "1in") %>%
   column_spec(column = c(6:10), width = "0.8in") %>% 
-  collapse_rows(columns = 1, valign = "top")
+  collapse_rows(columns = 1) %>% 
+  row_spec(dim(df)[1], bold = TRUE)
 
 kbl_all
+```
 
-kbl_summary <- kbl(params$summary,
+
+```{r summary}
+
+summary_df <- janitor::adorn_totals(params$summary)
+
+kbl_summary <- kbl(summary_df,
     col.names = c("MLRA",
                   "County",
                   "Unique Practice Implementations",
@@ -74,15 +84,16 @@ kbl_summary <- kbl(params$summary,
     escape = FALSE,
     booktabs = TRUE) %>%
   row_spec(row = 0, bold = TRUE) %>%
-  column_spec(column = c(1:5), width = "1.2in") %>% 
-  collapse_rows(columns = 1)
+  column_spec(column = c(1,3,5), width = "1.4in") %>% 
+  column_spec(column = c(2,4), width = "0.8in") %>%
+  collapse_rows(columns = 1) %>% 
+  row_spec(dim(summary_df)[1], bold = TRUE)
 
 kbl_summary
-
 ```
 
 
-```{r, fig.align = "center", fig.height = 6, fig.width= 10}
+```{r plot, fig.align = "center", fig.height = 6, fig.width = 10, dpi = 300}
 
 params$plot
 

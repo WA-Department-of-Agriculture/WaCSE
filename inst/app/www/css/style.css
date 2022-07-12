@@ -1,20 +1,17 @@
-.nav-pills .nav-link.active {
-  background-color:#61c3ee;
-}
 
 .btn-success {
-    background-color: #489739;
-    border-color: #489739;
+    background-color: #1E8F2C;
+    border-color: #1E8F2C;
     color: white;
 }
 
 .btn-success.hover, .btn-success:active, .btn-success:hover {
-    background-color: #489739;
+    background-color: #1E8F2C;
 }
 
 .btn-danger {
-    background: #dd4b39;
-    border-color: #dd4b39;
+    background: #320306;
+    border-color: #320306;
     color: white;
 }
 
@@ -58,11 +55,11 @@
 }
 
 .bg-teal {
-    background-color: #00819c !important;
+    background-color: #395FDB !important;
 }
 
-.bg-green {
-    background-color: #489739 !important;
+.bg-blue {
+    background-color: #7B91DB !important;
 }
 
 .vscomp-value {
@@ -98,20 +95,6 @@
     width: 50%;
 }
 
-table.dataTable tr.dtrg-group td {
-    background-color: #48973978 !important;
-    color: #222;
-}
-
-table.dataTable tr.dtrg-group.dtrg-level-1 td {
-    background-color: #4897394f !important;
-    padding-top: .25em;
-    padding-bottom: .25em;
-    padding-left: 2em;
-    font-size: .9em;
-    color: #222;
-}
-
 table.dataTable {
     width: 100%;
     margin: 0 auto;
@@ -135,21 +118,31 @@ table.dataTable thead th, table.dataTable thead td {
     border-bottom: 1px solid #222;
 }
 
-table.dataTable thead th.dt-head-center, table.dataTable thead td.dt-head-center, table.dataTable tfoot th.dt-head-center, table.dataTable tfoot td.dt-head-center {
-    text-align: center;
-    background-color: #489739;
-    color: white;
+table.dataTable thead .sorting {
+  background-color: #5A6BA2 !important;
+  color: white;
 }
 
-table.dataTable thead .sorting {
-  background-color: #489739;
-  color: white;
+table.dataTable tr.dtrg-group td {
+    background-color: #9ea8c8 !important;
+    color: #222;
+}
+
+table.dataTable tr.dtrg-group.dtrg-level-1 td {
+    background-color: #ced3e3 !important;
+    padding-top: .25em;
+    padding-bottom: .25em;
+    padding-left: 2em;
+    font-size: .9em;
+    color: #222;
+}
+
+table.dataTable thead th.dt-head-center, table.dataTable thead td.dt-head-center, table.dataTable tfoot th.dt-head-center, table.dataTable tfoot td.dt-head-center {
+    text-align: center;
 }
 
 table.dataTable thead th.dt-head-left, table.dataTable thead td.dt-head-left, table.dataTable tfoot th.dt-head-left, table.dataTable tfoot td.dt-head-left {
     text-align: left;
-    background-color: #489739;
-    color: white;
 }
 
 button.dt-button, div.dt-button, a.dt-button, input.dt-button {

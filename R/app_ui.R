@@ -61,12 +61,12 @@ golem_add_external_resources <- function() {
     favicon(ext = "png"),
     bundle_resources(
       path = app_sys("app/www"),
-      app_title = "WaCSEshiny"
+      app_title = "WaCSE"
     ),
     shinyjs::useShinyjs(),
     shinyFeedback::useShinyFeedback(),
     shinyWidgets::useShinydashboard(),
-    shinyWidgets::setBackgroundColor(color = "#D9E2E7"),
+    shinyWidgets::setBackgroundColor(color = "#dfdfdf"),
     waiter::useWaiter(),
     waiter::waiterPreloader(html = spin_hexdots())
 

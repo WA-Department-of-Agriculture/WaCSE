@@ -25,7 +25,7 @@ mod_explore_ui <- function(id) {
         width = 4, status = "primary", collapsible = TRUE, solidHeader = TRUE,
         virtualSelectInput(
           inputId = ns("county"),
-          label = strong("1. County"),
+          label = strong("1. County (grouped by MLRA)"),
           choices = cm_choices,
           selected = "Klickitat",
           multiple = TRUE,

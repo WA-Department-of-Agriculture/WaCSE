@@ -74,7 +74,7 @@ fct_plot <- function(data, type, error_bar) {
 
     font <- "Arial"
 
-    title <- "Total GHG Emission Reductions"
+    title <- "Figure 1: Total GHG Emission Reductions"
 
     labels <- scales::label_number(accuracy = , big.mark = ",")
   }
@@ -105,10 +105,16 @@ fct_plot <- function(data, type, error_bar) {
     ) +
     theme_minimal(base_family = font) +
     theme(
-      plot.title = element_text(face = "bold"),
+      plot.title = element_text(
+        hjust = 0.5,
+        size = 10),
       axis.text.y = element_text(
         margin = margin(r = 20),
         hjust = 0
+      ),
+      axis.title.x.bottom = element_text(
+        size = 8,
+        color = "#4d4d4d"
       ),
       legend.title = element_text(face = "bold"),
       legend.text = element_text(margin = margin(t = 5, b = 5, unit = "pt"))
