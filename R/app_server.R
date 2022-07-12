@@ -20,7 +20,4 @@ app_server <- function(input, output, session) {
 
   mod_land_use_server("land_use_tab")
 
-  # render download tab -----------------------------------------------------
-
-  mod_download_server("download_tab")
 }

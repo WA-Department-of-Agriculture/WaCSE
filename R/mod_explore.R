@@ -246,7 +246,7 @@ mod_explore_server <- function(id) {
     output$mlra_map <- renderUI({
       tags$iframe(
         src = "https://nras.maps.arcgis.com/apps/instant/basic/index.html?appid=4233536b08044da7a9bc32c7040418be",
-        height = "600px",
+        height = "500px",
         width = "100%"
       )
     })

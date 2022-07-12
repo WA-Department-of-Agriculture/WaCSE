@@ -44,6 +44,7 @@ fct_table <- function(data, type) {
     scroll <- 500
     numeric_cols <- c(6, 9)
     acre_col <- 1
+    dom = "Blfrtip"
   }
 
   if (type == "estimate") {
@@ -79,6 +80,7 @@ fct_table <- function(data, type) {
     scroll <- 200
     numeric_cols <- c(6:7, 10)
     acre_col <- 6
+    dom = "Blfrtip"
   }
 
   if (type == "summary") {
@@ -104,6 +106,7 @@ fct_table <- function(data, type) {
     scroll <- 200
     numeric_cols <- 4:5
     acre_col <- 4
+    dom = "lfrtip"
   }
 
   DT::datatable(
@@ -119,7 +122,7 @@ fct_table <- function(data, type) {
           targets = hide_targets
         )
       ),
-      dom = "Blfrtip",
+      dom = dom,
       rowGroup = rowGrp,
       buttons = list(list(
         extend = "collection",
@@ -129,7 +132,7 @@ fct_table <- function(data, type) {
             title = paste("Downloaded from WaCSE on", Sys.Date())
           ),
           list(
-            extend = "excel", filename = paste(Sys.Date(), "_WacSE_Download"),
+            extend = "excel", filename = paste(Sys.Date(), "_WaCSE_Download"),
             title = paste("Downloaded from WaCSE on", Sys.Date())
           ),
           list(

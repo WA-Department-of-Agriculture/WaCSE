@@ -27,6 +27,12 @@ fct_plot <- function(data, type, error_bar) {
       "Total Greenhouse Gases",
       "\n(Metric tonnes CO2 equivalent per acre per year)"
     )
+
+    font <- "Poppins"
+
+    title <- NULL
+
+    labels <- scales::label_number(accuracy = 0.001, big.mark = ",")
   }
 
   if (type == "estimate") {
@@ -43,6 +49,34 @@ fct_plot <- function(data, type, error_bar) {
       "Total Greenhouse Gases",
       "\n(Metric tonnes CO2 equivalent per year)"
     )
+
+    font <- "Poppins"
+
+    title <- NULL
+
+    labels <- scales::label_number(accuracy = 1, big.mark = ",")
+  }
+
+  if (type == "download") {
+    tt <- glue::glue(
+      "<b>{data$implementation}</b>
+        <b>MLRA:</b> {data$mlra}
+        <b>County:</b> {data$county}
+        <b>Acres:</b> {format(round(data$acres, 0), big.mark = ',')}
+        <b>Estimated Emission Reduction:</b> {format(round(data$mean, 2), big.mark = ',')} (MT CO2e/yr)"
+    )
+
+    ylab <- paste(
+      "\n",
+      "Total Greenhouse Gases",
+      "\n(Metric tonnes CO2 equivalent per year)"
+    )
+
+    font <- "Arial"
+
+    title <- "Total GHG Emission Reductions"
+
+    labels <- scales::label_number(accuracy = , big.mark = ",")
   }
 
   # plot data
@@ -69,7 +103,7 @@ fct_plot <- function(data, type, error_bar) {
       x = NULL,
       y = ylab
     ) +
-    theme_minimal(base_family = "Poppins") +
+    theme_minimal(base_family = font) +
     theme(
       plot.title = element_text(face = "bold"),
       axis.text.y = element_text(
@@ -80,9 +114,10 @@ fct_plot <- function(data, type, error_bar) {
       legend.text = element_text(margin = margin(t = 5, b = 5, unit = "pt"))
     ) +
     scale_y_continuous(
-      labels = scales::label_number(accuracy = 0.001),
+      labels = labels,
       expand = expansion(mult = c(0.03, 0.3))
-    )
+    ) +
+    ggtitle(title)
 
   # add error bars if error_bar = TRUE
 

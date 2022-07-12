@@ -57,21 +57,17 @@ mod_estimate_ui <- function(id) {
             value = "1",
             min = 1
           ),
-          div(
-            class = "group",
-            actionButton(
-              inputId = ns("add"),
-              label = "Add",
-              class = "btn-success",
-              icon = icon("plus")
-            ),
-            actionButton(
-              inputId = ns("remove"),
-              label = "Remove",
-              class = "btn-danger",
-              icon = icon("minus")
-            ),
-            downloadButton(ns("report"))
+          actionButton(
+            inputId = ns("add"),
+            label = "Add",
+            class = "btn-success",
+            icon = icon("plus")
+          ),
+          actionButton(
+            inputId = ns("remove"),
+            label = "Remove",
+            class = "btn-danger",
+            icon = icon("minus")
           )
         )
       ), column(
@@ -86,13 +82,19 @@ mod_estimate_ui <- function(id) {
                 icon = icon("table"), br(),
                 DT::DTOutput(ns("table"))
               ),
+              tabPanel("Bar Graph",
+                icon = icon("chart-bar"), br(),
+                ggiraph::girafeOutput(ns("plot"))
+              ),
               tabPanel("Summary",
                 icon = icon("list"), br(),
                 DT::DTOutput(ns("summary"))
               ),
-              tabPanel("Bar Graph",
-                icon = icon("chart-bar"), br(),
-                ggiraph::girafeOutput(ns("plot"))
+              tabPanel("Download",
+                icon = icon("file-export"), br(),
+                textInput(ns("name"), "Organization or Farm Name"),
+                textInput(ns("project"), "Project Name"),
+                downloadButton(ns("report"), "Download Report")
               )
             )
           )
@@ -202,12 +204,12 @@ mod_estimate_server <- function(id) {
     # give warning if user selects acres <1
 
     observeEvent(input$acres, {
+      req(input$acres)
       positive <- input$acres >= 1
       shinyFeedback::feedbackWarning(
         "acres", !positive,
         "Please select at least one acre."
       )
-      req(input$acres)
       return(input$acres)
     })
 
@@ -281,8 +283,7 @@ mod_estimate_server <- function(id) {
         "Nitrous Oxide" = input$acres * filtered()$n2o,
         "Methane" = input$acres * filtered()$ch4,
         "Total Greenhouse Gases" = input$acres * filtered()$total.ghg.co2
-      ) %>%
-        mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated")))
+      )
 
       rv$df <- rbind(rv$df, tmp)
 
@@ -399,7 +400,10 @@ mod_estimate_server <- function(id) {
     proxy_full <- DT::dataTableProxy("table")
 
     observe({
-      DT::replaceData(proxy_full, rv$df, rownames = FALSE)
+      req(rv$df)
+      data <- rv$df %>%
+      mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated")))
+      DT::replaceData(proxy_full, data, rownames = FALSE)
     })
 
     # summary table
@@ -479,7 +483,7 @@ mod_estimate_server <- function(id) {
           project = input$project,
           table = rv$df,
           summary = summary_county(),
-          plot = fct_plot(filtered_plot(), type = "estimate", error_bar = FALSE)
+          plot = fct_plot(filtered_plot(), type = "download", error_bar = FALSE)
         )
 
         # Knit the document, passing in the `params` list, and eval it in a

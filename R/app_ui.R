@@ -30,10 +30,6 @@ app_ui <- function(request) {
           mod_land_use_ui("land_use_tab")
         ),
         tabPanel(
-          "Bookmark and download",
-          mod_download_ui("download_tab")
-        ),
-        tabPanel(
           "About",
           column(8,
             offset = 1,

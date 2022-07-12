@@ -11,11 +11,8 @@
 mod_land_use_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    box(
-      width = 12, status = "primary",
       htmlOutput(ns("crop_map"))
-    ),
-  )
+    )
 }
 
 #' land_use Server Functions
@@ -30,7 +27,7 @@ mod_land_use_server <- function(id) {
     output$crop_map <- renderUI({
       tags$iframe(
         src = "https://nras.maps.arcgis.com/apps/dashboards/260347f5c6884d00b51b8192745f0751",
-        height = "600px",
+        height = "625px",
         width = "100%"
       )
     })
