@@ -11,10 +11,9 @@ comet_all <- vroom::vroom("data-raw/US_COMET-Planner_Download.csv",
 )
 
 mlra <- vroom::vroom("data-raw/MLRA.csv",
-                     col_select = c(MLRARSYM, MLRA_NAME)) %>%
+  col_select = c(MLRARSYM, MLRA_NAME)
+) %>%
   unique()
-
-crop_data <- vroom::vroom("data-raw/2021WSDACropData.csv")
 
 # rename columns ----------------------------------------------------------
 
@@ -38,7 +37,7 @@ comet_wa <- comet_all %>%
 
 comet_wa <- dplyr::left_join(comet_wa, mlra, by = c("mlra" = "MLRARSYM")) %>%
   relocate(mlra = MLRA_NAME, .after = county) %>%
-  subset(select = -c(1,4))
+  subset(select = -c(1, 4))
 
 # parse out CPS implementations -------------------------------------------
 
@@ -141,4 +140,3 @@ write.csv(comet_tags, "data-raw/comet_tags.csv")
 
 usethis::use_data(comet_wa, overwrite = TRUE)
 usethis::use_data(comet_tags, overwrite = TRUE)
-usethis::use_data(crop_data, overwrite = TRUE)
