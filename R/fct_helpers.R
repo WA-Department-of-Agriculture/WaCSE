@@ -22,8 +22,8 @@ fct_font <- function(id) {
 
 theme <- bslib::bs_theme(
   version = 5,
-  primary = "#253e90", secondary = "#253e90", success = "#489739",
-  warning = "#ffb04c", danger = "#320306", base_font = bslib::font_google("Poppins"),
+  primary = "#f2cc8f", secondary = "#f2cc8f", success = "#81B29A",
+  warning = "#f2cc8f", danger = "#E07A5F", base_font = bslib::font_google("Poppins"),
   font_scale = NULL, `enable-shadows` = TRUE, `enable-rounded` = TRUE, bootswatch = "lumen"
 )
 
@@ -42,51 +42,6 @@ fct_wrap <- function(x, width) {
   stringr::str_wrap(x, width = width)
 }
 
-#' fct_sumAcres
-#'
-#' @description sum acres
-#'
-#' @param county which counties the user selects
-#' @param type cropland, pasture, or other. Other contains conservation, fallow, research, unknown, and wildlife feed.
-#'
-#' @return The return value, if any, from executing the utility.
-#'
-#' @noRd
-
-fct_sumAcres <- function(county, type) {
-
-  # subset by county
-
-  filterCounty <- crop_data %>%
-    subset(County %in% county)
-
-  # subset by type
-
-  filtered_df <- switch(type,
-    cropland = {
-      subset(
-        filterCounty,
-        !CropGroup %in% c("Developed", "Other", "Pasture", "Shellfish", "Turfgrass")
-      )
-    },
-    pasture = {
-      subset(
-        filterCounty,
-        CropGroup == "Pasture"
-      )
-    },
-    other = {
-      subset(
-        filterCounty,
-        CropGroup == "Other"
-      )
-    }
-  )
-
-  totalAcres <- format(round(sum(filtered_df$ExactAcres), 0), big.mark = ",")
-
-  totalAcres
-}
 
 #' fct_table_filter
 #'

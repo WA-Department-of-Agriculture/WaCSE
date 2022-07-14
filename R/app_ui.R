@@ -15,7 +15,8 @@ app_ui <- function(request) {
     fluidPage(
       theme = theme,
       navbarPage(
-        "Washington Climate Smart Estimator (WaCSE)",
+        title = span(img(src = "www/img/favicon.png", height = "80px"),
+                     "Washington Climate Smart Estimator"),
         collapsible = TRUE,
         tabPanel(
           "Explore the data",
@@ -33,7 +34,7 @@ app_ui <- function(request) {
           "About",
           column(8,
             offset = 1,
-            box(width = NULL, status = "success", includeMarkdown("ABOUT.md"))
+            box(width = NULL, status = "primary", includeMarkdown("ABOUT.md"))
           )
         )
       )
@@ -66,7 +67,8 @@ golem_add_external_resources <- function() {
     shinyjs::useShinyjs(),
     shinyFeedback::useShinyFeedback(),
     shinyWidgets::useShinydashboard(),
-    shinyWidgets::setBackgroundColor(color = "#dfdfdf"),
+    shinyWidgets::setBackgroundColor(color = "#faf9f0"),
+    bsplus::use_bs_popover(),
     waiter::useWaiter(),
     waiter::waiterPreloader(html = spin_hexdots())
 

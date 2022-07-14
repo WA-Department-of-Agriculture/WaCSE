@@ -9,25 +9,25 @@
 #' @importFrom shiny NS tagList
 #' @importFrom shinyWidgets virtualSelectInput
 #' @importFrom shinydashboard box
+#' @importFrom bsplus shiny_iconlink bs_embed_popover
 
 mod_explore_ui <- function(id) {
   ns <- NS(id)
 
-  county_mlra <- comet_wa %>%
-    select(county, mlra) %>%
-    unique()
-  cm_choices <- split(county_mlra$county, county_mlra$mlra)
-
   tagList(
     fluidRow(
       box(
-        title = strong("Filter the Data"),
+        title = tagList(
+          span(strong("Filter the Data")),
+          span(shiny_iconlink() %>%
+                 bs_embed_popover(title = "Testing this popover."))
+        ),
         width = 4, status = "primary", collapsible = TRUE, solidHeader = TRUE,
         virtualSelectInput(
           inputId = ns("county"),
-          label = strong("1. County (grouped by MLRA)"),
-          choices = cm_choices,
-          selected = "Klickitat",
+          label = strong("1. County"),
+          choices = unique(comet_wa$county),
+          selected = c("Adams", "Asotin"),
           multiple = TRUE,
           search = TRUE,
           position = "bottom",
@@ -40,7 +40,8 @@ mod_explore_ui <- function(id) {
           multiple = TRUE,
           position = "bottom",
           optionsCount = 5,
-          autoSelectFirstOption = TRUE
+          autoSelectFirstOption = TRUE,
+          showSelectedOptionsFirst = TRUE
         ),
         uiOutput(ns("practice")),
         uiOutput(ns("land_use")),
@@ -94,11 +95,12 @@ mod_explore_server <- function(id) {
         inputId = ns("practice"),
         label = strong("3. Conservation Practice"),
         choices = sort(unique(choices)),
+        selected = choices[1:2],
         multiple = TRUE,
         search = TRUE,
         position = "bottom",
         optionsCount = 5,
-        autoSelectFirstOption = TRUE
+        showSelectedOptionsFirst = TRUE
       )
     })
 
@@ -118,7 +120,7 @@ mod_explore_server <- function(id) {
         selected = choices,
         position = "bottom",
         optionsCount = 5,
-        autoSelectFirstOption = TRUE
+        showValueAsTags = TRUE
       )
     })
 
@@ -137,7 +139,8 @@ mod_explore_server <- function(id) {
         selected = choices,
         multiple = TRUE,
         position = "bottom",
-        optionsCount = 5
+        optionsCount = 5,
+        showValueAsTags = TRUE
       )
     })
 
@@ -157,9 +160,11 @@ mod_explore_server <- function(id) {
           selected = c(choices["Not Applicable"], choices[1:3]),
           multiple = TRUE,
           position = "bottom",
-          optionsCount = 5
+          optionsCount = 5,
+          showSelectedOptionsFirst = TRUE
         ),
-        p("*", em("If you selected multiple practices in Step 3, select 'Not Applicable' in Step 6 to include all practices."))
+        p("*", em("If you selected multiple practices in Step 3,
+                  select 'Not Applicable' in Step 6 to include all practices."))
       )
     })
 

@@ -10,15 +10,12 @@
 #' @import dplyr
 #' @importFrom shinyWidgets virtualSelectInput updateVirtualSelect actionBttn
 #' @importFrom shinydashboard box valueBoxOutput renderValueBox valueBox
+#' @importFrom bsplus shiny_iconlink bs_embed_popover
 #'
+
 
 mod_estimate_ui <- function(id) {
   ns <- NS(id)
-
-  county_mlra <- comet_wa %>%
-    select(county, mlra) %>%
-    unique()
-  cm_choices <- split(county_mlra$county, county_mlra$mlra)
 
   tagList(
     fluidRow(
@@ -29,9 +26,9 @@ mod_estimate_ui <- function(id) {
           width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
           virtualSelectInput(
             inputId = ns("county"),
-            label = strong("1. County (grouped by MLRA)"),
-            choices = cm_choices,
-            selected = "Klickitat",
+            label = strong("1. County"),
+            choices = unique(comet_wa$county),
+            selected = "Adams",
             multiple = FALSE,
             position = "bottom",
             optionsCount = 5,
@@ -382,7 +379,7 @@ mod_estimate_server <- function(id) {
       valueBox("Total Acres",
         value = paste(value_acres(), "Ac"),
         icon = icon("seedling"),
-        color = "blue",
+        color = "yellow",
         width = NULL
       )
     })
@@ -402,7 +399,7 @@ mod_estimate_server <- function(id) {
       valueBox("Total GHG Reductions",
         value = paste(value_ghg(), "MT CO2eq/yr"),
         icon = icon("globe-americas"),
-        color = "teal",
+        color = "green",
         width = NULL
       )
     })
@@ -495,7 +492,7 @@ mod_estimate_server <- function(id) {
           {
 
             tempReport <- file.path(tempdir(), "WaCSE_Report.Rmd")
-            file.copy(normalizePath("inst/app/www/WaCSE_Report.Rmd"),
+            file.copy(normalizePath("inst/app/www/rmd/WaCSE_Report.Rmd"),
               tempReport,
               overwrite = TRUE
             )

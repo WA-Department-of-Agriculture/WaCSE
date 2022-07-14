@@ -97,7 +97,7 @@ fct_plot <- function(data, type, error_bar) {
     na.rm = TRUE
     ) +
     geom_hline(yintercept = 0, linetype = "dashed") +
-    scale_fill_viridis_d(begin = 0.2) +
+    scale_fill_viridis_d(option = "F", end = 0.9) +
     labs(
       fill = "MLRA Legend",
       x = NULL,
@@ -113,7 +113,7 @@ fct_plot <- function(data, type, error_bar) {
         hjust = 0
       ),
       axis.title.x.bottom = element_text(
-        size = 8,
+        size = 9,
         color = "#4d4d4d"
       ),
       legend.title = element_text(face = "bold"),
@@ -170,7 +170,7 @@ fct_plot <- function(data, type, error_bar) {
 
   # plot with ggiraph
 
-  tooltip_css <- "font-size:1rem; color:black; background:#D9E2E7; padding:8px; border-radius:6px;"
+  tooltip_css <- "font-size:1rem; color:black; background:#FAF9F0; padding:8px; border-radius:6px;"
 
   plot <- girafe(
     ggobj = plot,
