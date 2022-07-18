@@ -5,15 +5,16 @@
 
 # Washington Climate Smart Estimator (WaCSE)
 
-The Washington State Department of Agriculture (WSDA) developed WaCSE as
-a Shiny application for the Washington State Conservation Commission
-(SCC) to use in the [Sustainable Farms and
-Fields](https://www.scc.wa.gov/sff) (SFF) program. Intended users are
-SCC, conservation districts, and farmers interested in identifying
-conservation practices to reduce greenhouse gas (GHG) emissions. The
-interactive platforms facilitate comparing GHG emission reduction
-potentials from different conservation practices across Washington’s
-diverse counties.
+The [Washington State Department of
+Agriculture](https://agr.wa.gov/departments/land-and-water/natural-resources)
+developed WaCSE for the Washington State Conservation Commission to use
+in the [Sustainable Farms and Fields](https://www.scc.wa.gov/sff) (SFF)
+program. Intended users are the Conservation Commission, conservation
+districts, growers, and anyone interested in identifying agricultural
+conservation practices to reduce greenhouse gas (GHG) emissions. This
+user-friendly, interactive web application facilitates comparing GHG
+emission reduction potentials from different conservation practices
+across Washington’s diverse counties.
 
 This app was built using the
 [Golem](https://github.com/ThinkR-open/golem) framework.
@@ -24,5 +25,5 @@ Amy Swan, Mark Easter, Adam Chambers, Kevin Brown, Stephen A. Williams,
 Jeff Creque, John Wick, Keith Paustian. 2020. COMET-Planner Dataset,
 Version 2.1, Build 1, and COMET-Planner Report: Carbon and Greenhouse
 Gas Evaluation for NRCS Conservation Practice Planning. A Companion
-report to <http://www.comet-planner.com>.
-<http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf>.
+report to [COMET-Planner](http://www.comet-planner.com).
+[COMET-Planner_Report_Final.pdf](http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf).
