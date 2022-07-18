@@ -3,7 +3,8 @@
 
 **The values shown on this page are your total estimated emissions
 reductions converted into terms you are more likely to be familiar
-with.** The assumptions and equations used to calculate these values are
-provided in the Environmental Protection Agency’s
+with.** Assumptions and equations used to calculate these values are
+provided in the Environmental Protection Agency’s (EPA)
 <a href="https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references" target ="_blank">Greenhouse
-Gases Equivalencies Calculator</a>.
+Gases Equivalencies Calculator</a>. Results may differ slightly from
+those returned by EPA’s calculator due to rounding.

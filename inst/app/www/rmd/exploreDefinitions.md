@@ -16,5 +16,5 @@ quantification methods can be found in the
 <a href="https://planner-prod2-dot-comet-201514.appspot.com/static/media/COMET-Planner_Report_Final.41c0b5e0.pdf/" target="_blank">
 COMET-Planner Report</a>.
 
-**Close this box by clicking the Minus button in the top right
+**Minimize this box by clicking the Minus button in the top right
 heading.**

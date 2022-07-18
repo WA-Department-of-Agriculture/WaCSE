@@ -15,20 +15,29 @@ mod_impact_ui <- function(id) {
     fluidRow(
       box(
         width = 12, status = "primary",
-        includeMarkdown(normalizePath("inst/app/www/rmd/aboutGHGeq.md")),
-        HTML("<h4><strong>500 metric tonnes of CO2eq</strong>
-             is equivalent to CO2 emissions from:</h4>"),
+        includeMarkdown(normalizePath("inst/app/www/rmd/impactAbout.md")),
+        numericInput(ns("ghg_input"),
+          label = strong("Enter CO2eq emissions in metric tonnes:"),
+          value = 50,
+          width = 200
+        ),
         fluidRow(
+          h5(strong(textOutput(ns("ghgCO2eq")))),
           valueBoxOutput(ns("home")),
           valueBoxOutput(ns("gallons")),
           valueBoxOutput(ns("phones"))
         ),
         fluidRow(
-          HTML("<h4><strong>500 metric tonnes of CO2eq</strong>
-             is equivalent to GHG emissions avoided by:</h4>"),
+          h5(strong(textOutput(ns("ghgAvoided")))),
           valueBoxOutput(ns("waste")),
           valueBoxOutput(ns("trash")),
           valueBoxOutput(ns("lights"))
+        ),
+        fluidRow(
+          h5(strong(textOutput(ns("Cseq")))),
+          valueBoxOutput(ns("seedling")),
+          valueBoxOutput(ns("forest")),
+          valueBoxOutput(ns("conversion"))
         )
       )
     )
@@ -42,13 +51,23 @@ mod_impact_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
+    # get ghg emissions estimate from the input
+
+    ghg_input <- reactive(input$ghg_input)
+
+# CO2 emissions from row --------------------------------------------------
+
+    output$ghgCO2eq <- renderText({
+      paste(ghg_input(), "metric tonnes of CO2eq is equivalent to CO2 emissions from:")
+    })
+
     # home value box ----------------------------------------------------------
 
     output$home <- renderValueBox({
-      valueBox("Home's energy use for one year",
-        value = "63",
+      valueBox("Home's electricity use for one year",
+        value = fct_ghgEq(ghg_input(), "home"),
         icon = icon("home"),
-        color = "green",
+        color = "yellow",
         width = NULL
       )
     })
@@ -57,7 +76,7 @@ mod_impact_server <- function(id) {
 
     output$gallons <- renderValueBox({
       valueBox("Gallons of gas consumed",
-        value = "56,262",
+        value = fct_ghgEq(ghg_input(), "gas"),
         icon = icon("gas-pump"),
         color = "yellow",
         width = NULL
@@ -68,32 +87,39 @@ mod_impact_server <- function(id) {
 
     output$phones <- renderValueBox({
       valueBox("Number of smartphones charged",
-        value = "60,821,323",
+        value = fct_ghgEq(ghg_input(), "smartphone"),
         icon = icon("mobile"),
-        color = "blue",
+        color = "yellow",
         width = NULL
       )
+    })
+
+
+# emissions avoided by row ----------------------------------------------------
+
+    output$ghgAvoided <- renderText({
+      paste(ghg_input(), "metric tonnes of CO2eq is equivalent to GHG emissions avoided by:")
     })
 
     # waste value box ----------------------------------------------------------
 
     output$waste <- renderValueBox({
-      valueBox("Tons of waste recycled instead of landfilled ",
-               value = 173,
-               icon = icon("recycle"),
-               color = "blue",
-               width = NULL
+      valueBox("Tons of waste recycled instead of landfilled",
+        value = fct_ghgEq(ghg_input(), "waste"),
+        icon = icon("recycle"),
+        color = "blue",
+        width = NULL
       )
     })
 
     # trash bag value box ----------------------------------------------------------
 
     output$trash <- renderValueBox({
-      valueBox("Trash bags of waste recycled instead of landfilled ",
-               value = "63",
-               icon = icon("trash"),
-               color = "green",
-               width = NULL
+      valueBox("Trash bags of waste recycled instead of landfilled",
+        value = fct_ghgEq(ghg_input(), "trash"),
+        icon = icon("trash"),
+        color = "blue",
+        width = NULL
       )
     })
 
@@ -101,12 +127,53 @@ mod_impact_server <- function(id) {
 
     output$lights <- renderValueBox({
       valueBox("Incandescent lamps switched to LEDs",
-               value = "18,951",
-               icon = icon("lightbulb"),
-               color = "yellow",
+        value = fct_ghgEq(ghg_input(), "light"),
+        icon = icon("lightbulb"),
+        color = "blue",
+        width = NULL
+      )
+    })
+
+
+# carbon sequestered row --------------------------------------------------
+
+    output$Cseq <- renderText({
+      paste(ghg_input(), "metric tonnes of CO2eq is equivalent to carbon sequestered by:")
+    })
+
+    # seedling value box ----------------------------------------------------------
+
+    output$seedling <- renderValueBox({
+      valueBox("Tree seedlings grown for 10 years",
+               value = fct_ghgEq(ghg_input(), "seedling"),
+               icon = icon("seedling"),
+               color = "green",
                width = NULL
       )
     })
+
+    # forest value box ----------------------------------------------------------
+
+    output$forest <- renderValueBox({
+      valueBox("Acres of US forests in one year",
+               value = fct_ghgEq(ghg_input(), "forest"),
+               icon = icon("tree"),
+               color = "green",
+               width = NULL
+      )
+    })
+
+    # conversion value box ----------------------------------------------------------
+
+    output$conversion <- renderValueBox({
+      valueBox("Acres of US forests preserved from conversion to cropland in one year",
+               value = fct_ghgEq(ghg_input(), "conversion"),
+               icon = icon("apple"),
+               color = "green",
+               width = NULL
+      )
+    })
+
   })
 }
 ## To be copied in the UI

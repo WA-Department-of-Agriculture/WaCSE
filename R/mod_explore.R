@@ -20,7 +20,7 @@ mod_explore_ui <- function(id) {
         box(
           title = strong("Definitions"),
           width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
-          includeMarkdown(normalizePath("inst/app/www/rmd/definitions.md"))
+          includeMarkdown(normalizePath("inst/app/www/rmd/exploreDefinitions.md"))
         ),
         box(
           title = tagList(

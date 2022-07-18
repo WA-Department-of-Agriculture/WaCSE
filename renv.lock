@@ -85,6 +85,24 @@
       "Hash": "50c838a310445e954bc13f26f26a6ecf",
       "Requirements": []
     },
+    "attachment": {
+      "Package": "attachment",
+      "Version": "0.2.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "32c42cee438011deea573f878a210892",
+      "Requirements": [
+        "cli",
+        "desc",
+        "glue",
+        "knitr",
+        "magrittr",
+        "rmarkdown",
+        "roxygen2",
+        "stringr",
+        "withr"
+      ]
+    },
     "attempt": {
       "Package": "attempt",
       "Version": "0.3.1",
@@ -1324,6 +1342,18 @@
         "jsonlite",
         "rlang",
         "sass",
+        "shiny"
+      ]
+    },
+    "shinydashboard": {
+      "Package": "shinydashboard",
+      "Version": "0.7.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e418b532e9bb4eb22a714b9a9f1acee7",
+      "Requirements": [
+        "htmltools",
+        "promises",
         "shiny"
       ]
     },

@@ -90,6 +90,10 @@
     padding: 0;
 }
 
+.small-box p {
+    font-size: 1.2rem;
+}
+
 .small-box .icon-large {
     position: absolute;
     top: auto;
@@ -98,13 +102,6 @@
     font-size: 60px;
     padding-right: 0.1em;
     color: white;
-}
-
-.group {
-    display: flex;
-    position: relative;
-    justify-content: space-evenly;
-    align-items: center;
 }
 
 .bg-blue {

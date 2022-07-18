@@ -98,12 +98,9 @@ mod_estimate_ui <- function(id) {
               type = "pills",
               tabPanel("Summary",
                 icon = icon("list"), br(),
-                div(
-                  class = "group",
-                  valueBoxOutput(ns("total_acres")),
-                  valueBoxOutput(ns("total_ghg"))
-                ),
-                DT::DTOutput(ns("summary"))
+                  fluidRow(valueBoxOutput(ns("total_acres")),
+                  valueBoxOutput(ns("total_ghg")),
+                DT::DTOutput(ns("summary")))
               ),
               tabPanel("Download Report",
                 icon = icon("file-export"), br(),
@@ -411,7 +408,7 @@ mod_estimate_server <- function(id) {
     output$total_acres <- renderValueBox({
       valueBox("Total Acres",
         value = paste(value_acres(), "Ac"),
-        icon = icon("seedling"),
+        icon = icon("leaf"),
         color = "green",
         width = NULL
       )

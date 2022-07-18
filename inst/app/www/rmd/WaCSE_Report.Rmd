@@ -152,6 +152,6 @@ params$plot
 
 # Greenhouse Gas Equivalencies
 
-The values shown here are your total estimated esmissions reductions converted into terms you are more likely to be familiar with. Assumptions and equations used to calculate these values are provided in the Environmental Protection Agency's [Greenhouse Gases Equivalencies Calculator](https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references). 
+The values shown here are your total estimated esmissions reductions converted into terms you are more likely to be familiar with. Assumptions and equations used to calculate these values are provided in the Environmental Protection Agency's (EPA) [Greenhouse Gases Equivalencies Calculator](https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references). Results may differ slightly from those returned by EPA's calculator due to rounding.
 
 **Will insert total GHG CO2eq and valueBoxes or a table with the equivalencies here**
