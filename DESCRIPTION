@@ -1,27 +1,44 @@
 Package: WaCSE
 Title: Washington Climate Smart Estimator
 Version: 0.0.0.9000
-Authors@R: person('Jadey', 'Ryan', email = 'jryan@agr.wa.gov', role = c('cre', 'aut'))
-Description: The Washington Climate Smart Estimator (WaCSE) is a shiny application to explore greenhouse gas emission reduction potentials from different conservation practices across Washington's diverse counties.
+Authors@R: 
+    person("Jadey", "Ryan", , "jryan@agr.wa.gov", role = c("cre", "aut"))
+Description: The Washington Climate Smart Estimator (WaCSE) is a shiny
+    application to explore greenhouse gas emission reduction potentials
+    from different conservation practices across Washington's diverse
+    counties.
 License: CC BY 4.0
+URL: https://github.com/WA-Department-of-Agriculture/WaCSEshiny
+BugReports: 
+    https://github.com/WA-Department-of-Agriculture/WaCSEshiny/issues
+Depends: 
+    R (>= 2.10)
 Imports: 
-    attempt,
+    bslib,
+    bsplus,
     config (>= 0.3.1),
     dplyr,
     DT,
+    gfonts,
+    ggiraph,
     ggplot2,
     glue,
     golem (>= 0.3.2),
     htmltools,
+    rmarkdown,
+    scales,
+    shadowtext,
     shiny (>= 1.7.1),
-    shinyWidgets
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.1.2
-URL: https://github.com/WA-Department-of-Agriculture/WaCSEshiny
-BugReports: https://github.com/WA-Department-of-Agriculture/WaCSEshiny/issues
+    shinydashboard,
+    shinyFeedback,
+    shinyjs,
+    shinyWidgets,
+    stringr,
+    tidyr,
+    waiter
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-Depends: 
-    R (>= 2.10)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2

@@ -17,7 +17,7 @@
 ## Amend DESCRIPTION with dependencies read from package code parsing
 usethis::use_package("dplyr")
 usethis::use_package("ggplot2")
-#attachment::att_amend_desc()
+attachment::att_amend_desc(pkg_ignore = "WaCSEshiny")
 
 ## Add modules ----
 ## Create a module infrastructure in R/
