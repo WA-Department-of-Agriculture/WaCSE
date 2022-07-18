@@ -15,7 +15,7 @@ app_ui <- function(request) {
     fluidPage(
       theme = theme,
       navbarPage(
-        title = span(img(src = "www/img/favicon.png", height = "80px"),
+        title = span(img(src = "www/rmd/img/favicon.png", height = "80px"),
                      "Washington Climate Smart Estimator"),
         collapsible = TRUE,
         tabPanel(
@@ -27,14 +27,16 @@ app_ui <- function(request) {
           mod_estimate_ui("estimate_tab")
         ),
         tabPanel(
-          "Agricultural land use",
-          mod_land_use_ui("land_use_tab")
+          "Understand your impact",
+          mod_impact_ui("impact_tab")
         ),
         tabPanel(
           "About",
           column(8,
             offset = 1,
-            box(width = NULL, status = "primary", includeMarkdown("ABOUT.md"))
+            box(width = NULL, status = "primary",
+                includeMarkdown(normalizePath("inst/app/www/rmd/about.md"))
+                )
           )
         )
       )
@@ -63,6 +65,14 @@ golem_add_external_resources <- function() {
     bundle_resources(
       path = app_sys("app/www"),
       app_title = "WaCSE"
+    ),
+    # this doesn't work in the style.css file. works in this ui file.
+    tags$style(HTML("
+      .shiny-output-error-validation {
+        color: #333;
+        font-weight: bold;
+      }
+    ")
     ),
     shinyjs::useShinyjs(),
     shinyFeedback::useShinyFeedback(),

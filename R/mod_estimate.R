@@ -8,11 +8,8 @@
 #'
 #' @importFrom shiny NS tagList
 #' @import dplyr
-#' @importFrom shinyWidgets virtualSelectInput updateVirtualSelect actionBttn
+#' @importFrom shinyWidgets virtualSelectInput updateVirtualSelect
 #' @importFrom shinydashboard box valueBoxOutput renderValueBox valueBox
-#' @importFrom bsplus shiny_iconlink bs_embed_popover
-#'
-
 
 mod_estimate_ui <- function(id) {
   ns <- NS(id)
@@ -22,13 +19,15 @@ mod_estimate_ui <- function(id) {
       column(
         width = 4,
         box(
-          title = strong("Add Practices by County and Acres"),
+          title = tagList(
+            span(strong("Add practices to your estimate")),
+            span(fct_helpBtn(ns("addHelp")))
+          ),
           width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
           virtualSelectInput(
             inputId = ns("county"),
-            label = strong("1. County"),
+            label = strong("Step 1. County"),
             choices = unique(comet_wa$county),
-            selected = "Adams",
             multiple = FALSE,
             position = "bottom",
             optionsCount = 5,
@@ -36,7 +35,7 @@ mod_estimate_ui <- function(id) {
           ),
           virtualSelectInput(
             inputId = ns("class"),
-            label = strong("2. Conservation Class"),
+            label = strong("Step 2. Conservation Class"),
             choices = unique(comet_tags$class),
             multiple = FALSE,
             position = "bottom",
@@ -48,7 +47,7 @@ mod_estimate_ui <- function(id) {
           uiOutput(ns("implementation")),
           numericInput(
             inputId = ns("acres"),
-            label = strong("7. Number of Acres"),
+            label = strong("Step 7. Number of Acres"),
             value = "1",
             min = 1
           ),
@@ -69,9 +68,13 @@ mod_estimate_ui <- function(id) {
         width = 8,
         fluidRow(
           box(
-            title = strong("View and Download your Estimate"),
+            title = tagList(
+              span(strong("View your estimate")),
+              span(fct_helpBtn(ns("viewHelp")))
+            ),
             width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
-            tabsetPanel(id = ns("tabs"),
+            tabsetPanel(
+              id = ns("tabs"),
               type = "pills",
               tabPanel("Table",
                 icon = icon("table"), br(),
@@ -80,25 +83,37 @@ mod_estimate_ui <- function(id) {
               tabPanel("Bar Graph",
                 icon = icon("chart-bar"), br(),
                 ggiraph::girafeOutput(ns("plot"))
-              ),
-              tabPanel("Summary",
-                icon = icon("list"), br(),
-                DT::DTOutput(ns("summary"))
-              ),
-              tabPanel("Download",
-                icon = icon("file-export"), br(),
-                textInput(ns("name"), "Organization or Farm Name"),
-                textInput(ns("project"), "Project Name"),
-                downloadButton(ns("report"), "Download Report")
               )
             )
           )
         ),
-        fluidRow(div(
-          class = "group",
-          valueBoxOutput(ns("total_acres")),
-          valueBoxOutput(ns("total_ghg"))
-        ))
+        fluidRow(
+          box(
+            title = tagList(
+              span(strong("Summarize and download your estimate")),
+              span(fct_helpBtn(ns("summarizeHelp")))
+            ),
+            width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
+            tabsetPanel(
+              type = "pills",
+              tabPanel("Summary",
+                icon = icon("list"), br(),
+                div(
+                  class = "group",
+                  valueBoxOutput(ns("total_acres")),
+                  valueBoxOutput(ns("total_ghg"))
+                ),
+                DT::DTOutput(ns("summary"))
+              ),
+              tabPanel("Download Report",
+                icon = icon("file-export"), br(),
+                textInput(ns("name"), "Organization or Farm Name"),
+                textInput(ns("project"), "Project Name"),
+                downloadButton(ns("report"), "Download", class = "btn-success")
+              )
+            )
+          )
+        )
       )
     )
   )
@@ -111,20 +126,41 @@ mod_estimate_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
+    # help modals -------------------------------------------------------------
+
+    # modal for add practice help
+
+    observeEvent(input$addHelp, {
+      fct_helpModal("estimateAdd")
+    })
+
+    # # modal for explore help
+
+    observeEvent(input$viewHelp, {
+      fct_helpModal("estimateView")
+    })
+
+    # modal for summarize help
+
+    observeEvent(input$summarizeHelp, {
+      fct_helpModal("estimateSummarize")
+    })
+
     # update or render UI inputs --------------------------------------------------------
 
     # render practice input
 
     output$practice <- renderUI({
-      choices <- unique(comet_tags) %>%
-        subset(class %in% input$class) %>%
+      choices <- unique(comet_wa) %>%
+        subset(county %in% input$county &
+                 class %in% input$class) %>%
         select(practice)
 
       choices <- as.character(pull(choices))
 
       virtualSelectInput(
         inputId = ns("practice"),
-        label = strong("3. Conservation Practice"),
+        label = strong("Step 3. Conservation Practice"),
         choices = sort(unique(choices)),
         multiple = FALSE,
         position = "bottom",
@@ -145,7 +181,7 @@ mod_estimate_server <- function(id) {
 
       virtualSelectInput(
         inputId = ns("land_use"),
-        label = strong("4. Current Land Use"),
+        label = strong("Step 4. Current Land Use"),
         choices = sort(unique(choices)),
         multiple = FALSE,
         position = "bottom",
@@ -165,7 +201,7 @@ mod_estimate_server <- function(id) {
 
       virtualSelectInput(
         inputId = ns("irrigation"),
-        label = strong("5. Irrigation Type"),
+        label = strong("Step 5. Irrigation Type"),
         choices = sort(unique(choices)),
         multiple = FALSE,
         position = "bottom",
@@ -187,7 +223,7 @@ mod_estimate_server <- function(id) {
 
       virtualSelectInput(
         inputId = ns("implementation"),
-        label = strong("6. Practice Implementation"),
+        label = strong("Step 6. Practice Implementation"),
         choices = sort(unique(choices)),
         multiple = FALSE,
         position = "bottom",
@@ -211,14 +247,11 @@ mod_estimate_server <- function(id) {
     # only show Remove action button on the Table tab
 
     observeEvent(input$tabs, {
-      if (input$tabs == "Table")
-      {
+      if (input$tabs == "Table") {
         shinyjs::runjs(
           "document.getElementById('estimate_tab-remove').style.visibility = 'visible';"
         )
-      }
-      else
-      {
+      } else {
         shinyjs::runjs(
           "document.getElementById('estimate_tab-remove').style.visibility = 'hidden';"
         )
@@ -265,7 +298,7 @@ mod_estimate_server <- function(id) {
         )
       }
 
-      filtered <- fct_table_filter(filtered)
+      filtered <- fct_tableFilter(filtered)
 
       return(filtered)
     })
@@ -302,7 +335,6 @@ mod_estimate_server <- function(id) {
       rv$df <- unique(rv$df)
 
       return(rv$df)
-
     })
 
     # remove row from table
@@ -379,7 +411,7 @@ mod_estimate_server <- function(id) {
       valueBox("Total Acres",
         value = paste(value_acres(), "Ac"),
         icon = icon("seedling"),
-        color = "yellow",
+        color = "green",
         width = NULL
       )
     })
@@ -399,7 +431,7 @@ mod_estimate_server <- function(id) {
       valueBox("Total GHG Reductions",
         value = paste(value_ghg(), "MT CO2eq/yr"),
         icon = icon("globe-americas"),
-        color = "green",
+        color = "blue",
         width = NULL
       )
     })
@@ -409,7 +441,6 @@ mod_estimate_server <- function(id) {
     # full table
 
     output$table <- DT::renderDT({
-      isolate(rv)
       fct_table(df, type = "estimate")
     })
 
@@ -417,33 +448,21 @@ mod_estimate_server <- function(id) {
 
     observe({
       req(rv$df)
-      data <- as.data.frame(rv$df) %>%
-        mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated")))
+      data <- as.data.frame(rv$df)
       DT::replaceData(proxy_full, data, rownames = FALSE)
     })
 
     # summary table
 
     output$summary <- DT::renderDT({
-      isolate(rv$df)
       fct_table(summary_df, type = "summary")
     })
 
     proxy_summary <- DT::dataTableProxy("summary")
 
     observe({
-      DT::replaceData(proxy_summary, summary_county(), rownames = FALSE)
-    })
-
-    # there is a bug that requires the add button be clicked when the
-    # summary tab is active to render the summary table
-    # this is a workaround
-
-    observeEvent(input$tabs, {
-      if (input$tabs == "Summary")
-      {
-        shinyjs::click("estimate_tab-add")
-      }
+      data <- as.data.frame(summary_county())
+      DT::replaceData(proxy_summary, data, rownames = FALSE)
     })
 
     # render plot -------------------------------------------------------------
@@ -490,7 +509,6 @@ mod_estimate_server <- function(id) {
         withProgress(
           message = "Preparing your report",
           {
-
             tempReport <- file.path(tempdir(), "WaCSE_Report.Rmd")
             file.copy(normalizePath("inst/app/www/rmd/WaCSE_Report.Rmd"),
               tempReport,

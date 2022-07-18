@@ -23,7 +23,8 @@ fct_font <- function(id) {
 theme <- bslib::bs_theme(
   version = 5,
   primary = "#f2cc8f", secondary = "#f2cc8f", success = "#81B29A",
-  warning = "#f2cc8f", danger = "#E07A5F", base_font = bslib::font_google("Poppins"),
+  warning = "#f2cc8f", danger = "#E07A5F", royal = "#3d405b",
+  base_font = bslib::font_google("Poppins"),
   font_scale = NULL, `enable-shadows` = TRUE, `enable-rounded` = TRUE, bootswatch = "lumen"
 )
 
@@ -43,7 +44,7 @@ fct_wrap <- function(x, width) {
 }
 
 
-#' fct_table_filter
+#' fct_tableFilter
 #'
 #' @description A fct function to filter and pivot data for datatable
 #'
@@ -53,7 +54,7 @@ fct_wrap <- function(x, width) {
 #'
 #' @noRd
 
-fct_table_filter <- function(data) {
+fct_tableFilter <- function(data) {
   data <- data %>%
     select(
       "mlra",
@@ -68,4 +69,40 @@ fct_table_filter <- function(data) {
       names_from = ghg_type,
       values_from = mean
     )
+}
+
+#' fct_helpBtn
+#'
+#' @description A fct function to filter and pivot data for datatable
+#'
+#' @param id The input slot that will be used to access the value.
+#'
+#'
+#' @noRd
+
+fct_helpBtn <- function(id) {
+  shinyWidgets::actionBttn(
+    inputId = id,
+    label = NULL,
+    icon = icon("question"),
+    style = "material-circle",
+    size = "xs",
+  )
+}
+
+#' fct_helpModal
+#'
+#' @description A fct function to filter and pivot data for datatable
+#'
+#' @param btnInput The input of the button to attach the modal to.
+#'
+#' @param md The name of the markdown file to include.
+#'
+#' @noRd
+
+fct_helpModal <- function(md) {
+  showModal(modalDialog(
+    includeMarkdown(normalizePath(paste0("inst/app/www/rmd/", md, ".md"))),
+    easyClose = TRUE
+  ))
 }

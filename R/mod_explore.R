@@ -9,65 +9,78 @@
 #' @importFrom shiny NS tagList
 #' @importFrom shinyWidgets virtualSelectInput
 #' @importFrom shinydashboard box
-#' @importFrom bsplus shiny_iconlink bs_embed_popover
 
 mod_explore_ui <- function(id) {
   ns <- NS(id)
 
   tagList(
     fluidRow(
-      box(
-        title = tagList(
-          span(strong("Filter the Data")),
-          span(shiny_iconlink() %>%
-                 bs_embed_popover(title = "Testing this popover."))
+      column(
+        4,
+        box(
+          title = strong("Definitions"),
+          width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
+          includeMarkdown(normalizePath("inst/app/www/rmd/definitions.md"))
         ),
-        width = 4, status = "primary", collapsible = TRUE, solidHeader = TRUE,
-        virtualSelectInput(
-          inputId = ns("county"),
-          label = strong("1. County"),
-          choices = unique(comet_wa$county),
-          selected = c("Adams", "Asotin"),
-          multiple = TRUE,
-          search = TRUE,
-          position = "bottom",
-          optionsCount = 5
-        ),
-        virtualSelectInput(
-          inputId = ns("class"),
-          label = strong("2. Conservation Class"),
-          choices = unique(comet_tags$class),
-          multiple = TRUE,
-          position = "bottom",
-          optionsCount = 5,
-          autoSelectFirstOption = TRUE,
-          showSelectedOptionsFirst = TRUE
-        ),
-        uiOutput(ns("practice")),
-        uiOutput(ns("land_use")),
-        uiOutput(ns("irrigation")),
-        uiOutput(ns("nutrient_practice"))
+        box(
+          title = tagList(
+            span(strong("Filter the data")),
+            span(fct_helpBtn(ns("filterHelp")))
+          ),
+          width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
+          virtualSelectInput(
+            inputId = ns("county"),
+            label = strong("Step 1. County"),
+            choices = sort(unique(comet_wa$county)),
+            multiple = TRUE,
+            search = TRUE,
+            position = "bottom",
+            optionsCount = 5,
+            autoSelectFirstOption = TRUE,
+            showValueAsTags = TRUE
+          ),
+          virtualSelectInput(
+            inputId = ns("class"),
+            label = strong("Step 2. Conservation Class"),
+            choices = sort(unique(comet_tags$class)),
+            multiple = TRUE,
+            position = "bottom",
+            optionsCount = 5,
+            autoSelectFirstOption = TRUE,
+            showValueAsTags = TRUE
+          ),
+          uiOutput(ns("practice")),
+          uiOutput(ns("land_use")),
+          uiOutput(ns("irrigation")),
+          uiOutput(ns("nutrient_practice"))
+        )
       ),
-      box(
-        title = strong("Explore the Data"),
-        width = 8, status = "primary", collapsible = TRUE, solidHeader = TRUE,
-        tabsetPanel(
-          type = "pills",
-          tabPanel(
-            "Table",
-            icon = icon("table"),
-            br(),
-            DT::DTOutput(ns("table"))
+      column(
+        8,
+        box(
+          title = tagList(
+            span(strong("Explore the data")),
+            span(fct_helpBtn(ns("exploreHelp")))
           ),
-          tabPanel(
-            "Bar Graph",
-            icon = icon("chart-bar"),
-            ggiraph::girafeOutput(ns("plot"))
-          ),
-          tabPanel(
-            "MLRA Map",
-            icon = icon("map"), br(),
-            htmlOutput(ns("mlra_map"))
+          width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
+          tabsetPanel(
+            type = "pills",
+            tabPanel(
+              "Table",
+              icon = icon("table"), br(),
+              DT::DTOutput(ns("table"))
+            ),
+            tabPanel(
+              "Bar Graph",
+              icon = icon("chart-bar"),
+              ggiraph::girafeOutput(ns("plot"))
+            ),
+            tabPanel(
+              "MLRA Map",
+              icon = icon("map"), br(),
+              includeMarkdown(normalizePath("inst/app/www/rmd/mlra.md")),
+              htmlOutput(ns("mlra_map"))
+            )
           )
         )
       )
@@ -82,25 +95,41 @@ mod_explore_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
+
+    # help modals -------------------------------------------------------------
+
+    # modal for filter help
+
+    observeEvent(input$filterHelp, {
+      fct_helpModal("exploreFilter")
+    })
+
+    # modal for explore help
+
+    observeEvent(input$exploreHelp, {
+      fct_helpModal("exploreExplore")
+    })
+
     # render UI filter elements -----------------------------------------------
 
     output$practice <- renderUI({
-      choices <- unique(comet_tags) %>%
-        subset(class %in% input$class) %>%
+      choices <- unique(comet_wa) %>%
+        subset(county %in% input$county &
+          class %in% input$class) %>%
         select(practice)
 
       choices <- as.character(pull(choices))
 
       virtualSelectInput(
         inputId = ns("practice"),
-        label = strong("3. Conservation Practice"),
+        label = strong("Step 3. Conservation Practice"),
         choices = sort(unique(choices)),
-        selected = choices[1:2],
         multiple = TRUE,
         search = TRUE,
         position = "bottom",
         optionsCount = 5,
-        showSelectedOptionsFirst = TRUE
+        autoSelectFirstOption = TRUE,
+        showValueAsTags = TRUE
       )
     })
 
@@ -114,7 +143,7 @@ mod_explore_server <- function(id) {
 
       virtualSelectInput(
         inputId = ns("land_use"),
-        label = strong("4. Current Land Use"),
+        label = strong("Step 4. Current Land Use"),
         choices = sort(unique(choices)),
         multiple = TRUE,
         selected = choices,
@@ -134,7 +163,7 @@ mod_explore_server <- function(id) {
 
       virtualSelectInput(
         inputId = ns("irrigation"),
-        label = strong("5. Irrigation Type"),
+        label = strong("Step 5. Irrigation Type"),
         choices = sort(unique(choices)),
         selected = choices,
         multiple = TRUE,
@@ -155,13 +184,14 @@ mod_explore_server <- function(id) {
       tagList(
         virtualSelectInput(
           inputId = ns("nutrient_practice"),
-          label = strong("6. Nutrient Management*"),
+          label = strong("Step 6. Nutrient Management*"),
           choices = sort(unique(choices)),
           selected = c(choices["Not Applicable"], choices[1:3]),
           multiple = TRUE,
           position = "bottom",
           optionsCount = 5,
-          showSelectedOptionsFirst = TRUE
+          search = TRUE,
+          showValueAsTags = TRUE
         ),
         p("*", em("If you selected multiple practices in Step 3,
                   select 'Not Applicable' in Step 6 to include all practices."))
@@ -214,8 +244,7 @@ mod_explore_server <- function(id) {
     # render table ------------------------------------------------------------
 
     explore_table <- reactive({
-      explore_table <- fct_table_filter(filtered_df()) %>%
-        mutate(across(where(is.numeric), ~ replace(., is.na(.), "Not estimated")))
+      explore_table <- fct_tableFilter(filtered_df())
       return(explore_table)
     })
 

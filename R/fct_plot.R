@@ -19,18 +19,16 @@ fct_plot <- function(data, type, error_bar) {
       "<b>{data$implementation}</b>
         <b>MLRA:</b> {data$mlra}
         <b>County:</b> {data$county}
-        <b>Emission Reduction Coefficient:</b> {data$mean} (MT CO2e/ac/yr)"
+        <b>ERC:</b> {data$mean} (MT CO2e/ac/yr)"
     )
 
     ylab <- paste(
       "\n",
-      "Total Greenhouse Gases",
+      "Total GHG Emission Reduction Coefficient",
       "\n(Metric tonnes CO2 equivalent per acre per year)"
     )
 
     font <- "Poppins"
-
-    title <- NULL
 
     labels <- scales::label_number(accuracy = 0.001, big.mark = ",")
   }
@@ -46,13 +44,11 @@ fct_plot <- function(data, type, error_bar) {
 
     ylab <- paste(
       "\n",
-      "Total Greenhouse Gases",
+      "Total GHG Emissions Reduced",
       "\n(Metric tonnes CO2 equivalent per year)"
     )
 
     font <- "Poppins"
-
-    title <- NULL
 
     labels <- scales::label_number(accuracy = 1, big.mark = ",")
   }
@@ -68,13 +64,11 @@ fct_plot <- function(data, type, error_bar) {
 
     ylab <- paste(
       "\n",
-      "Total Greenhouse Gases",
+      "Total GHG Emissions Reduced",
       "\n(Metric tonnes CO2 equivalent per year)"
     )
 
     font <- "Arial"
-
-    title <- "Figure 1: Total GHG Emission Reductions"
 
     labels <- scales::label_number(accuracy = , big.mark = ",")
   }
@@ -105,9 +99,6 @@ fct_plot <- function(data, type, error_bar) {
     ) +
     theme_minimal(base_family = font) +
     theme(
-      plot.title = element_text(
-        hjust = 0.5,
-        size = 10),
       axis.text.y = element_text(
         margin = margin(r = 20),
         hjust = 0
@@ -122,8 +113,7 @@ fct_plot <- function(data, type, error_bar) {
     scale_y_continuous(
       labels = labels,
       expand = expansion(mult = c(0.03, 0.3))
-    ) +
-    ggtitle(title)
+    )
 
   # add error bars if error_bar = TRUE
 
@@ -170,7 +160,7 @@ fct_plot <- function(data, type, error_bar) {
 
   # plot with ggiraph
 
-  tooltip_css <- "font-size:1rem; color:black; background:#FAF9F0; padding:8px; border-radius:6px;"
+  tooltip_css <- "font-size:1rem; color:white; background:#3d405b; padding:8px; border-radius:6px;"
 
   plot <- girafe(
     ggobj = plot,

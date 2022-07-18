@@ -1,16 +1,14 @@
 /* CSS HEX https://coolors.co/palette/f4f1de-e07a5f-3d405b-81b29a-f2cc8f*/
 --floral-white: #faf9f0;
 --ghost-white: #f3f3f7;
---eggshell: #f4f1de;
---terra-cotta: #E07A5F;
---chinese-red: #ab3f21
+ --terra-cotta: #E07A5F;
 --independence: #3d405b;
 --mint-cream: #d9e8e1;
 --cambridge-blue: #A6C9B8;
 --green-sheen: #81B29A;
 --viridian: #4d8068;
+--brunswick green: #345445;
 --deep-champagne: #f2cc8f;
---harvest-gold: #c98518;
 
 .navbar.navbar-default {
     background-color: #f3f3f7!important;
@@ -34,25 +32,30 @@
 }
 
 .btn-success {
-    background: #81B29A !important;
-    border-color: #81B29A;
-    color: white;
+    background: #A6C9B8 !important;
+    border-color: #A6C9B8;
+    color: black;
 }
 
-.btn-success.hover, .btn-success:active, .btn-success:hover {
-    background-color: #81B29A;
+.btn-success.hover, .btn-success:active, .btn-success:hover, .btn-success:focus {
+    background-color: #A6C9B8;
+    color: black;
 }
 
 .btn-danger {
     background: #e07a5f !important;
     border-color: #e07a5f;
-    color: white;
+    color: black;
 
 }
 
-.btn-danger.hover, .btn-danger:active, .btn-danger:hover {
+.btn-danger.hover, .btn-danger:active, .btn-danger:hover, .btn-danger:focus {
     background-color: #e07a5f;
+    color: black;
+}
 
+.bttn-material-circle.bttn-default {
+    color: #3d405b;
 }
 
 .box.box-solid.box-primary>.box-header {
@@ -87,6 +90,16 @@
     padding: 0;
 }
 
+.small-box .icon-large {
+    position: absolute;
+    top: auto;
+    bottom: 5px;
+    right: 5px;
+    font-size: 60px;
+    padding-right: 0.1em;
+    color: white;
+}
+
 .group {
   display: flex;
   position: relative;
@@ -94,12 +107,12 @@
   align-items: center;
 }
 
-.bg-yellow {
-    background-color: #C98518 !important;
+.bg-blue {
+    background-color: #3d405b !important;
 }
 
 .bg-green {
-    background-color: #4D8068 !important;
+    background-color: #345445 !important;
 }
 
 .vscomp-value {
@@ -119,8 +132,12 @@
     line-height: 1;
 }
 
-.vscomp-option.focused, .vscomp-option.selected {
+.vscomp-option.focused {
     background-color: #d9e8e1;
+}
+
+.vscomp-option.selected {
+  background-color: #A6C9B8;
 }
 
 .vscomp-wrapper.multiple .vscomp-option.selected .checkbox-icon::after {
@@ -139,6 +156,13 @@
     width: 50%;
 }
 
+caption {
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    color: #333;
+    text-align: left;
+}
+
 table.dataTable {
     width: 100%;
     margin: 0 auto;
@@ -153,6 +177,17 @@ table.dataTable tbody th, table.dataTable tbody td {
     padding: 2px;
 }
 
+.dataTables_wrapper .dataTables_length {
+    float: left;
+    padding: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter {
+    float: right;
+    text-align: right;
+    padding: 5px;
+}
+
 table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.dataTable.display tbody th, table.dataTable.display tbody td {
     border-top: 1px solid #666;
 }
@@ -164,12 +199,18 @@ table.dataTable thead th, table.dataTable thead td {
 
 table.dataTable thead .sorting {
   background-color: #81b29a !important;
-  color: #222;
+  color: black;
+}
+
+table.dataTable thead th.dt-head-center, table.dataTable thead td.dt-head-center, table.dataTable tfoot th.dt-head-center, table.dataTable tfoot td.dt-head-center {
+    text-align: center;
+    background-color: #81b29a !important;
+    color: black;
 }
 
 table.dataTable tr.dtrg-group td {
     background-color: #A6C9B8 !important;
-    color: #222;
+    color: black;
 }
 
 table.dataTable tr.dtrg-group.dtrg-level-1 td {
@@ -178,7 +219,7 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td {
     padding-left: 2em;
     font-size: .9em;
     background-color: #D9E8E1!important;
-    color: #222;
+    color: black;
 }
 
 table.dataTable thead th.dt-head-center, table.dataTable thead td.dt-head-center, table.dataTable tfoot th.dt-head-center, table.dataTable tfoot td.dt-head-center {
@@ -194,44 +235,52 @@ button.dt-button, div.dt-button, a.dt-button, input.dt-button {
     border-radius: .25rem;
 }
 
-button.dt-button:hover:not(.disabled) {
+button.dt-button:hover {
     border: 1px solid #666;
     border-radius: .25rem;
     background: #A6C9B8 !important;
 }
 
-button.dt-button:active:not(.disabled) {
+button.dt-button:active {
     background: #A6C9B8 !important;
     box-shadow: inset 1px 1px 3px #999;
 }
 
-button.dt-button:focus:not(.disabled) {
+button.dt-button:focus) {
     border: 1px solid #666;
     text-shadow: 0 1px 0 #222;
     outline: none;
     background: #A6C9B8 !important;
 }
 
-div.dt-button-collection button.dt-button:active:not(.disabled), div.dt-button-collection button.dt-button.active:not(.disabled) {
+div.dt-button-collection button.dt-button:active, div.dt-button-collection button.dt-button.active {
     background-color: #A6C9B8 !important;
-    box-shadow: inset 1px 1px 3px #666;
+    box-shadow: none !important;
 }
 
-button.dt-button:active:not(.disabled):hover:not(.disabled), button.dt-button.active:not(.disabled):hover:not(.disabled) {
+button.dt-button:active:hover, button.dt-button.active:hover {
     box-shadow: inset 1px 1px 3px #999;
     background: #A6C9B8 !important;
+    box-shadow: none !important;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    color: #222 !important;
     border: 1px solid #0000004d;
     border-radius: .25rem;
-    background: #f6f6f6 !important;
+    background: #A6C9B8 !important;
 }
 
-.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-    border: 1px solid #0000004d;
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover, .paginate_button:active {
+    color: #222 !important;
+    border: 1px solid #0000004d !important;
     border-radius: .25rem;
-    background: #f6f6f6 !important;
+    background: #d9e8e1 !important;
+    box-shadow: none !important;
+}
+
+button.dt-button span.dt-down-arrow, div.dt-button span.dt-down-arrow, a.dt-button span.dt-down-arrow, input.dt-button span.dt-down-arrow {
+  color: black !important
 }
 
 .ggiraph-toolbar {
@@ -255,6 +304,3 @@ button.dt-button:active:not(.disabled):hover:not(.disabled), button.dt-button.ac
   background-color: transparent;
 }
 
-.fa-info-circle {
-  color: black;
-}

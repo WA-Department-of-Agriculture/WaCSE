@@ -1,0 +1,35 @@
+---
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<center><h2> 
+
+Welcome to WaCSE 
+
+</center></h2>
+
+<center>
+
+An interactive decision-support tool for comparing climate benefits of different agricultural conservation practices across Washington's diverse counties.
+
+</center>
+
+<hr>
+
+**What you can do with WaCSE:**
+
+- **Explore the data:** Compare the greenhouse gas emission reduction estimates between counties and practices.
+
+- **Calculate your estimate:** Input your county, practice, and number of acres to implement the practice on to build a downloadable report of your estimated greenhouse gas mitigation potential.
+
+- **Understand your impact:** Convert your reduced emissions to the equivalent amount of CO2 emissions from driving cars, consuming gasoline, and charging smartphones.
+
+
+**Look for ![Question mark icon](img/question.png){height=30} for guidance throughout this web application.** 
+
+*Data source: <a href="http://comet-planner.com/" target="_blank">NRCS COMET-Planner (Swan et al. 2020) </a>*
+

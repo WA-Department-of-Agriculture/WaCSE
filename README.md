@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<img src = "inst/app/www/hex-WaCSE.png" align = "right" alt = "logo" width = "130"/>
+<img src="inst/app/www/rmd/img/favicon.png" align="right" width="120"/>
 
 # Washington Climate Smart Estimator (WaCSE)
 
@@ -26,16 +26,3 @@ Version 2.1, Build 1, and COMET-Planner Report: Carbon and Greenhouse
 Gas Evaluation for NRCS Conservation Practice Planning. A Companion
 report to <http://www.comet-planner.com>.
 <http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf>.
-
-## Installation
-
-You can install the development version of WaCSEshiny from
-[GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("WA-Department-of-Agriculture/WaCSEshiny")
-
-# Run
-WaCSEshiny::run_app()
-```

@@ -8,6 +8,11 @@
 app_server <- function(input, output, session) {
   # Your application server logic
 
+    # intro modal -------------------------------------------------------------
+  observeEvent("", {
+    fct_helpModal(md = "intro")
+  })
+
   # render explore tab ------------------------------------------------------
 
   mod_explore_server("explore_tab")
@@ -16,8 +21,7 @@ app_server <- function(input, output, session) {
 
   mod_estimate_server("estimate_tab")
 
-  # render ag land use tab --------------------------------------------------------------
+  # render understand tab --------------------------------------------------------------
 
-  mod_land_use_server("land_use_tab")
-
+  mod_impact_server("impact_tab")
 }
