@@ -26,7 +26,7 @@ An interactive decision-support tool for comparing climate benefits of different
 
 - **Calculate your estimate:** Input your county, practice, and number of acres to implement the practice on to build a downloadable report of your estimated greenhouse gas mitigation potential.
 
-- **Understand your impact:** Convert your reduced emissions to the equivalent amount of CO2 emissions from driving cars, consuming gasoline, and charging smartphones.
+- **Understand your impact:** Convert your reduced emissions to the equivalent amount of CO2 emissions from home energy use, consuming gasoline, and charging smartphones.
 
 
 **Look for ![Question mark icon](img/question.png){height=30} for guidance throughout this web application.** 

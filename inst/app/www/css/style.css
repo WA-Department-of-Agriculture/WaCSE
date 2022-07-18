@@ -101,10 +101,10 @@
 }
 
 .group {
-  display: flex;
-  position: relative;
-  justify-content: space-evenly;
-  align-items: center;
+    display: flex;
+    position: relative;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .bg-blue {
@@ -113,6 +113,10 @@
 
 .bg-green {
     background-color: #345445 !important;
+}
+
+.bg-yellow {
+    background-color: #a26400 !important;
 }
 
 .vscomp-value {
@@ -137,7 +141,7 @@
 }
 
 .vscomp-option.selected {
-  background-color: #A6C9B8;
+    background-color: #A6C9B8;
 }
 
 .vscomp-wrapper.multiple .vscomp-option.selected .checkbox-icon::after {
@@ -198,8 +202,8 @@ table.dataTable thead th, table.dataTable thead td {
 }
 
 table.dataTable thead .sorting {
-  background-color: #81b29a !important;
-  color: black;
+    background-color: #81b29a !important;
+    color: black;
 }
 
 table.dataTable thead th.dt-head-center, table.dataTable thead td.dt-head-center, table.dataTable tfoot th.dt-head-center, table.dataTable tfoot td.dt-head-center {
@@ -280,27 +284,15 @@ button.dt-button:active:hover, button.dt-button.active:hover {
 }
 
 button.dt-button span.dt-down-arrow, div.dt-button span.dt-down-arrow, a.dt-button span.dt-down-arrow, input.dt-button span.dt-down-arrow {
-  color: black !important
+    color: black !important
 }
 
 .ggiraph-toolbar {
-  opacity: 1 !important;
+    opacity: 1 !important;
 }
 
 .ggiraph-toolbar-icon {
     stroke: #3d405b;
     fill: #3d405b;
-}
-
-.popover {
-  background-color: #4D8068;
-}
-
-.popover-header {
-  background-color: white;
-}
-
-.popover-arrow {
-  background-color: transparent;
 }
 

@@ -237,9 +237,10 @@ mod_estimate_server <- function(id) {
     observeEvent(input$acres, {
       req(input$acres)
       positive <- input$acres >= 1
-      shinyFeedback::feedbackWarning(
+      shinyFeedback::feedbackDanger(
         "acres", !positive,
-        "Please select at least one acre."
+        "Please select at least one acre.",
+        color = "#b50000"
       )
       return(input$acres)
     })
@@ -396,7 +397,7 @@ mod_estimate_server <- function(id) {
       return(summary_county)
     })
 
-    # total acres info box ----------------------------------------------------------
+    # total acres value box ----------------------------------------------------------
 
     value_acres <- reactive({
       req(rv$df)
@@ -416,7 +417,7 @@ mod_estimate_server <- function(id) {
       )
     })
 
-    # total ghg info box ----------------------------------------------------------
+    # total ghg value box ----------------------------------------------------------
 
     value_ghg <- reactive({
       req(rv$df)

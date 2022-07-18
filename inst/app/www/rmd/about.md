@@ -44,7 +44,7 @@ impacts on GHG and soil carbon from conservation practices.
 
 WaCSE uses the COMET-Planner dataset but presents the GHG emission
 reductions data in a way that allows comparison between **multiple
-counties** at one time. The data can be visualized in tables and bar
+counties at one time**. The data can be visualized in tables and bar
 graphs. Users can also easily download the tables, bar graphs, and a PDF
 report of all outputs from their estimate.
 

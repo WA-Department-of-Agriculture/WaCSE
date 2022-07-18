@@ -151,6 +151,23 @@
         "sass"
       ]
     },
+    "bsplus": {
+      "Package": "bsplus",
+      "Version": "0.1.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "76d14fb160c333fae3ee83350e2a915b",
+      "Requirements": [
+        "glue",
+        "htmltools",
+        "jsonlite",
+        "lubridate",
+        "magrittr",
+        "purrr",
+        "rmarkdown",
+        "stringr"
+      ]
+    },
     "cachem": {
       "Package": "cachem",
       "Version": "1.0.6",
@@ -668,6 +685,26 @@
       "Hash": "7ab57a6de7f48a8dc84910d1eca42883",
       "Requirements": []
     },
+    "janitor": {
+      "Package": "janitor",
+      "Version": "2.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6de84a8c67fb247e721166049c84695f",
+      "Requirements": [
+        "dplyr",
+        "lifecycle",
+        "lubridate",
+        "magrittr",
+        "purrr",
+        "rlang",
+        "snakecase",
+        "stringi",
+        "stringr",
+        "tidyr",
+        "tidyselect"
+      ]
+    },
     "jquerylib": {
       "Package": "jquerylib",
       "Version": "0.1.4",
@@ -767,6 +804,17 @@
       "Requirements": [
         "glue",
         "rlang"
+      ]
+    },
+    "lubridate": {
+      "Package": "lubridate",
+      "Version": "1.8.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "2ff5eedb6ee38fb1b81205c73be1be5a",
+      "Requirements": [
+        "cpp11",
+        "generics"
       ]
     },
     "magrittr": {
@@ -1291,6 +1339,17 @@
         "digest",
         "jsonlite",
         "shiny"
+      ]
+    },
+    "snakecase": {
+      "Package": "snakecase",
+      "Version": "0.11.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4079070fc210c7901c0832a3aeab894f",
+      "Requirements": [
+        "stringi",
+        "stringr"
       ]
     },
     "sourcetools": {

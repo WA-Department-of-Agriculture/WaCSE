@@ -69,7 +69,7 @@ golem_add_external_resources <- function() {
     # this doesn't work in the style.css file. works in this ui file.
     tags$style(HTML("
       .shiny-output-error-validation {
-        color: #333;
+        color: #b50000;
         font-weight: bold;
       }
     ")
