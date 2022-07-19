@@ -13,7 +13,6 @@
 
 mod_estimate_ui <- function(id) {
   ns <- NS(id)
-
   tagList(
     fluidRow(
       column(
@@ -98,9 +97,11 @@ mod_estimate_ui <- function(id) {
               type = "pills",
               tabPanel("Summary",
                 icon = icon("list"), br(),
-                  fluidRow(valueBoxOutput(ns("total_acres")),
+                fluidRow(
+                  valueBoxOutput(ns("total_acres")),
                   valueBoxOutput(ns("total_ghg")),
-                DT::DTOutput(ns("summary")))
+                  DT::DTOutput(ns("summary"))
+                )
               ),
               tabPanel("Download Report",
                 icon = icon("file-export"), br(),
@@ -150,7 +151,7 @@ mod_estimate_server <- function(id) {
     output$practice <- renderUI({
       choices <- unique(comet_wa) %>%
         subset(county %in% input$county &
-                 class %in% input$class) %>%
+          class %in% input$class) %>%
         select(practice)
 
       choices <- as.character(pull(choices))
@@ -505,7 +506,8 @@ mod_estimate_server <- function(id) {
         # case we don't have write permissions to the current working dir (which
         # can happen when deployed).
         withProgress(
-          message = "Preparing your report",
+          message = "Preparing your report.",
+          detail = " This could take a while...",
           {
             tempReport <- file.path(tempdir(), "WaCSE_Report.Rmd")
             file.copy(normalizePath("inst/app/www/rmd/WaCSE_Report.Rmd"),

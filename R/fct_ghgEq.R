@@ -11,18 +11,17 @@
 #' @noRd
 
 fct_ghgEq <- function(CO2eq, eq) {
-
   CO2eq <- as.numeric(CO2eq)
 
   switch(eq,
-         "home" = format(round(CO2eq / 5.139, 1), big.mark = ","),
-         "gas" = format(round(CO2eq / 8.887E-3, 0), big.mark = ","),
-         "smartphone" = format(round(CO2eq / 8.220801116E-6, 0), big.mark = ","),
-         "waste" = format(round(CO2eq / 2.89, 1), big.mark = ","),
-         "trash" = format(round(CO2eq / 20.23, 1), big.mark = ","),
-         "light" = format(round(CO2eq / 2.63849007E-2, 0), big.mark = ","),
-         "seedling" = format(round(CO2eq / 0.0604935136, 0), big.mark = ","),
-         "forest" = format(round(CO2eq / 0.8433333, 0), big.mark = ","),
-         "conversion" = format(round(CO2eq / 148.2433333, 1), big.mark = ",")
-         )
+    "home" = format(round(CO2eq / 5.139, 1), big.mark = ","),
+    "gas" = format(round(CO2eq / 8.887E-3, 0), big.mark = ","),
+    "smartphone" = format(round(CO2eq / 8.220801116E-6, 0), big.mark = ","),
+    "waste" = format(round(CO2eq / 2.89, 1), big.mark = ","),
+    "trash" = format(round(CO2eq / 20.23, 1), big.mark = ","),
+    "light" = format(round(CO2eq / 2.63849007E-2, 0), big.mark = ","),
+    "seedling" = format(round(CO2eq / 0.0604935136, 0), big.mark = ","),
+    "forest" = format(round(CO2eq / 0.8433333, 0), big.mark = ","),
+    "conversion" = format(round(CO2eq / 148.2433333, 1), big.mark = ",")
+  )
 }

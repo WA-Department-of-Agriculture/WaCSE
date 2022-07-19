@@ -15,8 +15,10 @@ app_ui <- function(request) {
     fluidPage(
       theme = theme,
       navbarPage(
-        title = span(img(src = "www/rmd/img/favicon.png", height = "80px"),
-                     "Washington Climate Smart Estimator"),
+        title = span(
+          img(src = "www/rmd/img/favicon.png", height = "80px"),
+          "Washington Climate Smart Estimator"
+        ),
         collapsible = TRUE,
         tabPanel(
           "Explore the data",
@@ -34,9 +36,10 @@ app_ui <- function(request) {
           "About",
           column(8,
             offset = 1,
-            box(width = NULL, status = "primary",
-                includeMarkdown(normalizePath("inst/app/www/rmd/about.md"))
-                )
+            box(
+              width = NULL, status = "primary",
+              includeMarkdown(normalizePath("inst/app/www/rmd/about.md"))
+            )
           )
         )
       )
@@ -72,13 +75,11 @@ golem_add_external_resources <- function() {
         color: #b50000;
         font-weight: bold;
       }
-    ")
-    ),
+    ")),
     shinyjs::useShinyjs(),
     shinyFeedback::useShinyFeedback(),
     shinyWidgets::useShinydashboard(),
     shinyWidgets::setBackgroundColor(color = "#faf9f0"),
-    bsplus::use_bs_popover(),
     waiter::useWaiter(),
     waiter::waiterPreloader(html = spin_hexdots())
 

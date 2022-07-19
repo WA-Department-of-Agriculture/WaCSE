@@ -23,6 +23,18 @@
     background: #f3f3f7;
 }
 
+.shiny-notification {
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      position:fixed;
+      font-size: 250%;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+}
+
 .btn {
     text-transform: capitalize !important;
 }

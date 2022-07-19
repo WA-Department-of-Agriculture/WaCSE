@@ -9,6 +9,8 @@
 #' @importFrom shiny NS tagList
 #' @importFrom shinydashboard box valueBoxOutput renderValueBox valueBox
 
+# TODO: get total GHG emissions from estimate tab as a reactive then use updateNumericInput
+
 mod_impact_ui <- function(id) {
   ns <- NS(id)
   tagList(
@@ -19,7 +21,7 @@ mod_impact_ui <- function(id) {
         numericInput(ns("ghg_input"),
           label = strong("Enter CO2eq emissions in metric tonnes:"),
           value = 50,
-          width = 200
+          width = 300
         ),
         fluidRow(
           h5(strong(textOutput(ns("ghgCO2eq")))),
@@ -53,9 +55,12 @@ mod_impact_server <- function(id) {
 
     # get ghg emissions estimate from the input
 
-    ghg_input <- reactive(input$ghg_input)
+    ghg_input <- reactive({
+      req(input$ghg_input)
+      input$ghg_input
+    })
 
-# CO2 emissions from row --------------------------------------------------
+    # CO2 emissions from row --------------------------------------------------
 
     output$ghgCO2eq <- renderText({
       paste(ghg_input(), "metric tonnes of CO2eq is equivalent to CO2 emissions from:")
@@ -95,7 +100,7 @@ mod_impact_server <- function(id) {
     })
 
 
-# emissions avoided by row ----------------------------------------------------
+    # emissions avoided by row ----------------------------------------------------
 
     output$ghgAvoided <- renderText({
       paste(ghg_input(), "metric tonnes of CO2eq is equivalent to GHG emissions avoided by:")
@@ -135,7 +140,7 @@ mod_impact_server <- function(id) {
     })
 
 
-# carbon sequestered row --------------------------------------------------
+    # carbon sequestered row --------------------------------------------------
 
     output$Cseq <- renderText({
       paste(ghg_input(), "metric tonnes of CO2eq is equivalent to carbon sequestered by:")
@@ -145,10 +150,10 @@ mod_impact_server <- function(id) {
 
     output$seedling <- renderValueBox({
       valueBox("Tree seedlings grown for 10 years",
-               value = fct_ghgEq(ghg_input(), "seedling"),
-               icon = icon("seedling"),
-               color = "green",
-               width = NULL
+        value = fct_ghgEq(ghg_input(), "seedling"),
+        icon = icon("seedling"),
+        color = "green",
+        width = NULL
       )
     })
 
@@ -156,10 +161,10 @@ mod_impact_server <- function(id) {
 
     output$forest <- renderValueBox({
       valueBox("Acres of US forests in one year",
-               value = fct_ghgEq(ghg_input(), "forest"),
-               icon = icon("tree"),
-               color = "green",
-               width = NULL
+        value = fct_ghgEq(ghg_input(), "forest"),
+        icon = icon("tree"),
+        color = "green",
+        width = NULL
       )
     })
 
@@ -167,13 +172,12 @@ mod_impact_server <- function(id) {
 
     output$conversion <- renderValueBox({
       valueBox("Acres of US forests preserved from conversion to cropland in one year",
-               value = fct_ghgEq(ghg_input(), "conversion"),
-               icon = icon("apple"),
-               color = "green",
-               width = NULL
+        value = fct_ghgEq(ghg_input(), "conversion"),
+        icon = icon("apple"),
+        color = "green",
+        width = NULL
       )
     })
-
   })
 }
 ## To be copied in the UI
