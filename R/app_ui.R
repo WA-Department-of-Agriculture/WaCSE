@@ -34,7 +34,7 @@ app_ui <- function(request) {
         ),
         tabPanel(
           "About",
-          column(8,
+          column(10,
             offset = 1,
             box(
               width = NULL, status = "primary",
@@ -69,13 +69,9 @@ golem_add_external_resources <- function() {
       path = app_sys("app/www"),
       app_title = "WaCSE"
     ),
-    # this doesn't work in the style.css file. works in this ui file.
-    tags$style(HTML("
-      .shiny-output-error-validation {
-        color: #b50000;
-        font-weight: bold;
-      }
-    ")),
+    tags$link(rel = "stylesheet",
+              type = "text/css",
+              href = "www/css/style.css"),
     shinyjs::useShinyjs(),
     shinyFeedback::useShinyFeedback(),
     shinyWidgets::useShinydashboard(),

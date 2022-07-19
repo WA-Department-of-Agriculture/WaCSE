@@ -19,15 +19,22 @@ mod_explore_ui <- function(id) {
         4,
         box(
           title = strong("Definitions"),
-          width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
-          includeMarkdown(normalizePath("inst/app/www/rmd/exploreDefinitions.md"))
+          width = NULL,
+          status = "primary",
+          collapsible = TRUE,
+          solidHeader = TRUE,
+          includeMarkdown(
+            normalizePath("inst/app/www/rmd/exploreDefinitions.md"))
         ),
         box(
           title = tagList(
             span(strong("Filter the data")),
-            span(fct_helpBtn(ns("filterHelp")))
+            span(fct_helpBtn(id = ns("filterHelp")))
           ),
-          width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
+          width = NULL,
+          status = "primary",
+          collapsible = TRUE,
+          solidHeader = TRUE,
           virtualSelectInput(
             inputId = ns("county"),
             label = strong("Step 1. County"),
@@ -49,10 +56,10 @@ mod_explore_ui <- function(id) {
             autoSelectFirstOption = TRUE,
             showValueAsTags = TRUE
           ),
-          uiOutput(ns("practice")),
-          uiOutput(ns("land_use")),
-          uiOutput(ns("irrigation")),
-          uiOutput(ns("nutrient_practice"))
+          uiOutput(outputId = ns("practice")),
+          uiOutput(outputId = ns("land_use")),
+          uiOutput(outputId = ns("irrigation")),
+          uiOutput(outputId = ns("nutrient_practice"))
         )
       ),
       column(
@@ -62,12 +69,16 @@ mod_explore_ui <- function(id) {
             span(strong("Explore the data")),
             span(fct_helpBtn(ns("exploreHelp")))
           ),
-          width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
+          width = NULL,
+          status = "primary",
+          collapsible = TRUE,
+          solidHeader = TRUE,
           tabsetPanel(
             type = "pills",
             tabPanel(
               "Table",
-              icon = icon("table"), br(),
+              icon = icon("table"),
+              br(),
               DT::DTOutput(ns("table"))
             ),
             tabPanel(
@@ -77,7 +88,8 @@ mod_explore_ui <- function(id) {
             ),
             tabPanel(
               "MLRA Map",
-              icon = icon("map"), br(),
+              icon = icon("map"),
+              br(),
               includeMarkdown(normalizePath("inst/app/www/rmd/mlra.md")),
               htmlOutput(ns("mlra_map"))
             )
@@ -94,7 +106,6 @@ mod_explore_ui <- function(id) {
 mod_explore_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
 
     # help modals -------------------------------------------------------------
 
@@ -193,8 +204,9 @@ mod_explore_server <- function(id) {
           search = TRUE,
           showValueAsTags = TRUE
         ),
-        p("*", em("If you selected multiple practices in Step 3,
-                  select 'Not Applicable' in Step 6 to include all practices."))
+        p("*",
+          em("If you selected multiple practices in Step 3,
+              select 'Not Applicable' in Step 6 to include all practices."))
       )
     })
 
@@ -215,7 +227,11 @@ mod_explore_server <- function(id) {
     # render reactive df ------------------------------------------------------
 
     filtered_df <- reactive({
-      req(input$county, input$class, input$practice, input$land_use, input$irrigation)
+      req(input$county,
+          input$class,
+          input$practice,
+          input$land_use,
+          input$irrigation)
       if (!("Nutrient Management (CPS 590)" %in% input$practice)) {
         filtered_df <- subset(
           comet_wa,
@@ -226,6 +242,7 @@ mod_explore_server <- function(id) {
             irrigation %in% input$irrigation
         )
         return(filtered_df)
+
       } else {
         req(input$nutrient_practice)
         filtered_df <- subset(
