@@ -487,8 +487,8 @@ mod_estimate_server <- function(id) {
 
       HTML(paste0("<p style=font-size:1.1em>Convert your CO2eq emissions
                   into easier to understand equivalencies by entering your
-                  Total GHG Reductions (", ghg, ") in the <em>Understand your
-                  impact</em> tab.</p>"))
+                  Total GHG Reductions (", ghg, ") in the <em>GHG Equivalencies
+                  Calculator</em> in the Understand your impact tab.</p>"))
     })
 
     # render tables ------------------------------------------------------------

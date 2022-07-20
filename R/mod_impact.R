@@ -19,11 +19,17 @@ mod_impact_ui <- function(id) {
         includeMarkdown(normalizePath("inst/app/www/rmd/impactAbout.md")),
         numericInput(
           inputId = ns("ghg_input"),
-          label = strong("Enter CO2eq emissions in metric tonnes:"),
-          value = 50,
+          label = strong("CO2eq emissions in metric tonnes:"),
+          value = NULL,
           min = 0,
           width = 300,
         ),
+        actionButton(
+          inputId = ns("convert"),
+          label = "Convert",
+          class = "btn-success",
+          ),
+        hr(),
         fluidRow(
           h5(strong(textOutput(outputId = ns("ghgCO2eq")))),
           valueBoxOutput(outputId = ns("home")),
@@ -54,9 +60,9 @@ mod_impact_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    # observe ghg emissions estimate from the input
+    # update ghg emissions estimate from the input upon click of convert button
 
-    ghg_input <- reactive({
+    ghg_input <- eventReactive(input$convert, {
       ifelse(input$ghg_input %in% c("", NULL, NA), 0, input$ghg_input)
     })
 
