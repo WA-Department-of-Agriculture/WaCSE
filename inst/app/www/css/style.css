@@ -20,10 +20,9 @@
 
 .navbar-nav .nav-link, .navbar-nav .nav-tabs>li>a,
 .navbar-nav .nav-pills>li>a, ul.nav.navbar-nav>li>a {
-  border-radius: 0.8em;
+  border-radius: 0.25em;
   padding-left: 1em;
 }
-
 
 .nav>li>a:active, .nav>li>a:focus, .nav>li>a:hover {
   color: #222;
@@ -225,6 +224,7 @@ table.dataTable thead th, table.dataTable thead td {
 table.dataTable thead .sorting {
     background-color: #81b29a;
     color: black;
+    text-align: left !important;
 }
 
 table.dataTable thead th.dt-head-center, table.dataTable thead td.dt-head-center, table.dataTable tfoot th.dt-head-center, table.dataTable tfoot td.dt-head-center {

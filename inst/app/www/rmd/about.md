@@ -57,7 +57,7 @@ Negative values indicate a loss of carbon or increased emissions of GHG
 
 Technical guides for NRCS conservation practices standards (CPS) are
 found
-<a href="https://www.nrcs.usda.gov/wps/portal/nrcs/main/national/technical/cp/" target="_blank">here</a>).
+<a href="https://www.nrcs.usda.gov/wps/portal/nrcs/main/national/technical/cp/" target="_blank">here</a>.
 
 ### References
 
@@ -79,6 +79,3 @@ Resource Conservation Service, Handbook 296.
 If you have any feedback or would like to report a bug, please contact
 the app author: Jadey Ryan at
 [jryan@agr.wa.gov](mailto:jryan@agr.wa.gov?subject=WaCSE).
-
-<a href="http://comet-planner.com/" target="_blank">NRCS COMET-Planner
-(Swan et al. 2020) </a>

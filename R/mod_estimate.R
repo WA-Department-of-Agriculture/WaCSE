@@ -17,12 +17,18 @@ mod_estimate_ui <- function(id) {
     fluidRow(
       column(
         width = 4,
+
+        # inputs box ---------------------------------------------------------
+
         box(
           title = tagList(
             span(strong("Add practices to your estimate")),
             span(fct_helpBtn(ns("addHelp")))
           ),
-          width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
+          width = NULL,
+          status = "primary",
+          collapsible = TRUE,
+          solidHeader = TRUE,
           virtualSelectInput(
             inputId = ns("county"),
             label = strong("Step 1. County"),
@@ -40,10 +46,10 @@ mod_estimate_ui <- function(id) {
             position = "bottom",
             optionsCount = 5
           ),
-          uiOutput(ns("practice")),
-          uiOutput(ns("land_use")),
-          uiOutput(ns("irrigation")),
-          uiOutput(ns("implementation")),
+          uiOutput(outputId = ns("practice")),
+          uiOutput(outputId = ns("land_use")),
+          uiOutput(outputId = ns("irrigation")),
+          uiOutput(outputId = ns("implementation")),
           numericInput(
             inputId = ns("acres"),
             label = strong("Step 7. Number of Acres"),
@@ -66,48 +72,76 @@ mod_estimate_ui <- function(id) {
       ), column(
         width = 8,
         fluidRow(
+
+          # view estimate box -------------------------------------------------
+
           box(
             title = tagList(
               span(strong("View your estimate")),
-              span(fct_helpBtn(ns("viewHelp")))
+              span(fct_helpBtn(id = ns("viewHelp")))
             ),
-            width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
+            width = NULL,
+            status = "primary",
+            collapsible = TRUE,
+            solidHeader = TRUE,
             tabsetPanel(
               id = ns("tabs"),
               type = "pills",
               tabPanel("Table",
-                icon = icon("table"), br(),
-                DT::DTOutput(ns("table"))
+                icon = icon("table"),
+                br(),
+                DT::DTOutput(outputId = ns("table"))
               ),
               tabPanel("Bar Graph",
-                icon = icon("chart-bar"), br(),
-                ggiraph::girafeOutput(ns("plot"))
+                icon = icon("chart-bar"),
+                br(),
+                ggiraph::girafeOutput(outputId = ns("plot"))
               )
             )
           )
         ),
         fluidRow(
+
+          # summary and download box -----------------------------------------
+
           box(
             title = tagList(
               span(strong("Summarize and download your estimate")),
-              span(fct_helpBtn(ns("summarizeHelp")))
+              span(fct_helpBtn(id = ns("summarizeHelp")))
             ),
-            width = NULL, status = "primary", collapsible = TRUE, solidHeader = TRUE,
+            width = NULL,
+            status = "primary",
+            collapsible = TRUE,
+            solidHeader = TRUE,
             tabsetPanel(
               type = "pills",
-              tabPanel("Summary",
-                icon = icon("list"), br(),
+              tabPanel(
+                title = "Summary",
+                icon = icon("list"),
+                br(),
                 fluidRow(
-                  valueBoxOutput(ns("total_acres")),
-                  valueBoxOutput(ns("total_ghg")),
-                  DT::DTOutput(ns("summary"))
+                  htmlOutput(outputId = ns("impact")),
+                  valueBoxOutput(outputId = ns("total_acres")),
+                  valueBoxOutput(outputId = ns("total_ghg")),
+                  DT::DTOutput(outputId = ns("summary"))
                 )
               ),
-              tabPanel("Download Report",
-                icon = icon("file-export"), br(),
-                textInput(ns("name"), "Organization or Farm Name"),
-                textInput(ns("project"), "Project Name"),
-                downloadButton(ns("report"), "Download", class = "btn-success")
+              tabPanel(
+                title = "Download Report",
+                icon = icon("file-export"),
+                br(),
+                textInput(
+                  inputId = ns("name"),
+                  label = "Organization or Farm Name"
+                ),
+                textInput(
+                  inputId = ns("project"), "Project Name"
+                ),
+                downloadButton(
+                  outputId = ns("report"),
+                  label = "Download",
+                  class = "btn-success"
+                )
               )
             )
           )
@@ -144,7 +178,7 @@ mod_estimate_server <- function(id) {
       fct_helpModal("estimateSummarize")
     })
 
-    # update or render UI inputs --------------------------------------------------------
+    # update or render UI inputs -----------------------------------------------
 
     # render practice input
 
@@ -237,7 +271,7 @@ mod_estimate_server <- function(id) {
       positive <- input$acres >= 1
       shinyFeedback::feedbackDanger(
         "acres", !positive,
-        "Please select at least one acre.",
+        "Please input at least one acre.",
         color = "#b50000"
       )
       return(input$acres)
@@ -248,16 +282,18 @@ mod_estimate_server <- function(id) {
     observeEvent(input$tabs, {
       if (input$tabs == "Table") {
         shinyjs::runjs(
-          "document.getElementById('estimate_tab-remove').style.visibility = 'visible';"
+          "document.getElementById('estimate_tab-remove')
+          .style.visibility = 'visible';"
         )
       } else {
         shinyjs::runjs(
-          "document.getElementById('estimate_tab-remove').style.visibility = 'hidden';"
+          "document.getElementById('estimate_tab-remove')
+          .style.visibility = 'hidden';"
         )
       }
     })
 
-    # create reactive df for full table and plot ---------------------------------------------
+    # create reactive df for full table and plot -------------------------------
 
     # prepare data for table
 
@@ -302,7 +338,7 @@ mod_estimate_server <- function(id) {
       return(filtered)
     })
 
-    # add, edit, or delete rows ------------------------------------------------------
+    # add, edit, or delete rows ------------------------------------------------
 
     # add new row to table
 
@@ -329,9 +365,7 @@ mod_estimate_server <- function(id) {
         "Total Greenhouse Gases" = input$acres * filtered()$total.ghg.co2
       )
 
-      rv$df <- rbind(rv$df, tmp)
-
-      rv$df <- unique(rv$df)
+      rv$df <- rbind(rv$df, tmp) %>% unique()
 
       return(rv$df)
     })
@@ -349,8 +383,13 @@ mod_estimate_server <- function(id) {
             ),
             footer = tagList(
               modalButton("Cancel"),
-              actionButton(ns("confirm"), label = "Yes", class = "btn-danger")
-            ), easyClose = TRUE
+              actionButton(
+                inputId = ns("confirm"),
+                label = "Yes",
+                class = "btn-danger"
+              )
+            ),
+            easyClose = TRUE
           )
         } else {
           modalDialog(
@@ -370,6 +409,7 @@ mod_estimate_server <- function(id) {
     })
 
     # prepare summary data  ------------------------------------------
+
     summary_df <- data.frame(
       "MLRA" = character(),
       "County" = character(),
@@ -395,7 +435,7 @@ mod_estimate_server <- function(id) {
       return(summary_county)
     })
 
-    # total acres value box ----------------------------------------------------------
+    # total acres value box ---------------------------------------------------
 
     value_acres <- reactive({
       req(rv$df)
@@ -407,7 +447,8 @@ mod_estimate_server <- function(id) {
     })
 
     output$total_acres <- renderValueBox({
-      valueBox("Total Acres",
+      valueBox(
+        subtitle = "Total Acres",
         value = paste(value_acres(), "Ac"),
         icon = icon("leaf"),
         color = "green",
@@ -415,7 +456,7 @@ mod_estimate_server <- function(id) {
       )
     })
 
-    # total ghg value box ----------------------------------------------------------
+    # total ghg value box ------------------------------------------------------
 
     value_ghg <- reactive({
       req(rv$df)
@@ -424,15 +465,30 @@ mod_estimate_server <- function(id) {
         as.vector() %>%
         sum() %>%
         prettyNum(big.mark = ",")
+      return(value_ghg)
     })
 
     output$total_ghg <- renderValueBox({
-      valueBox("Total GHG Reductions",
+      valueBox(
+        subtitle = "Total GHG Reductions",
         value = paste(value_ghg(), "MT CO2eq/yr"),
         icon = icon("globe-americas"),
         color = "blue",
         width = NULL
       )
+    })
+
+    # instructions for entering total GHG reductions into impact tab ----------
+
+    output$impact <- renderUI({
+      req(rv$df)
+
+      ghg <- paste0("<strong>", value_ghg(), "MT CO2eq/yr</strong>")
+
+      HTML(paste0("<p style=font-size:1.1em>Convert your CO2eq emissions
+                  into easier to understand equivalencies by entering your
+                  Total GHG Reductions (", ghg, ") in the <em>Understand your
+                  impact</em> tab.</p>"))
     })
 
     # render tables ------------------------------------------------------------
@@ -487,13 +543,14 @@ mod_estimate_server <- function(id) {
       if (is.null(rv$df)) {
         validate("Add some data to see the graph.")
       }
+
       if (dplyr::n_distinct(filtered_plot()$implementation) > 20 ||
         nrow(filtered_plot()) > 60) {
         validate("The graph is too cluttered. Please remove some selections.")
       }
+
       fct_plot(filtered_plot(), type = "estimate", error_bar = FALSE)
     })
-
 
     # download report ---------------------------------------------------------
 
@@ -502,9 +559,9 @@ mod_estimate_server <- function(id) {
         paste0(Sys.Date(), "_WaCSE_Report.pdf")
       },
       content = function(file) {
-        # Copy the report file to a temporary directory before processing it, in
-        # case we don't have write permissions to the current working dir (which
-        # can happen when deployed).
+        # Copy the report file to a temporary directory before processing it,
+        # in case we don't have write permissions to the current working dir
+        # (which can happen when deployed).
         withProgress(
           message = "Preparing your report.",
           detail = " This could take a while...",
@@ -523,14 +580,17 @@ mod_estimate_server <- function(id) {
               project = input$project,
               table = rv$df,
               summary = summary_county(),
-              plot = fct_plot(filtered_plot(), type = "download", error_bar = FALSE)
+              plot = fct_plot(filtered_plot(),
+                type = "download",
+                error_bar = FALSE
+              )
             )
 
             incProgress(0.5)
 
             # Knit the document, passing in the `params` list, and eval it in a
-            # child of the global environment (this isolates the code in the document
-            # from the code in this app).
+            # child of the global environment (this isolates the code in the
+            # document from the code in this app).
             rmarkdown::render(tempReport,
               output_file = file,
               params = params,

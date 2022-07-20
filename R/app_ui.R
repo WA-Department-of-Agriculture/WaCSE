@@ -69,9 +69,11 @@ golem_add_external_resources <- function() {
       path = app_sys("app/www"),
       app_title = "WaCSE"
     ),
-    tags$link(rel = "stylesheet",
-              type = "text/css",
-              href = "www/css/style.css"),
+    tags$link(
+      rel = "stylesheet",
+      type = "text/css",
+      href = "www/css/style.css"
+    ),
     shinyjs::useShinyjs(),
     shinyFeedback::useShinyFeedback(),
     shinyWidgets::useShinydashboard(),
