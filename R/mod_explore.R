@@ -79,19 +79,19 @@ mod_explore_ui <- function(id) {
               "Table",
               icon = icon("table"),
               br(),
-              DT::DTOutput(ns("table"))
+              DT::DTOutput(ns("table")) %>% withSpinner()
             ),
             tabPanel(
               "Bar Graph",
               icon = icon("chart-bar"),
-              ggiraph::girafeOutput(ns("plot"))
+              ggiraph::girafeOutput(ns("plot")) %>% withSpinner()
             ),
             tabPanel(
               "MLRA Map",
               icon = icon("map"),
               br(),
               includeMarkdown(normalizePath("inst/app/www/rmd/mlra.md")),
-              htmlOutput(ns("mlra_map"))
+              htmlOutput(ns("mlra_map")) %>% withSpinner()
             )
           )
         )

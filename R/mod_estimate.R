@@ -90,12 +90,12 @@ mod_estimate_ui <- function(id) {
               tabPanel("Table",
                 icon = icon("table"),
                 br(),
-                DT::DTOutput(outputId = ns("table"))
+                DT::DTOutput(outputId = ns("table")) %>% withSpinner()
               ),
               tabPanel("Bar Graph",
                 icon = icon("chart-bar"),
                 br(),
-                ggiraph::girafeOutput(outputId = ns("plot"))
+                ggiraph::girafeOutput(outputId = ns("plot")) %>% withSpinner()
               )
             )
           )
@@ -123,7 +123,7 @@ mod_estimate_ui <- function(id) {
                   htmlOutput(outputId = ns("impact")),
                   valueBoxOutput(outputId = ns("total_acres")),
                   valueBoxOutput(outputId = ns("total_ghg")),
-                  DT::DTOutput(outputId = ns("summary"))
+                  DT::DTOutput(outputId = ns("summary")) %>% withSpinner()
                 )
               ),
               tabPanel(
