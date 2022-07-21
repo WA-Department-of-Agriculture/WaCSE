@@ -7,22 +7,22 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-#' @importFrom shinydashboard box valueBoxOutput renderValueBox valueBox
 
 mod_impact_ui <- function(id) {
   ns <- NS(id)
   tagList(
     fluidRow(
-      box(
+      shinydashboard::box(
         width = 12,
         status = "primary",
         includeMarkdown(normalizePath("inst/app/www/rmd/impactAbout.md")),
         numericInput(
           inputId = ns("ghg_input"),
-          label = strong("CO2eq emissions in metric tonnes:"),
+          label = strong("Enter your Total GHG Reduction from the
+                         Calculate your estimate tab:"),
           value = NULL,
           min = 0,
-          width = 300,
+          width = 500,
         ),
         actionButton(
           inputId = ns("convert"),
@@ -32,21 +32,21 @@ mod_impact_ui <- function(id) {
         hr(),
         fluidRow(
           h5(strong(textOutput(outputId = ns("ghgCO2eq")))),
-          valueBoxOutput(outputId = ns("home")),
-          valueBoxOutput(outputId = ns("gallons")),
-          valueBoxOutput(outputId = ns("phones"))
+          shinydashboard::valueBoxOutput(outputId = ns("home")),
+          shinydashboard::valueBoxOutput(outputId = ns("gallons")),
+          shinydashboard::valueBoxOutput(outputId = ns("phones"))
         ),
         fluidRow(
           h5(strong(textOutput(outputId = ns("ghgAvoided")))),
-          valueBoxOutput(outputId = ns("waste")),
-          valueBoxOutput(outputId = ns("trash")),
-          valueBoxOutput(outputId = ns("lights"))
+          shinydashboard::valueBoxOutput(outputId = ns("waste")),
+          shinydashboard::valueBoxOutput(outputId = ns("trash")),
+          shinydashboard::valueBoxOutput(outputId = ns("lights"))
         ),
         fluidRow(
           h5(strong(textOutput(outputId = ns("Cseq")))),
-          valueBoxOutput(outputId = ns("seedling")),
-          valueBoxOutput(outputId = ns("forest")),
-          valueBoxOutput(outputId = ns("conversion"))
+          shinydashboard::valueBoxOutput(outputId = ns("seedling")),
+          shinydashboard::valueBoxOutput(outputId = ns("forest")),
+          shinydashboard::valueBoxOutput(outputId = ns("conversion"))
         )
       )
     )
@@ -75,8 +75,8 @@ mod_impact_server <- function(id) {
 
     # home value box ----------------------------------------------------------
 
-    output$home <- renderValueBox({
-      valueBox(
+    output$home <- shinydashboard::renderValueBox({
+      shinydashboard::valueBox(
         subtitle = "Homes' electricity use for one year",
         value = fct_ghgEq(ghg_input(), "home"),
         icon = icon("home"),
@@ -87,8 +87,8 @@ mod_impact_server <- function(id) {
 
     # gallons of gas value box ------------------------------------------------
 
-    output$gallons <- renderValueBox({
-      valueBox(
+    output$gallons <- shinydashboard::renderValueBox({
+      shinydashboard::valueBox(
         subtitle = "Gallons of gas consumed",
         value = fct_ghgEq(ghg_input(), "gas"),
         icon = icon("gas-pump"),
@@ -99,8 +99,8 @@ mod_impact_server <- function(id) {
 
     # smartphones value box ---------------------------------------------------
 
-    output$phones <- renderValueBox({
-      valueBox(
+    output$phones <- shinydashboard::renderValueBox({
+      shinydashboard::valueBox(
         subtitle = "Number of smartphones charged",
         value = fct_ghgEq(ghg_input(), "smartphone"),
         icon = icon("mobile"),
@@ -118,8 +118,8 @@ mod_impact_server <- function(id) {
 
     # waste value box ----------------------------------------------------------
 
-    output$waste <- renderValueBox({
-      valueBox(
+    output$waste <- shinydashboard::renderValueBox({
+      shinydashboard::valueBox(
         subtitle = "Tons of waste recycled instead of landfilled",
         value = fct_ghgEq(ghg_input(), "waste"),
         icon = icon("recycle"),
@@ -130,8 +130,8 @@ mod_impact_server <- function(id) {
 
     # trash bag value box ------------------------------------------------------
 
-    output$trash <- renderValueBox({
-      valueBox(
+    output$trash <- shinydashboard::renderValueBox({
+      shinydashboard::valueBox(
         subtitle = "Trash bags of waste recycled instead of landfilled",
         value = fct_ghgEq(ghg_input(), "trash"),
         icon = icon("trash"),
@@ -142,8 +142,8 @@ mod_impact_server <- function(id) {
 
     # lights value box ---------------------------------------------------------
 
-    output$lights <- renderValueBox({
-      valueBox(
+    output$lights <- shinydashboard::renderValueBox({
+      shinydashboard::valueBox(
         subtitle = "Incandescent lamps switched to LEDs",
         value = fct_ghgEq(ghg_input(), "light"),
         icon = icon("lightbulb"),
@@ -161,8 +161,8 @@ mod_impact_server <- function(id) {
 
     # seedling value box -------------------------------------------------------
 
-    output$seedling <- renderValueBox({
-      valueBox(
+    output$seedling <- shinydashboard::renderValueBox({
+      shinydashboard::valueBox(
         subtitle = "Tree seedlings grown for 10 years",
         value = fct_ghgEq(ghg_input(), "seedling"),
         icon = icon("seedling"),
@@ -173,8 +173,8 @@ mod_impact_server <- function(id) {
 
     # forest value box ---------------------------------------------------------
 
-    output$forest <- renderValueBox({
-      valueBox(
+    output$forest <- shinydashboard::renderValueBox({
+      shinydashboard::valueBox(
         subtitle = "Acres of US forests in one year",
         value = fct_ghgEq(ghg_input(), "forest"),
         icon = icon("tree"),
@@ -185,8 +185,8 @@ mod_impact_server <- function(id) {
 
     # conversion value box -----------------------------------------------------
 
-    output$conversion <- renderValueBox({
-      valueBox(
+    output$conversion <- shinydashboard::renderValueBox({
+      shinydashboard::valueBox(
         subtitle = "Acres of US forests preserved from
         conversion to cropland in one year",
         value = fct_ghgEq(ghg_input(), "conversion"),

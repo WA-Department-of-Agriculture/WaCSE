@@ -3,7 +3,6 @@
 #' @description A fct function to create a bar graph
 #'
 #' @import ggplot2
-#' @import ggiraph
 #'
 #' @return The return value, if any, from executing the function.
 #'
@@ -25,7 +24,7 @@ fct_plot <- function(data, type, error_bar) {
     ylab <- paste(
       "\n",
       "Total GHG Emission Reduction Coefficient",
-      "\n(Metric tonnes CO2 equivalent per acre per year)"
+      "\n(Metric tonnes CO2eq per acre per year)"
     )
 
     font <- "Poppins"
@@ -39,13 +38,14 @@ fct_plot <- function(data, type, error_bar) {
         <b>MLRA:</b> {data$mlra}
         <b>County:</b> {data$county}
         <b>Acres:</b> {format(round(data$acres, 0), big.mark = ',')}
-        <b>Estimated Emission Reduction:</b> {format(round(data$mean, 2), big.mark = ',')} (MT CO2e/yr)"
+        <b>Estimated Emission Reduction:</b>
+      {format(round(data$mean, 2), big.mark = ',')} (MT CO2e/yr)"
     )
 
     ylab <- paste(
       "\n",
       "Total GHG Emissions Reduced",
-      "\n(Metric tonnes CO2 equivalent per year)"
+      "\n(Metric tonnes CO2eq per year)"
     )
 
     font <- "Poppins"
@@ -59,7 +59,8 @@ fct_plot <- function(data, type, error_bar) {
         <b>MLRA:</b> {data$mlra}
         <b>County:</b> {data$county}
         <b>Acres:</b> {format(round(data$acres, 0), big.mark = ',')}
-        <b>Estimated Emission Reduction:</b> {format(round(data$mean, 2), big.mark = ',')} (MT CO2e/yr)"
+        <b>Estimated Emission Reduction:</b>
+      {format(round(data$mean, 2), big.mark = ',')} (MT CO2e/yr)"
     )
 
     ylab <- paste(
@@ -84,7 +85,7 @@ fct_plot <- function(data, type, error_bar) {
       )
     ) +
     coord_flip() +
-    geom_col_interactive(aes(
+    ggiraph::geom_col_interactive(aes(
       tooltip = tt
     ),
     position = position_dodge2(reverse = TRUE),
@@ -160,16 +161,18 @@ fct_plot <- function(data, type, error_bar) {
 
   # plot with ggiraph
 
-  tooltip_css <- "font-size:1rem; color:white; background:#3d405b; padding:8px; border-radius:6px;"
+  tooltip_css <- "font-size:1rem; color:white;
+  background:#3d405b; padding:8px; border-radius:6px;"
 
-  plot <- girafe(
+  plot <- ggiraph::girafe(
     ggobj = plot,
     width_svg = 9,
     options = list(
-      opts_tooltip(
+      ggiraph::opts_tooltip(
         css = tooltip_css
       ),
-      opts_toolbar(saveaspng = TRUE, pngname = paste(Sys.Date(), "_WaCSE_Plot"))
+      ggiraph::opts_toolbar(saveaspng = TRUE,
+                            pngname = paste(Sys.Date(), "_WaCSE_Plot"))
     )
   )
 }

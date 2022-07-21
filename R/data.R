@@ -1,38 +1,53 @@
-#' A subset of the NRCS Comet-Planner dataset
+#' Greenhouse gas emission reduction coefficients
 #'
-#' A dataset containing the coefficients of greenhouse gas emissions
+#' A subset of the NRCS Comet-Planner dataset containing the coefficients of greenhouse gas emissions
 #' and soil carbon for Washington State.
 #'
-#' @format A data frame with 17280 rows and 14 variables. The Rda dataset tidies the data by pivoting longer.
+#' @format A data frame with 17280 rows and 14 variables:
 #' \describe{
-#'   \item{state}{Abbreviation for state}
 #'   \item{county}{County name}
 #'   \item{mlra}{USDA Major Land Resource Area rectified to county boundaries}
-#'   \item{lrr}{USDA Land Resource Region rectified to county boundaries}
 #'   \item{class}{Broad class of conservation practice}
 #'   \item{practice}{USDA-NRCS Conservation Practice Standard name}
 #'   \item{implementation}{The implementation scenario modeled for each conservation practice standard; implementation scenarios are described in more detail in the one-page summaries associated with each practice}
-#'   \\item{current_land_use}{Value extracted from planner_implementation to use as filtering tag.}
-#'   \\item{irrigation}{Value extracted from planner_implementation to use as filtering tag.}
-#'   \\item{nutrient_practice}{Value extracted from planner_implementation to use as filtering tag.}
-#'   \\item{ghg_type}{The Emission Reduction Coefficient (ERC) type: co2, n2o, ch4, or total_ghg_co2}
-#'   \\item{mean}{Mean emission reductions in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
-#'   \\item{sterr}{Standard error of the mean of emission reductions in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
-#'   \\item{lower}{Mean ERC - sterr}
-#'   \\item{upper}{Mean ERC + sterr}
+#'   \item{abbr}{Abbreviated implementation for plots.}
+#'   \item{current_land_use}{Value extracted from planner_implementation to use as filtering tag.}
+#'   \item{irrigation}{Value extracted from planner_implementation to use as filtering tag.}
+#'   \item{nutrient_practice}{Value extracted from planner_implementation to use as filtering tag.}
+#'   \item{ghg_type}{The Emission Reduction Coefficient (ERC) type: co2, n2o, ch4, or total_ghg_co2}
+#'   \item{mean}{Mean emission reductions in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   \item{sterr}{Standard error of the mean of emission reductions in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   \item{lower}{Mean ERC - sterr}
+#'   \item{upper}{Mean ERC + sterr}
 #'
 #'  The below descriptions are directly from the source metadata.
 #'
-#'   \item{co2_mean}{Mean total carbon dioxide (CO2) emission reductions (sum of all CO2 sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
-#'   \item{co2_sterr}{Standard error of the mean of total carbon dioxide (CO2) emission reductions (sum of all CO2 sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
-#'   \item{n2o_mean}{Mean total nitrous oxide (N2O) emission reductions (sum of all N2O emission sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
-#'   \item{n2o_sterr}{Standard error of the mean for total nitrous oxide (N2O) emission reductions (sum of all N2O emission sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
-#'   \item{ch4_mean}{Mean total methane (CH4) emission reductions (sum of all CH4 emission sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
-#'   \item{ch4_sterr}{Standard error of the mean for total methane (CH4) emission reductions (sum of all CH4 emission sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
-#'   \item{total_ghg_co2}{Mean of total greenhouse gas emission reductions in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
-#'   \item{total_ghg_co2_sterr}{Standard error of the mean for total greenhouse gas emission reductions in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   {co2_mean}{Mean total carbon dioxide (CO2) emission reductions (sum of all CO2 sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   {co2_sterr}{Standard error of the mean of total carbon dioxide (CO2) emission reductions (sum of all CO2 sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   {n2o_mean}{Mean total nitrous oxide (N2O) emission reductions (sum of all N2O emission sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   {n2o_sterr}{Standard error of the mean for total nitrous oxide (N2O) emission reductions (sum of all N2O emission sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   {ch4_mean}{Mean total methane (CH4) emission reductions (sum of all CH4 emission sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   {ch4_sterr}{Standard error of the mean for total methane (CH4) emission reductions (sum of all CH4 emission sources) in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   {total_ghg_co2}{Mean of total greenhouse gas emission reductions in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
+#'   {total_ghg_co2_sterr}{Standard error of the mean for total greenhouse gas emission reductions in metric tonnes CO2 equivalent per acre per year (MT CO2e/ac/yr)}
 #'   ...
 #' }
 #'
 #' @source \url{http://www.comet-planner.com/}
 "comet_wa"
+
+#' comet_wa tags
+#'
+#' Tags for filtering conservation practice implementations from the comet_wa dataset
+#'
+#' @format A data frame with 114 rows and 7 variables:
+#' \describe{
+#'   \item{class}{Broad class of conservation practice}
+#'   \item{practice}{USDA-NRCS Conservation Practice Standard name}
+#'   \item{implementation}{The implementation scenario modeled for each conservation practice standard; implementation scenarios are described in more detail in the one-page summaries associated with each practice}
+#'   \item{abbr}{Abbreviated implementation for plots.}
+#'   \item{current_land_use}{Value extracted from planner_implementation to use as filtering tag.}
+#'   \item{irrigation}{Value extracted from planner_implementation to use as filtering tag.}
+#'   \item{nutrient_practice}{Value extracted from planner_implementation to use as filtering tag.}
+#'   }
+"comet_tags"

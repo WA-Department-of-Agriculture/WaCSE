@@ -10,14 +10,25 @@ Agriculture](https://agr.wa.gov/departments/land-and-water/natural-resources)
 developed WaCSE for the Washington State Conservation Commission to use
 in the [Sustainable Farms and Fields](https://www.scc.wa.gov/sff) (SFF)
 program. Intended users are the Conservation Commission, conservation
-districts, growers, and anyone interested in identifying agricultural
-conservation practices to reduce greenhouse gas (GHG) emissions. This
-user-friendly, interactive web application facilitates comparing GHG
-emission reduction potentials from different conservation practices
-across Washington’s diverse counties.
+districts, growers, and anyone interested in reducing agricultural
+greenhouse gas (GHG) emissions. This interactive tool estimates the
+reduction of GHG emissions from different conservation practices across
+Washington’s diverse counties.
 
 This app was built using the
 [Golem](https://github.com/ThinkR-open/golem) framework.
+
+## Install and run WaCSE
+
+You can install and run the development version of WaCSE from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("WA-Department-of-Agriculture/WaCSE")
+
+WaCSE::run_app()
+```
 
 ## Data reference
 

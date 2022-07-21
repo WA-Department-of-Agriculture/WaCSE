@@ -20,13 +20,13 @@ diverse counties.
 -   **Explore the data:** Compare the greenhouse gas emission reduction
     estimates between counties and practices.
 
--   **Calculate your estimate:** Input your county, practice, and number
-    of acres to implement the practice on to build a downloadable report
-    of your estimated greenhouse gas mitigation potential.
+-   **Calculate your estimate:** Input your county, practice, and
+    acreage to build a downloadable report of your estimated greenhouse
+    gas mitigation potential.
 
 -   **Understand your impact:** Convert your reduced emissions to the
-    equivalent amount of CO2 emissions from driving cars, consuming
-    gasoline, and charging smartphones.
+    equivalent from home energy use, consuming gasoline, charging
+    smartphones, and more!
 
 **Look for
 <img src="img/question.png" height="30" alt="Question mark icon" /> for

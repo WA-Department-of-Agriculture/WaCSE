@@ -8,8 +8,6 @@
 #'
 #' @importFrom shiny NS tagList
 #' @import dplyr
-#' @importFrom shinyWidgets virtualSelectInput updateVirtualSelect
-#' @importFrom shinydashboard box valueBoxOutput renderValueBox valueBox
 
 mod_estimate_ui <- function(id) {
   ns <- NS(id)
@@ -20,16 +18,16 @@ mod_estimate_ui <- function(id) {
 
         # inputs box ---------------------------------------------------------
 
-        box(
+        shinydashboard::box(
           title = tagList(
-            span(strong("Add practices to your estimate")),
+            span(strong("Add conservation practices")),
             span(fct_helpBtn(ns("addHelp")))
           ),
           width = NULL,
           status = "primary",
           collapsible = TRUE,
           solidHeader = TRUE,
-          virtualSelectInput(
+          shinyWidgets::virtualSelectInput(
             inputId = ns("county"),
             label = strong("Step 1. County"),
             choices = unique(comet_wa$county),
@@ -38,7 +36,7 @@ mod_estimate_ui <- function(id) {
             optionsCount = 5,
             search = TRUE
           ),
-          virtualSelectInput(
+          shinyWidgets::virtualSelectInput(
             inputId = ns("class"),
             label = strong("Step 2. Conservation Class"),
             choices = unique(comet_tags$class),
@@ -75,9 +73,9 @@ mod_estimate_ui <- function(id) {
 
           # view estimate box -------------------------------------------------
 
-          box(
+          shinydashboard::box(
             title = tagList(
-              span(strong("View your estimate")),
+              span(strong("View your GHG reduction estimate")),
               span(fct_helpBtn(id = ns("viewHelp")))
             ),
             width = NULL,
@@ -90,12 +88,16 @@ mod_estimate_ui <- function(id) {
               tabPanel("Table",
                 icon = icon("table"),
                 br(),
-                DT::DTOutput(outputId = ns("table")) %>% withSpinner()
+                shinycssloaders::withSpinner(
+                  DT::DTOutput(outputId = ns("table"))
+                )
               ),
               tabPanel("Bar Graph",
                 icon = icon("chart-bar"),
                 br(),
-                ggiraph::girafeOutput(outputId = ns("plot")) %>% withSpinner()
+                shinycssloaders::withSpinner(
+                  ggiraph::girafeOutput(outputId = ns("plot"))
+                )
               )
             )
           )
@@ -104,9 +106,9 @@ mod_estimate_ui <- function(id) {
 
           # summary and download box -----------------------------------------
 
-          box(
+          shinydashboard::box(
             title = tagList(
-              span(strong("Summarize and download your estimate")),
+              span(strong("Summarize and download your GHG reduction estimate")),
               span(fct_helpBtn(id = ns("summarizeHelp")))
             ),
             width = NULL,
@@ -121,9 +123,11 @@ mod_estimate_ui <- function(id) {
                 br(),
                 fluidRow(
                   htmlOutput(outputId = ns("impact")),
-                  valueBoxOutput(outputId = ns("total_acres")),
-                  valueBoxOutput(outputId = ns("total_ghg")),
-                  DT::DTOutput(outputId = ns("summary")) %>% withSpinner()
+                  shinydashboard::valueBoxOutput(outputId = ns("total_acres")),
+                  shinydashboard::valueBoxOutput(outputId = ns("total_ghg")),
+                  shinycssloaders::withSpinner(
+                    DT::DTOutput(outputId = ns("summary"))
+                  )
                 )
               ),
               tabPanel(
@@ -186,11 +190,11 @@ mod_estimate_server <- function(id) {
       choices <- unique(comet_wa) %>%
         subset(county %in% input$county &
           class %in% input$class) %>%
-        select(practice)
+        dplyr::select(practice)
 
       choices <- as.character(pull(choices))
 
-      virtualSelectInput(
+      shinyWidgets::virtualSelectInput(
         inputId = ns("practice"),
         label = strong("Step 3. Conservation Practice"),
         choices = sort(unique(choices)),
@@ -207,11 +211,11 @@ mod_estimate_server <- function(id) {
       choices <- unique(comet_tags) %>%
         subset(class %in% input$class &
           practice %in% input$practice) %>%
-        select(current_land_use)
+        dplyr::select(current_land_use)
 
       choices <- as.character(pull(choices))
 
-      virtualSelectInput(
+      shinyWidgets::virtualSelectInput(
         inputId = ns("land_use"),
         label = strong("Step 4. Current Land Use"),
         choices = sort(unique(choices)),
@@ -227,11 +231,11 @@ mod_estimate_server <- function(id) {
       choices <- unique(comet_tags) %>%
         subset(class %in% input$class &
           practice %in% input$practice) %>%
-        select(irrigation)
+        dplyr::select(irrigation)
 
       choices <- as.character(pull(choices))
 
-      virtualSelectInput(
+      shinyWidgets::virtualSelectInput(
         inputId = ns("irrigation"),
         label = strong("Step 5. Irrigation Type"),
         choices = sort(unique(choices)),
@@ -249,11 +253,11 @@ mod_estimate_server <- function(id) {
           practice %in% input$practice &
           current_land_use %in% input$land_use &
           irrigation %in% input$irrigation) %>%
-        select(implementation)
+        dplyr::select(implementation)
 
       choices <- as.character(pull(choices))
 
-      virtualSelectInput(
+      shinyWidgets::virtualSelectInput(
         inputId = ns("implementation"),
         label = strong("Step 6. Practice Implementation"),
         choices = sort(unique(choices)),
@@ -298,16 +302,16 @@ mod_estimate_server <- function(id) {
     # prepare data for table
 
     df <- data.frame(
-      "MLRA" = character(),
-      "County" = character(),
-      "Conservation Class" = character(),
-      "Conservation Practice" = character(),
-      "Practice Implementation" = character(),
-      "Acres" = numeric(),
-      "Carbon Dioxide" = numeric(),
-      "Nitrous Oxide" = numeric(),
-      "Methane" = numeric(),
-      "Total Greenhouse Gases" = numeric()
+      "mlra" = character(),
+      "county" = character(),
+      "class" = character(),
+      "practice" = character(),
+      "implementation" = character(),
+      "acres" = numeric(),
+      "co2" = numeric(),
+      "n2o" = numeric(),
+      "ch4" = numeric(),
+      "totalGHG" = numeric()
     )
 
     rv <- reactiveValues(x = df)
@@ -353,16 +357,16 @@ mod_estimate_server <- function(id) {
       )
 
       tmp <- data.frame(
-        "MLRA" = filtered()$mlra,
-        "County" = filtered()$county,
-        "Conservation Class" = filtered()$class,
-        "Conservation Practice" = filtered()$practice,
-        "Practice Implementation" = filtered()$implementation,
-        "Acres" = input$acres,
-        "Carbon Dioxide" = input$acres * filtered()$co2,
-        "Nitrous Oxide" = input$acres * filtered()$n2o,
-        "Methane" = input$acres * filtered()$ch4,
-        "Total Greenhouse Gases" = input$acres * filtered()$total.ghg.co2
+        "mlra" = filtered()$mlra,
+        "county" = filtered()$county,
+        "class" = filtered()$class,
+        "practice" = filtered()$practice,
+        "implementation" = filtered()$implementation,
+        "acres" = input$acres,
+        "co2" = input$acres * filtered()$co2,
+        "n2o" = input$acres * filtered()$n2o,
+        "ch4" = input$acres * filtered()$ch4,
+        "totalGHG" = input$acres * filtered()$total.ghg.co2
       )
 
       rv$df <- rbind(rv$df, tmp) %>% unique()
@@ -411,25 +415,25 @@ mod_estimate_server <- function(id) {
     # prepare summary data  ------------------------------------------
 
     summary_df <- data.frame(
-      "MLRA" = character(),
-      "County" = character(),
-      "# of Practice Implementations" = numeric(),
-      "Total Acres" = numeric(),
-      "Total Greenhouse Gases" = numeric()
+      "mlra" = character(),
+      "county" = character(),
+      "uniqueImpl" = numeric(),
+      "acres" = numeric(),
+      "totalGHG" = numeric()
     )
 
     summary_county <- reactive({
       req(rv$df)
       summary_county <- rv$df %>%
         mutate(
-          Acres = as.numeric(Acres),
-          Total.Greenhouse.Gases = as.numeric(Total.Greenhouse.Gases)
+          acres = as.numeric(acres),
+          totalGHG = as.numeric(totalGHG)
         ) %>%
-        group_by(MLRA, County) %>%
+        group_by(mlra, county) %>%
         summarize(
-          "# of Practice Implementations" = n_distinct(Practice.Implementation),
-          "Total Acres" = sum(Acres),
-          "Total Greenhouse Gases" = sum(Total.Greenhouse.Gases)
+          "uniqueImpl" = dplyr::n_distinct(implementation),
+          "acres" = sum(acres),
+          "totalGHG" = sum(totalGHG)
         ) %>%
         as.data.frame()
       return(summary_county)
@@ -440,14 +444,14 @@ mod_estimate_server <- function(id) {
     value_acres <- reactive({
       req(rv$df)
       value_acres <- rv$df %>%
-        select("Acres") %>%
+        dplyr::select(acres) %>%
         as.vector() %>%
         sum() %>%
-        prettyNum(big.mark = ",")
+        format(big.mark = ",")
     })
 
-    output$total_acres <- renderValueBox({
-      valueBox(
+    output$total_acres <- shinydashboard::renderValueBox({
+      shinydashboard::valueBox(
         subtitle = "Total Acres",
         value = paste(value_acres(), "Ac"),
         icon = icon("leaf"),
@@ -461,15 +465,15 @@ mod_estimate_server <- function(id) {
     value_ghg <- reactive({
       req(rv$df)
       value_ghg <- rv$df %>%
-        select("Total.Greenhouse.Gases") %>%
+        dplyr::select(totalGHG) %>%
         as.vector() %>%
         sum() %>%
-        prettyNum(big.mark = ",")
+        format(big.mark = ",")
       return(value_ghg)
     })
 
-    output$total_ghg <- renderValueBox({
-      valueBox(
+    output$total_ghg <- shinydashboard::renderValueBox({
+      shinydashboard::valueBox(
         subtitle = "Total GHG Reductions",
         value = paste(value_ghg(), "MT CO2eq/yr"),
         icon = icon("globe-americas"),
@@ -483,12 +487,8 @@ mod_estimate_server <- function(id) {
     output$impact <- renderUI({
       req(rv$df)
 
-      ghg <- paste0("<strong>", value_ghg(), "MT CO2eq/yr</strong>")
-
-      HTML(paste0("<p style=font-size:1.1em>Convert your CO2eq emissions
-                  into easier to understand equivalencies by entering your
-                  Total GHG Reductions (", ghg, ") in the <em>GHG Equivalencies
-                  Calculator</em> in the Understand your impact tab.</p>"))
+      HTML(paste0("<p> Visit the Understand your impact tab at the top of this
+                  page to learn about what this GHG reduction means.</p>"))
     })
 
     # render tables ------------------------------------------------------------
@@ -525,15 +525,15 @@ mod_estimate_server <- function(id) {
     filtered_plot <- reactive({
       req(rv$df)
       rv$df %>%
-        select(
-          mlra = MLRA,
-          county = County,
-          abbr = Practice.Implementation,
-          implementation = Practice.Implementation,
-          acres = Acres,
-          mean = Total.Greenhouse.Gases
+        dplyr::select(
+          mlra = mlra,
+          county = county,
+          abbr = implementation,
+          implementation = implementation,
+          acres = acres,
+          mean = totalGHG
         ) %>%
-        mutate(
+        dplyr::mutate(
           acres = as.numeric(acres),
           mean = as.numeric(mean)
         )
@@ -573,8 +573,8 @@ mod_estimate_server <- function(id) {
             )
             fct_ghgEq <- file.path(tempdir(), "fct_ghgEq.R")
             file.copy(normalizePath("R/fct_ghgEq.R"),
-                      fct_ghgEq,
-                      overwrite = TRUE
+              fct_ghgEq,
+              overwrite = TRUE
             )
 
             incProgress(0.1)

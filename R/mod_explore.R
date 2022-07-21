@@ -7,8 +7,6 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-#' @importFrom shinyWidgets virtualSelectInput
-#' @importFrom shinydashboard box
 
 mod_explore_ui <- function(id) {
   ns <- NS(id)
@@ -17,16 +15,17 @@ mod_explore_ui <- function(id) {
     fluidRow(
       column(
         4,
-        box(
+        shinydashboard::box(
           title = strong("Definitions"),
           width = NULL,
           status = "primary",
           collapsible = TRUE,
           solidHeader = TRUE,
           includeMarkdown(
-            normalizePath("inst/app/www/rmd/exploreDefinitions.md"))
+            normalizePath("inst/app/www/rmd/exploreDefinitions.md")
+          )
         ),
-        box(
+        shinydashboard::box(
           title = tagList(
             span(strong("Filter the data")),
             span(fct_helpBtn(id = ns("filterHelp")))
@@ -35,7 +34,7 @@ mod_explore_ui <- function(id) {
           status = "primary",
           collapsible = TRUE,
           solidHeader = TRUE,
-          virtualSelectInput(
+          shinyWidgets::virtualSelectInput(
             inputId = ns("county"),
             label = strong("Step 1. County"),
             choices = sort(unique(comet_wa$county)),
@@ -46,7 +45,7 @@ mod_explore_ui <- function(id) {
             autoSelectFirstOption = TRUE,
             showValueAsTags = TRUE
           ),
-          virtualSelectInput(
+          shinyWidgets::virtualSelectInput(
             inputId = ns("class"),
             label = strong("Step 2. Conservation Class"),
             choices = sort(unique(comet_tags$class)),
@@ -64,7 +63,7 @@ mod_explore_ui <- function(id) {
       ),
       column(
         8,
-        box(
+        shinydashboard::box(
           title = tagList(
             span(strong("Explore the data")),
             span(fct_helpBtn(ns("exploreHelp")))
@@ -79,19 +78,23 @@ mod_explore_ui <- function(id) {
               "Table",
               icon = icon("table"),
               br(),
-              DT::DTOutput(ns("table")) %>% withSpinner()
+              shinycssloaders::withSpinner(
+                DT::DTOutput(ns("table"))
+              )
             ),
             tabPanel(
               "Bar Graph",
               icon = icon("chart-bar"),
-              ggiraph::girafeOutput(ns("plot")) %>% withSpinner()
+              shinycssloaders::withSpinner(
+                ggiraph::girafeOutput(ns("plot"))
+              )
             ),
             tabPanel(
               "MLRA Map",
               icon = icon("map"),
               br(),
-              includeMarkdown(normalizePath("inst/app/www/rmd/mlra.md")),
-              htmlOutput(ns("mlra_map")) %>% withSpinner()
+              includeMarkdown(normalizePath("inst/app/www/rmd/exploreMLRA.md")),
+              htmlOutput(ns("mlra_map"))
             )
           )
         )
@@ -127,11 +130,11 @@ mod_explore_server <- function(id) {
       choices <- unique(comet_wa) %>%
         subset(county %in% input$county &
           class %in% input$class) %>%
-        select(practice)
+        dplyr::select(practice)
 
       choices <- as.character(pull(choices))
 
-      virtualSelectInput(
+      shinyWidgets::virtualSelectInput(
         inputId = ns("practice"),
         label = strong("Step 3. Conservation Practice"),
         choices = sort(unique(choices)),
@@ -148,11 +151,11 @@ mod_explore_server <- function(id) {
       choices <- unique(comet_tags) %>%
         subset(class %in% input$class &
           practice %in% input$practice) %>%
-        select(current_land_use)
+        dplyr::select(current_land_use)
 
       choices <- as.character(pull(choices))
 
-      virtualSelectInput(
+      shinyWidgets::virtualSelectInput(
         inputId = ns("land_use"),
         label = strong("Step 4. Current Land Use"),
         choices = sort(unique(choices)),
@@ -168,11 +171,11 @@ mod_explore_server <- function(id) {
       choices <- unique(comet_tags) %>%
         subset(class %in% input$class &
           practice %in% input$practice) %>%
-        select(irrigation)
+        dplyr::select(irrigation)
 
       choices <- as.character(pull(choices))
 
-      virtualSelectInput(
+      shinyWidgets::virtualSelectInput(
         inputId = ns("irrigation"),
         label = strong("Step 5. Irrigation Type"),
         choices = sort(unique(choices)),
@@ -188,12 +191,12 @@ mod_explore_server <- function(id) {
       req("Nutrient Management (CPS 590)" %in% input$practice)
       choices <- unique(comet_tags) %>%
         subset(practice %in% input$practice) %>%
-        select(nutrient_practice)
+        dplyr::select(nutrient_practice)
 
       choices <- as.character(pull(choices))
 
       tagList(
-        virtualSelectInput(
+        shinyWidgets::virtualSelectInput(
           inputId = ns("nutrient_practice"),
           label = strong("Step 6. Nutrient Management*"),
           choices = sort(unique(choices)),
@@ -204,9 +207,11 @@ mod_explore_server <- function(id) {
           search = TRUE,
           showValueAsTags = TRUE
         ),
-        p("*",
+        p(
+          "*",
           em("If you selected multiple practices in Step 3,
-              select 'Not Applicable' in Step 6 to include all practices."))
+              select 'Not Applicable' in Step 6 to include all practices.")
+        )
       )
     })
 
@@ -227,11 +232,13 @@ mod_explore_server <- function(id) {
     # render reactive df ------------------------------------------------------
 
     filtered_df <- reactive({
-      req(input$county,
-          input$class,
-          input$practice,
-          input$land_use,
-          input$irrigation)
+      req(
+        input$county,
+        input$class,
+        input$practice,
+        input$land_use,
+        input$irrigation
+      )
       if (!("Nutrient Management (CPS 590)" %in% input$practice)) {
         filtered_df <- subset(
           comet_wa,
@@ -242,7 +249,6 @@ mod_explore_server <- function(id) {
             irrigation %in% input$irrigation
         )
         return(filtered_df)
-
       } else {
         req(input$nutrient_practice)
         filtered_df <- subset(

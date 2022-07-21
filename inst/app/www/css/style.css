@@ -309,11 +309,10 @@ button.dt-button span.dt-down-arrow, div.dt-button span.dt-down-arrow, a.dt-butt
 }
 
 .ggiraph-toolbar {
-    opacity: 1;
+    opacity: 1 !important;
 }
 
 .ggiraph-toolbar-icon {
     stroke: #3d405b;
     fill: #3d405b;
 }
-

@@ -13,20 +13,20 @@ fct_table <- function(data, type) {
   if (type == "explore") {
     sketch <- htmltools::withTags(
       table(
-        thead(
-          tr(
+        tags$thead(
+          tags$tr(
             class = "dt-head-left",
-            th(rowspan = 2, "MLRA"),
-            th(rowspan = 2, "County*"),
-            th(rowspan = 2, "Conservation Class"),
-            th(rowspan = 2, "Conservation Practice"),
-            th(rowspan = 2, "Practice Implementation"),
-            th(colspan = 1, "Carbon Dioxide"),
-            th(colspan = 1, "Nitrous Oxide"),
-            th(colspan = 1, "Methane"),
-            th(colspan = 1, "Total GHG"),
+            tags$th(rowspan = 2, "MLRA"),
+            tags$th(rowspan = 2, "County*"),
+            tags$th(rowspan = 2, "Conservation Class"),
+            tags$th(rowspan = 2, "Conservation Practice"),
+            tags$th(rowspan = 2, "Practice Implementation"),
+            tags$th(colspan = 1, "Carbon Dioxide"),
+            tags$th(colspan = 1, "Nitrous Oxide"),
+            tags$th(colspan = 1, "Methane"),
+            tags$th(colspan = 1, "Total GHG"),
           ),
-          tr(th(
+          tags$tr(tags$th(
             colspan = 4,
             class = "dt-head-center",
             em("ERC in MT CO2eq/ac/yr**")
@@ -43,8 +43,13 @@ fct_table <- function(data, type) {
     acre_col <- 7
     dom <- "Bfrtip"
     order <- 0
-    caption <- tags$caption(HTML("*Counties are grouped by their dominant MLRA. <br>
-                                  **Blanks mean that ERC was not calculated."))
+    caption <- tags$caption(HTML("*Counties are grouped by dominant MLRA. <br>
+                                 **If blank, NRCS data were not available for
+                                 the calculation.<br>
+                                 &nbsp;&nbsp; Negative emission reductions
+                                 indicate a loss of carbon or increased
+                                 emissions of GHG.
+"))
     filename <- paste0(Sys.Date(), "_WaCSE_exploreTableDownload")
     title <- paste0("Explore table downloaded from WaCSE on ", Sys.Date())
   }
@@ -52,21 +57,21 @@ fct_table <- function(data, type) {
   if (type == "estimate") {
     sketch <- htmltools::withTags(
       table(
-        thead(
-          tr(
+        tags$thead(
+          tags$tr(
             class = "dt-head-left",
-            th(rowspan = 2, "MLRA"),
-            th(rowspan = 2, "County*"),
-            th(rowspan = 2, "Conservation Class"),
-            th(rowspan = 2, "Conservation Practice"),
-            th(rowspan = 2, "Practice Implementation"),
-            th(rowspan = 2, "Acres"),
-            th(colspan = 1, "Carbon Dioxide"),
-            th(colspan = 1, "Nitrous Oxide"),
-            th(colspan = 1, "Methane"),
-            th(colspan = 1, "Total GHG"),
+            tags$th(rowspan = 2, "MLRA"),
+            tags$th(rowspan = 2, "County*"),
+            tags$th(rowspan = 2, "Conservation Class"),
+            tags$th(rowspan = 2, "Conservation Practice"),
+            tags$th(rowspan = 2, "Practice Implementation"),
+            tags$th(rowspan = 2, "Acres"),
+            tags$th(colspan = 1, "Carbon Dioxide"),
+            tags$th(colspan = 1, "Nitrous Oxide"),
+            tags$th(colspan = 1, "Methane"),
+            tags$th(colspan = 1, "Total GHG"),
           ),
-          tr(th(
+          tags$tr(tags$th(
             colspan = 4,
             class = "dt-head-center",
             em("Emission reductions in MT CO2eq/yr**")
@@ -83,25 +88,31 @@ fct_table <- function(data, type) {
     acre_col <- 6
     dom <- "Bfrtip"
     order <- 0
-    caption <- tags$caption(HTML("*Counties are grouped by their dominant MLRA.<br>
-                                 **<b>Emission Reduction Equation:</b>
-                                 Area (Acres) × Emission Reduction Coefficient (ERC) <br>
-                                 **Blanks mean that ERC was not calculated."))
+    caption <- tags$caption(HTML("*Counties are grouped by dominant MLRA.<br>
+                                 **<b>Calculation:</b>
+                                 Area (Acres) &times; Emission Reduction
+                                 Coefficient (ERC) <br>
+                                 &nbsp;&nbsp; If blank, NRCS data were not
+                                 available for the calculation. <br>
+                                 &nbsp;&nbsp;Negative emission reductions
+                                 indicate a loss of carbon or increased
+                                 emissions of GHG.
+"))
     filename <- paste0(Sys.Date(), "_WaCSE_estimateTableDownload")
     title <- paste0("Estimate table downloaded from WaCSE on ", Sys.Date())
   }
 
   if (type == "summary") {
     sketch <- htmltools::withTags(
-      table(
-        thead(
-          tr(
+      tags$table(
+        tags$thead(
+          tags$tr(
             class = "dt-head-left",
-            th("MLRA"),
-            th("County"),
-            th("Unique Practice Implementations"),
-            th("Total Acres"),
-            th("Total GHG Reduction*", br(), em("(MT CO2eq/yr)"))
+            tags$th("MLRA"),
+            tags$th("County"),
+            tags$th("Unique Practice Implementations"),
+            tags$th("Total Acres"),
+            tags$th("Total GHG Reduction*", br(), em("(MT CO2eq/yr)"))
           )
         )
       )
@@ -115,8 +126,12 @@ fct_table <- function(data, type) {
     acre_col <- 4
     dom <- "Bfrtip"
     order <- 1
-    caption <- tags$caption(HTML("*<b>Total GHG Reduction Equation:</b>
-                                  Area (Acres) × Emission Reduction Coefficient (ERC)"))
+    caption <- tags$caption(HTML("*<b>Calculation:</b>
+                                  Area (Acres) &times; Emission Reduction
+                                 Coefficient (ERC)<br>
+                                 &nbsp;&nbsp;Negative emission reductions
+                                 indicate a loss of carbon or increased
+                                 emissions of GHG."))
     filename <- paste0(Sys.Date(), "_WaCSE_estimateSummaryDownload")
     title <- paste0("Estimate summary downloaded from WaCSE on ", Sys.Date())
   }

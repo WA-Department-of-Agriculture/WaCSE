@@ -1,4 +1,4 @@
 library(testthat)
-library(WaCSEshiny)
+library(WaCSE)
 
-test_check("WaCSEshiny")
+test_check("WaCSE")

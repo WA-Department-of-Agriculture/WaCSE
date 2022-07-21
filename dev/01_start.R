@@ -21,7 +21,7 @@
 golem::fill_desc(
   pkg_name = "WaCSE", # The Name of the package containing the App
   pkg_title = "Washington Climate Smart Estimator", # The Title of the package containing the App
-  pkg_description = "The Washington Climate Smart Estimator (WaCSE) is a shiny application to explore greenhouse gas emission reduction potentials from different conservation practices across Washington's diverse counties.", # The Description of the package containing the App
+  pkg_description = "Washington Climate Smart Estimator (WaCSE) is a shiny application to explore greenhouse gas emission reduction potentials from different conservation practices across Washington's diverse counties.", # The Description of the package containing the App
   author_first_name = "Jadey", # Your First Name
   author_last_name = "Ryan", # Your Last Name
   author_email = "jryan@agr.wa.gov", # Your Email

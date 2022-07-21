@@ -4,8 +4,6 @@
 #'     DO NOT REMOVE.
 #' @import shiny
 #' @import dplyr
-#' @import waiter
-#' @import shinycssloaders
 #' @noRd
 
 app_ui <- function(request) {
@@ -37,7 +35,7 @@ app_ui <- function(request) {
           "About",
           column(10,
             offset = 1,
-            box(
+            shinydashboard::box(
               width = NULL, status = "primary",
               includeMarkdown(normalizePath("inst/app/www/rmd/about.md"))
             )
@@ -63,6 +61,8 @@ golem_add_external_resources <- function() {
     app_sys("app/www")
   )
 
+  source("R/globals.R")
+
   tags$head(
     favicon(),
     favicon(ext = "png"),
@@ -80,7 +80,20 @@ golem_add_external_resources <- function() {
     shinyWidgets::useShinydashboard(),
     shinyWidgets::setBackgroundColor(color = "#faf9f0"),
     waiter::useWaiter(),
-    waiter::waiterPreloader(html = spin_hexdots(), fadeout = TRUE),
+    waiter::waiterPreloader(html = waiter::spin_hexdots(), fadeout = TRUE),
+    shinydisconnect::disconnectMessage(
+      text = "Your session timed out. Please refresh the page and try again.",
+      refresh = "Refresh",
+      background = "#FFFFFF",
+      colour = "#444444",
+      refreshColour = "#337AB7",
+      overlayColour = "#000000",
+      overlayOpacity = 0.6,
+      width = 450,
+      top = "center",
+      size = 22,
+      css = ""
+    )
 
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()

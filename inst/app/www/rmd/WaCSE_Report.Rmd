@@ -48,21 +48,21 @@ library(dplyr)
 
 ### Who and what is WaCSE for? {.unlisted .unnumbered}
 
-The [Washington State Department of Agriculture](https://agr.wa.gov/departments/land-and-water/natural-resources) developed WaCSE for the Washington State Conservation Commission to use in the [Sustainable Farms and Fields](https://www.scc.wa.gov/sff) (SFF) program. Intended users are the Conservation Commission, conservation districts, growers, and anyone interested in identifying agricultural conservation practices to reduce greenhouse gas (GHG) emissions. This user-friendly, interactive web application facilitates comparing GHG emission reduction potentials from different conservation practices across Washington’s diverse counties.
+The [Washington State Department of Agriculture](https://agr.wa.gov/departments/land-and-water/natural-resources) developed WaCSE for the Washington State Conservation Commission to use in the [Sustainable Farms and Fields](https://www.scc.wa.gov/sff) (SFF) program. Intended users are the Conservation Commission, conservation districts, growers, and anyone interested in reducing agricultural greenhouse gas (GHG) emissions. This interactive tool estimates the reduction of GHG emissions from different conservation practices across Washington’s diverse counties.
 
 ### Where do the potential GHG emission reduction values come from? {.unlisted .unnumbered}
 
-Values were determined by the United States Department of Agriculture's Natural Resources Conservation Service (NRCS). NRCS reviewed field studies and applied a sample-based metamodeling approach to calculate potential GHG emission reduction coefficients. These values are derived from county-rectified major land resource areas (Swan et al. 2020). 
+Values were determined by the United States Department of Agriculture’s Natural Resources Conservation Service (NRCS). NRCS reviewed field studies and applied a sample-based metamodeling approach to calculate potential GHG emission reduction coefficients. These values are derived from county-rectified major land resource areas (Swan et al. 2020).
 
 NRCS and Colorado State University developed two tools to estimate impacts on GHG and soil carbon from conservation practices.
 
-- [**COMET-Farm**](http://comet-farm.com/) is a field-specific tool that requires more detailed information such as parcel, management history to define a system specific baseline, and intended conservation practices.   
+- [**COMET-Farm**](http://comet-farm.com/) is a field-specific tool that requires detailed management and parcel history to estimate the impact of conservation practices.  
 
-- [**COMET-Planner**](http://comet-planner.com/) is a simplified tool that evaluates GHG emission reductions by county, conservation practice practice, and acreage based on a fixed baseline management scenario.
+- [**COMET-Planner**](http://comet-planner.com/) is a simplified tool that evaluates GHG emission reductions by county rather than by a specific field with specific management history. It provides a more generalized, less accurate GHG reduction estimate, but is easier to use.
 
 ### How does WaCSE differ from COMET-Farm and COMET-Planner? {.unlisted .unnumbered}
 
-WaCSE uses the COMET-Planner dataset but presents the GHG emission reductions data in a way that allows comparison between multiple counties at one time. The data can be visualized in tables and bar graphs. Users can also easily download the tables, bar graphs, and a PDF report of all outputs from their estimate.
+WaCSE uses the COMET-Planner dataset and provides identical estimates. With WaCSE, however, data can be compared between multiple counties and multiple practices at once. WaCSE provides data in tables and bar graphs that can easily be download in spreadsheets and PDFs. WaCSE also helps the user understand their GHG reduction estimate by providing a calculator to convert the emissions data into equivalents from home energy use, consuming gasoline, charging smartphones, and more!
 
 ### What do negative values mean? {.unlisted .unnumbered}
 
@@ -70,11 +70,11 @@ Negative values indicate a loss of carbon or increased emissions of GHG (Swan et
 
 ### Where can I find more information about the NRCS conservation practices? {.unlisted .unnumbered}
 
-Technical guides for NRCS conservation practices standards (CPS) are found [here](https://www.nrcs.usda.gov/wps/portal/nrcs/main/national/technical/cp/).
+For technical guides, review the [NRCS conservation practices standards (CPS)](https://www.nrcs.usda.gov/wps/portal/nrcs/main/national/technical/cp/).
 
 ### Reference {.unlisted .unnumbered}
 
-Amy Swan, Mark Easter, Adam Chambers, Kevin Brown, Stephen A. Williams, Jeff Creque, John Wick, Keith Paustian. 2020. COMET-Planner Dataset, Version 2.1, Build 1, and COMET-Planner Report: Carbon and Greenhouse Gas Evaluation for NRCS Conservation Practice Planning. A Companion report to [COMET-Planner](http://www.comet-planner.com). [COMET-Planner_Report_Final.pdf](http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf).
+Amy Swan, Mark Easter, Adam Chambers, Kevin Brown, Stephen A. Williams, Jeff Creque, John Wick, Keith Paustian. 2020. COMET-Planner Dataset, Version 2.1, Build 1, and COMET-Planner Report: Carbon and Greenhouse Gas Evaluation for NRCS Conservation Practice Planning. A Companion report to [COMET-Planner](http://www.comet-planner.com). [http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf](http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf).
 
 \newpage
 
@@ -82,13 +82,16 @@ Amy Swan, Mark Easter, Adam Chambers, Kevin Brown, Stephen A. Williams, Jeff Cre
 
 ###  Definitions {.unlisted .unnumbered}
 
-- **Carbon dioxide equivalent (CO2eq)** is a metric measure used to compare emission impacts from various greenhouse gases based on their relative radiative forcing effect over a specified period of time.
+- **Carbon dioxide equivalent (CO2eq)** is a unit used to compare various greenhouse gases based on their relative global warming potential.
 
-- **Total greenhouse gases (GHG)** are the sum of CO2eq emissions from carbon dioxide, methane, and nitrous oxide from field emissions (including those associated with soils and woody biomass). Off-site emissions (i.e. transportation) are not included.
+- **Total greenhouse gases (GHG)** are the sum of carbon dioxide, methane, and nitrous oxide in units of CO2eq. Estimates include those associated with soils and woody biomass, but do not include off-site emissions like those from transportation.
 
-- **Emission reduction coefficients** were calculated using a sample-based approach and model runs in COMET-Farm, which uses USDA greenhouse gas inventory methods.
+- **Emission reduction coefficients** were calculated by COMET-Farm, which uses USDA greenhouse gas inventory methods. More information on quantification methods can be found in the COMET-Planner Report.
 
-- **Emission reduction equation (MT CO2eq/yr)**: Area (Acres) × Emission Reduction Coefficient (MT CO2eq/ac/yr)
+### Table Notes {.unlisted .unnumbered}
+- Counties are grouped by dominant MLRA.
+- **Emission Reduction Calculation**: Area (Acres) × Emission Reduction Coefficient (ERC)
+- Negative emission reductions indicate a loss of carbon or increased emissions of GHG.
 
 ```{r summary}
 
@@ -175,7 +178,7 @@ The values shown here are your total estimated esmissions reductions converted i
 ```{r get total GHG estimate}
 
 totalGHG <- params$data %>%
-  select("Total.Greenhouse.Gases") %>%
+  select(totalGHG) %>%
   as.vector() %>%
   sum()
 ```

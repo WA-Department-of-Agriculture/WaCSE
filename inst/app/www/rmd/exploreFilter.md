@@ -8,17 +8,16 @@
 conservation practice standards</a> included in
 <a href="http://comet-planner.com/" target="_blank"> COMET-Planner</a>.
 
-**There are multiple options for implementation of most practices.**
-Each step narrows down the implementations shown in the table and graph
-based on your inputs.
+**There are multiple options for most practices.** Each step narrows the
+options based on your choices.
 
-**Not all practices have been evaluated for every county.** For example,
-Hedgerow Planting only has estimates for Western Washington counties.
+**The NRCS has not evaluated all practices for every county.** For
+example, Hedgerow Planting data are only available in Western Washington
 
 ------------------------------------------------------------------------
 
-**Controls:**
+**How to use:**
 
 <figure>
-<img src="img/selectInputControls.png" style="width:100.0%" alt="Alt text: Image of select input controls (deselect one option at a time, deselect all options, select all options, select single option, search options)" /><figcaption aria-hidden="true">Alt text: Image of select input controls (deselect one option at a time, deselect all options, select all options, select single option, search options)</figcaption>
+<img src="img/selectInputControls.png" style="width:100.0%" alt="Alt text: Image showing how to deselect one option at a time, deselect all options, select all options, select a single option, and search all options." /><figcaption aria-hidden="true">Alt text: Image showing how to deselect one option at a time, deselect all options, select all options, select a single option, and search all options.</figcaption>
 </figure>
