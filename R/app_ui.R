@@ -81,9 +81,10 @@ golem_add_external_resources <- function() {
     shinyWidgets::setBackgroundColor(color = "#faf9f0"),
     waiter::useWaiter(),
     waiter::waiterPreloader(html = spin_hexdots(), fadeout = TRUE),
-    options(spinner.type = 7, spinner.color = "#81B29A", spinner.size = 1.5)
 
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
   )
 }
+# spinner options
+options(spinner.type = 7, spinner.color = "#81B29A", spinner.size = 1.5)

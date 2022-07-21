@@ -571,6 +571,11 @@ mod_estimate_server <- function(id) {
               tempReport,
               overwrite = TRUE
             )
+            fct_ghgEq <- file.path(tempdir(), "fct_ghgEq.R")
+            file.copy(normalizePath("R/fct_ghgEq.R"),
+                      fct_ghgEq,
+                      overwrite = TRUE
+            )
 
             incProgress(0.1)
 
@@ -578,7 +583,7 @@ mod_estimate_server <- function(id) {
             params <- list(
               name = input$name,
               project = input$project,
-              table = rv$df,
+              data = rv$df,
               summary = summary_county(),
               plot = fct_plot(filtered_plot(),
                 type = "download",
