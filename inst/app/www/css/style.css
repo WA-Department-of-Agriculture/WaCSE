@@ -227,8 +227,8 @@ table.dataTable thead .sorting {
     text-align: left !important;
 }
 
-table.dataTable thead th.dt-head-center, table.dataTable thead td.dt-head-center, table.dataTable tfoot th.dt-head-center, table.dataTable tfoot td.dt-head-center {
-    text-align: center;
+table.dataTable thead th.dt-head-left, table.dataTable thead td.dt-head-left, table.dataTable tfoot th.dt-head-left, table.dataTable tfoot td.dt-head-left {
+    text-align: left;
     background-color: #81b29a;
     color: black;
 }
@@ -245,14 +245,6 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td {
     font-size: .9em;
     background-color: #D9E8E1 !important;
     color: black;
-}
-
-table.dataTable thead th.dt-head-center, table.dataTable thead td.dt-head-center, table.dataTable tfoot th.dt-head-center, table.dataTable tfoot td.dt-head-center {
-    text-align: center;
-}
-
-table.dataTable thead th.dt-head-left, table.dataTable thead td.dt-head-left, table.dataTable tfoot th.dt-head-left, table.dataTable tfoot td.dt-head-left {
-    text-align: left;
 }
 
 button.dt-button, div.dt-button, a.dt-button, input.dt-button {

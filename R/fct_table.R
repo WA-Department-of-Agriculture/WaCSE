@@ -28,7 +28,7 @@ fct_table <- function(data, type) {
           ),
           tags$tr(tags$th(
             colspan = 4,
-            class = "dt-head-center",
+            class = "dt-head-left",
             em("ERC in MT CO2eq/ac/yr**")
           ))
         )
@@ -70,7 +70,7 @@ fct_table <- function(data, type) {
           ),
           tags$tr(tags$th(
             colspan = 4,
-            class = "dt-head-center",
+            class = "dt-head-left",
             em("Emission reductions in MT CO2eq/yr**")
           ))
         )
