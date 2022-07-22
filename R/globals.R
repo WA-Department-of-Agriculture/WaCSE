@@ -1,6 +1,6 @@
 
-#remotes::install_github("thinkr-open/checkhelper")
-#checkhelper::print_globals()
+# remotes::install_github("thinkr-open/checkhelper")
+# checkhelper::print_globals()
 
 utils::globalVariables(unique(c(
   # fct_plot:
@@ -16,3 +16,12 @@ utils::globalVariables(unique(c(
   # mod_explore_ui:
   "comet_tags", "comet_wa"
 )))
+
+
+# required for shinyapps.io to properly render pdf rmarkdown report
+
+if (!webshot::is_phantomjs_installed()) webshot::install_phantomjs()
+
+# set system timezone to PST
+
+Sys.setenv(TZ = "America/Los_Angeles")

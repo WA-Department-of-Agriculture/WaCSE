@@ -92,18 +92,30 @@ fct_plot <- function(data, type, error_bar) {
       x = NULL,
       y = ylab
     ) +
-    theme_minimal(base_family = "verdana") +
+    theme_minimal(
+      base_family = "Source Sans Pro",
+      base_size = 11
+    ) +
     theme(
       axis.text.y = element_text(
         margin = margin(r = 20),
-        hjust = 0
+        hjust = 0,
+        color = "black",
+        size = 11
+      ),
+      axis.text.x = element_text(
+        color = "black",
+        size = 11
       ),
       axis.title.x.bottom = element_text(
-        size = 9,
-        color = "#4d4d4d"
+        color = "black",
+        size = 11
       ),
       legend.title = element_text(face = "bold"),
-      legend.text = element_text(margin = margin(t = 5, b = 5, unit = "pt"))
+      legend.text = element_text(
+        margin = margin(t = 5, b = 5, unit = "pt"),
+        size = 12
+      )
     ) +
     scale_y_continuous(
       labels = labels,
@@ -155,7 +167,7 @@ fct_plot <- function(data, type, error_bar) {
 
   # plot with ggiraph
 
-  tooltip_css <- "font-size:1rem; color:white;
+  tooltip_css <- "font-size:12; color:white;
   background:#3d405b; padding:8px; border-radius:6px;"
 
   plot <- ggiraph::girafe(
@@ -165,8 +177,10 @@ fct_plot <- function(data, type, error_bar) {
       ggiraph::opts_tooltip(
         css = tooltip_css
       ),
-      ggiraph::opts_toolbar(saveaspng = TRUE,
-                            pngname = paste(Sys.Date(), "_WaCSE_Plot"))
+      ggiraph::opts_toolbar(
+        saveaspng = TRUE,
+        pngname = paste(Sys.Date(), "_WaCSE_Plot")
+      )
     )
   )
 }

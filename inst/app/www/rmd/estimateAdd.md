@@ -16,3 +16,5 @@ to help you choose the best option for your system.
 -   **Add** this practice to the table by clicking the *Add* button.
 -   **Remove** a practice by selecting the unwanted row in the table
     then clicking the *Remove* button.
+    -   To remove multiple rows at once, hold the ‘Ctrl’ key and click
+        on the rows you want to remove.

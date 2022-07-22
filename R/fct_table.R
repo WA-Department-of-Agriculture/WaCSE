@@ -44,11 +44,8 @@ fct_table <- function(data, type) {
     dom <- "Bfrtip"
     order <- 0
     caption <- tags$caption(HTML("*Counties are grouped by dominant MLRA. <br>
-                                 **If blank, NRCS data were not available for
-                                 the calculation.<br>
-                                 &nbsp;&nbsp; Negative emission reductions
-                                 indicate a loss of carbon or increased
-                                 emissions of GHG.
+                                 **If blank, NRCS data were not available for the calculation.<br>
+                                 &nbsp;&nbsp; Negative emission reductions indicate a loss of carbon or increased emissions of GHG.
 "))
     filename <- paste0(Sys.Date(), "_WaCSE_exploreTableDownload")
     title <- paste0("Explore table downloaded from WaCSE on ", Sys.Date())
@@ -88,16 +85,13 @@ fct_table <- function(data, type) {
     acre_col <- 6
     dom <- "Bfrtip"
     order <- 0
-    caption <- tags$caption(HTML("*Counties are grouped by dominant MLRA.<br>
-                                 **<b>Calculation:</b>
-                                 Area (Acres) &times; Emission Reduction
-                                 Coefficient (ERC) <br>
-                                 &nbsp;&nbsp; If blank, NRCS data were not
-                                 available for the calculation. <br>
-                                 &nbsp;&nbsp;Negative emission reductions
-                                 indicate a loss of carbon or increased
-                                 emissions of GHG.
-"))
+    caption <- tags$caption(
+      HTML("*Counties are grouped by dominant MLRA.<br>
+           **<b>Calculation:</b> Area (Acres) &times; Emission Reduction Coefficient (ERC) <br>
+           &nbsp;&nbsp; If blank, NRCS data were not available for the calculation. <br>
+           &nbsp;&nbsp;Negative emission reductions indicate a loss of carbon or increased emissions of GHG.
+")
+    )
     filename <- paste0(Sys.Date(), "_WaCSE_estimateTableDownload")
     title <- paste0("Estimate table downloaded from WaCSE on ", Sys.Date())
   }
@@ -126,12 +120,10 @@ fct_table <- function(data, type) {
     acre_col <- 4
     dom <- "Bfrtip"
     order <- 1
-    caption <- tags$caption(HTML("*<b>Calculation:</b>
-                                  Area (Acres) &times; Emission Reduction
-                                 Coefficient (ERC)<br>
-                                 &nbsp;&nbsp;Negative emission reductions
-                                 indicate a loss of carbon or increased
-                                 emissions of GHG."))
+    caption <- tags$caption(
+      HTML("*<b>Calculation:</b> Area (Acres) &times; Emission Reduction Coefficient (ERC)<br>
+           &nbsp;&nbsp;Negative emission reductions indicate a loss of carbon or increased emissions of GHG.")
+    )
     filename <- paste0(Sys.Date(), "_WaCSE_estimateSummaryDownload")
     title <- paste0("Estimate summary downloaded from WaCSE on ", Sys.Date())
   }

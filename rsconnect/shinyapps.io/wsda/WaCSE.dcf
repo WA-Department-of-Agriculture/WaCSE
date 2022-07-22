@@ -1,0 +1,13 @@
+name: WaCSE
+title: WaCSE
+username:
+account: wsda
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6676310
+bundleId: 6122310
+url: https://wsda.shinyapps.io/WaCSE/
+when: 1658474706.33987
+lastSyncTime: 1658474706.33987
+asMultiple: FALSE
+asStatic: FALSE

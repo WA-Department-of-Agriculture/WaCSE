@@ -1,3 +1,25 @@
+#' register font
+#'
+
+# gfonts::setup_font(
+#   id = "source-sans-pro",
+#   output_dir = "inst/app/www",
+#   variants = c("regular", "italic", "700", "700italic")
+# )
+#
+# gfonts::use_font(id = "source-sans-pro",
+#                  css_path = "inst/app/www/css/source-sans-pro.css",
+#                  selector = ".dummy-selector")
+#
+# if (!ggiraph::font_family_exists("Source Sans Pro")) {
+#   systemfonts::register_font(name = "Source Sans Pro",
+#                 plain = list("inst/app/www/fonts/source-sans-pro-v21-latin-regular.woff", 0),
+#                 bold = list("inst/app/www/fonts/source-sans-pro-v21-latin-700.woff", 0),
+#                 italic = list("inst/app/www/fonts/source-sans-pro-v21-latin-italic.woff", 0),
+#                 bolditalic = list("inst/app/www/fonts/source-sans-pro-v21-latin-700italic.woff", 0)
+#   )
+# }
+
 #' theme
 #' @description define theme for shiny app
 #' @noRd
@@ -6,7 +28,7 @@ theme <- bslib::bs_theme(
   version = 5,
   primary = "#f2cc8f", secondary = "#f2cc8f", success = "#81B29A",
   warning = "#f2cc8f", danger = "#E07A5F", royal = "#3d405b",
-  base_font = "Verdana", font_scale = NULL,
+  base_font = bslib::font_google("Source Sans Pro"), font_scale = NULL,
   `enable-shadows` = TRUE, `enable-rounded` = TRUE, bootswatch = "lumen"
 )
 

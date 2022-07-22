@@ -7,7 +7,7 @@
 run_app(
   onStart = NULL,
   options = list(),
-  enableBookmarking = "server",
+  enableBookmarking = NULL,
   uiPattern = "/",
   ...
 )
