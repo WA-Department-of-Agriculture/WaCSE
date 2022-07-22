@@ -62,7 +62,7 @@ golem_add_external_resources <- function() {
     app_sys("app/www")
   )
 
-  source("R/globals.R")
+  source(paste(here::here(),"/R/globals.R"))
 
   tags$head(
     favicon(),
