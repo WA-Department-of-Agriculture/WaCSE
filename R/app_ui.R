@@ -94,8 +94,8 @@ golem_add_external_resources <- function() {
       top = "center",
       size = 22,
       css = ""
-    )
-
+    ),
+    includeHTML("inst/app/www/google-analytics.html")
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
   )
