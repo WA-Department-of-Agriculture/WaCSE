@@ -27,8 +27,6 @@ fct_plot <- function(data, type, error_bar) {
       "\n(Metric tonnes CO2eq per acre per year)"
     )
 
-    font <- "Poppins"
-
     labels <- scales::label_number(accuracy = 0.001, big.mark = ",")
   }
 
@@ -48,8 +46,6 @@ fct_plot <- function(data, type, error_bar) {
       "\n(Metric tonnes CO2eq per year)"
     )
 
-    font <- "Poppins"
-
     labels <- scales::label_number(accuracy = 1, big.mark = ",")
   }
 
@@ -68,8 +64,6 @@ fct_plot <- function(data, type, error_bar) {
       "Total GHG Emissions Reduced",
       "\n(Metric tonnes CO2 equivalent per year)"
     )
-
-    font <- "Arial"
 
     labels <- scales::label_number(accuracy = , big.mark = ",")
   }
@@ -98,7 +92,7 @@ fct_plot <- function(data, type, error_bar) {
       x = NULL,
       y = ylab
     ) +
-    theme_minimal(base_family = font) +
+    theme_minimal(base_family = "verdana") +
     theme(
       axis.text.y = element_text(
         margin = margin(r = 20),

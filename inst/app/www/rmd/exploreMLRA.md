@@ -9,6 +9,8 @@ al. 2020).
 within the same MLRA will have the same estimate, unless the county
 falls within multiple MLRAs.**
 
+The map may take a few moments to load.
+
 Visit the
 <a href="https://nras.maps.arcgis.com/apps/instant/basic/index.html?appid=4233536b08044da7a9bc32c7040418be" target="_blank">full
 screen map</a>.

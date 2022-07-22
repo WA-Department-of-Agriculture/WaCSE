@@ -52,7 +52,8 @@ mod_estimate_ui <- function(id) {
             inputId = ns("acres"),
             label = strong("Step 7. Number of Acres"),
             value = "1",
-            min = 1
+            min = 1,
+            max = 10000000
           ),
           actionButton(
             inputId = ns("add"),
@@ -272,10 +273,10 @@ mod_estimate_server <- function(id) {
 
     observeEvent(input$acres, {
       req(input$acres)
-      positive <- input$acres >= 1
+      condition <- dplyr::between(input$acres, 1, 10000000)
       shinyFeedback::feedbackDanger(
-        "acres", !positive,
-        "Please input at least one acre.",
+        "acres", !condition,
+        "Please input at least one acre but not more than 10,000,000.",
         color = "#b50000"
       )
       return(input$acres)
