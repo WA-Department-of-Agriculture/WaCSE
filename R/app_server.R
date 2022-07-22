@@ -24,4 +24,10 @@ app_server <- function(input, output, session) {
   # render understand tab --------------------------------------------------------------
 
   mod_impact_server("impact_tab")
+
+  # stop session when browser is closed -------------------------------------
+
+  session$onSessionEnded(function() {
+    stopApp()
+  })
 }
