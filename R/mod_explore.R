@@ -128,8 +128,7 @@ mod_explore_server <- function(id) {
 
     output$practice <- renderUI({
       choices <- unique(comet_wa) %>%
-        subset(county %in% input$county &
-          class %in% input$class) %>%
+        subset(class %in% input$class) %>%
         dplyr::select(practice)
 
       choices <- as.character(pull(choices))
