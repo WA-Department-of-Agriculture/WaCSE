@@ -44,7 +44,7 @@ For technical guides, review the <a href="https://www.nrcs.usda.gov/wps/portal/n
 
 ### References 
 
-Amy Swan, Mark Easter, Adam Chambers, Kevin Brown, Stephen A. Williams, Jeff Creque, John Wick, Keith Paustian. 2020. COMET-Planner Dataset, Version 2.1, Build 1, and COMET-Planner Report: Carbon and Greenhouse Gas Evaluation for NRCS Conservation Practice Planning. A Companion report to <a href="http://www.comet-planner.com" target = "_blank">COMET-Planner.</a> <a href="http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf" target = "_blank">http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf.</a>
+Amy Swan, Mark Easter, Adam Chambers, Kevin Brown, Stephen A. Williams, Jeff Creque, John Wick, Keith Paustian. 2020. COMET-Planner Dataset, Version 2.1, Build 1, and COMET-Planner Report: Carbon and Greenhouse Gas Evaluation for NRCS Conservation Practice Planning. A Companion report to <a href="http://www.comet-planner.com" target = "_blank">COMET-Planner.</a> <a href="http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf" target = "_blank">COMET-Planner Final Report PDF.</a>
 
 USDA-NRCS. 2006. Land Resource Regions and Major Land Resource Areas of the United States, the Caribbean, and the Pacific Basin. USDA, Natural Resource Conservation Service, Handbook 296.
 

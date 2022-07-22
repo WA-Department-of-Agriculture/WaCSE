@@ -5,9 +5,9 @@ account: wsda
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6676310
-bundleId: 6122310
+bundleId: 6124501
 url: https://wsda.shinyapps.io/WaCSE/
-when: 1658474706.33987
-lastSyncTime: 1658474706.33987
+when: 1658520204.90183
+lastSyncTime: 1658520204.90183
 asMultiple: FALSE
 asStatic: FALSE

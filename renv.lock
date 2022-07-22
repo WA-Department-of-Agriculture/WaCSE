@@ -70,8 +70,14 @@
     "WaCSE": {
       "Package": "WaCSE",
       "Version": "0.0.0.9000",
-      "Source": "unknown",
-      "Hash": "c38b74df83a846fd5e7f8c70a9c4a7d1",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "WA-Department-of-Agriculture",
+      "RemoteRepo": "WaCSE",
+      "RemoteRef": "main",
+      "RemoteSha": "dce50cb90821e498f1a105d65e698b955f978a32",
+      "Hash": "00339d1176e4b0379d75067e895f7c48",
       "Requirements": [
         "DT",
         "config",
