@@ -94,6 +94,7 @@ mod_estimate_ui <- function(id) {
             multiple = FALSE,
             selected = NULL,
             position = "bottom",
+            search = "TRUE",
             showValueAsTags = TRUE
           ),
           numericInput(
