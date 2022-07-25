@@ -21,7 +21,7 @@ app_server <- function(input, output, session) {
 
   mod_estimate_server("estimate_tab")
 
-  # render understand tab --------------------------------------------------------------
+  # render understand tab ----------------------------------------------------
 
   mod_impact_server("impact_tab")
 
@@ -30,4 +30,25 @@ app_server <- function(input, output, session) {
   session$onSessionEnded(function() {
     stopApp()
   })
+
+  # warn user after 7 minutes of inactivity that they have 3 minutes left -----
+
+  shinyjs::runjs(
+    "(function() {
+      var timeoutWarningMsecs = 7 * 60 * 1000;
+      var idleTimer;
+
+      function onTimeout() {
+        alert('Warning: Your session will timeout in 3 minutes.');
+      }
+
+      function startIdleTimer() {
+        if (idleTimer) clearTimeout(idleTimer);
+        idleTimer = setTimeout(onTimeout, timeoutWarningMsecs);
+      }
+
+      $(document).on('shiny:message shiny:inputchanged', startIdleTimer);
+
+    })();"
+  )
 }

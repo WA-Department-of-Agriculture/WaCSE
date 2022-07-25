@@ -77,7 +77,7 @@ fct_tableFilter <- function(data) {
 
 #' fct_helpBtn
 #'
-#' @description A fct function to filter and pivot data for datatable
+#' @description A function to add a help button with the question mark icon
 #'
 #' @param id The input slot that will be used to access the value.
 #'
@@ -96,11 +96,13 @@ fct_helpBtn <- function(id) {
 
 #' fct_helpModal
 #'
-#' @description A fct function to filter and pivot data for datatable
+#' @description A function to render a help modal from the fct_helpBtn
 #'
-#' @param btnInput The input of the button to attach the modal to.
-#'
-#' @param md The name of the markdown file to include.
+#' @param md The name of the markdown file to include. Must be called within observeEvent(input$helpBtn)
+#' @examples
+#' observeEvent(input$filterHelp, {
+#'   fct_helpModal("exploreFilter")
+#' })
 #'
 #' @noRd
 

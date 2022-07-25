@@ -15,6 +15,9 @@ mod_explore_ui <- function(id) {
     fluidRow(
       column(
         4,
+
+        # definitions box ---------------------------------------------------------
+
         shinydashboard::box(
           title = strong("Definitions"),
           width = NULL,
@@ -25,6 +28,9 @@ mod_explore_ui <- function(id) {
             normalizePath("inst/app/www/rmd/exploreDefinitions.md")
           )
         ),
+
+        # filter box --------------------------------------------------------------
+
         shinydashboard::box(
           title = tagList(
             span(strong("Filter the data")),
@@ -50,7 +56,7 @@ mod_explore_ui <- function(id) {
             label = span(
               strong("Step 2. Conservation Class"),
               br(),
-              helpText("Select categories that describe the practices
+              helpText("Select NRCS categories that describe the practices
                        you are interested in.")
             ),
             placeholder = "Select conservation classes",
@@ -106,6 +112,9 @@ mod_explore_ui <- function(id) {
       ),
       column(
         8,
+
+        # explore the data box ----------------------------------------------------
+
         shinydashboard::box(
           title = tagList(
             span(strong("Explore the data")),

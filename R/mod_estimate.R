@@ -43,7 +43,7 @@ mod_estimate_ui <- function(id) {
             label = span(
               strong("Step 2. Conservation Class"),
               br(),
-              helpText("Select the category that describes the practices
+              helpText("Select the NRCS category that describes the practices
                        you are interested in.")
             ),
             placeholder = "Select conservation class",
@@ -95,7 +95,8 @@ mod_estimate_ui <- function(id) {
             selected = NULL,
             position = "bottom",
             search = TRUE,
-            showValueAsTags = TRUE
+            showValueAsTags = TRUE,
+            optionsCount = 5
           ),
           numericInput(
             inputId = ns("acres"),
@@ -529,7 +530,6 @@ mod_estimate_server <- function(id) {
 
     output$impact <- renderUI({
       req(rv$df)
-
       HTML(paste0("<p> Visit the Understand your impact tab at the top of this
                   page to learn about what this GHG reduction means.</p>"))
     })

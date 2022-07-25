@@ -21,15 +21,15 @@ app_ui <- function(request) {
         ),
         collapsible = TRUE,
         tabPanel(
-          "Explore the data",
+          title = "Explore the data",
           mod_explore_ui("explore_tab")
         ),
         tabPanel(
-          "Calculate your estimate",
+          title = "Calculate your estimate",
           mod_estimate_ui("estimate_tab")
         ),
         tabPanel(
-          "Understand your impact",
+          title = "Understand your impact",
           mod_impact_ui("impact_tab")
         ),
         tabPanel(
@@ -95,7 +95,15 @@ golem_add_external_resources <- function() {
       size = 22,
       css = ""
     ),
-    includeHTML("inst/app/www/google-analytics.html")
+    includeHTML("inst/app/www/google-analytics.html"),
+    # warn user that changes are not saved when closing the window.
+    # unfortunately, custom messages are no longer supported by modern browsers.
+    tags$script(HTML("
+                // Enable navigation prompt
+                window.onbeforeunload = function() {
+                  return 'Did you download your data and reports?';
+                };
+                "))
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
   )

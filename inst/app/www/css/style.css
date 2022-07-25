@@ -154,7 +154,7 @@
 
 .vscomp-option-text {
     overflow: hidden;
-    height: auto;
+    height: fit-content;
     white-space: normal;
     width: 100%;
     line-height: 1;
