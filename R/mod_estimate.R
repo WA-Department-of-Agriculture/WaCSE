@@ -30,27 +30,80 @@ mod_estimate_ui <- function(id) {
           shinyWidgets::virtualSelectInput(
             inputId = ns("county"),
             label = strong("Step 1. County"),
+            placeholder = "Select county",
             choices = unique(comet_wa$county),
+            selected = " ",
             multiple = FALSE,
             position = "bottom",
-            optionsCount = 5,
-            search = TRUE
+            search = TRUE,
+            optionsCount = 5
           ),
           shinyWidgets::virtualSelectInput(
             inputId = ns("class"),
-            label = strong("Step 2. Conservation Class"),
-            choices = unique(comet_tags$class),
+            label = span(
+              strong("Step 2. Conservation Class"),
+              br(),
+              helpText("Select the category that describes the practices
+                       you are interested in.")
+            ),
+            placeholder = "Select conservation class",
+            choices = sort(unique(comet_tags$class)),
+            selected = " ",
+            multiple = FALSE,
+            position = "bottom"
+          ),
+          shinyWidgets::virtualSelectInput(
+            inputId = ns("practice"),
+            label = span(
+              strong("Step 3. Conservation Practice"),
+              br(),
+              helpText("Select the NRCS conservation practice standard
+                       (CPS) you are interested in.")
+            ),
+            placeholder = "Select conservation practice",
+            choices = NULL,
+            selected = NULL,
             multiple = FALSE,
             position = "bottom",
+            search = TRUE,
             optionsCount = 5
           ),
-          uiOutput(outputId = ns("practice")),
-          uiOutput(outputId = ns("land_use")),
-          uiOutput(outputId = ns("irrigation")),
-          uiOutput(outputId = ns("implementation")),
+          shinyWidgets::virtualSelectInput(
+            inputId = ns("irrigation"),
+            label = span(
+              strong("Step 4. Irrigation Type"),
+              br(),
+              helpText("Select how the current system is irrigated.")
+            ),
+            placeholder = "Select irrigation type",
+            choices = NULL,
+            multiple = FALSE,
+            selected = NULL,
+            position = "bottom",
+            showValueAsTags = TRUE
+          ),
+          shinyWidgets::virtualSelectInput(
+            inputId = ns("implementation"),
+            label = span(
+              strong("Step 5. Practice Implementation"),
+              br(),
+              helpText("Select how the practice will be implemented.")
+            ),
+            placeholder = "Select practice implementation",
+            choices = NULL,
+            multiple = FALSE,
+            selected = NULL,
+            position = "bottom",
+            showValueAsTags = TRUE
+          ),
           numericInput(
             inputId = ns("acres"),
-            label = strong("Step 7. Number of Acres"),
+            label = span(
+              strong("Step 6. Number of Acres"),
+              br(),
+              helpText("Select the number of acres this
+                       practice will be used on.")
+            ),
             value = "1",
             min = 1,
             max = 10000000
@@ -89,6 +142,15 @@ mod_estimate_ui <- function(id) {
               tabPanel("Table",
                 icon = icon("table"),
                 br(),
+                strong(
+                  HTML(
+                    "All NRCS conservation classes, practices, and
+                  implementations are described in the
+                   <a href='http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf'
+                   target = '_blank'>COMET-Planner Final Report PDF</a>."
+                  )
+                ),
+                rep_br(2),
                 shinycssloaders::withSpinner(
                   DT::DTOutput(outputId = ns("table"))
                 )
@@ -183,90 +245,70 @@ mod_estimate_server <- function(id) {
       fct_helpModal("estimateSummarize")
     })
 
-    # update or render UI inputs -----------------------------------------------
+    # update UI inputs -----------------------------------------------
 
-    # render practice input
+    # practice input
 
-    output$practice <- renderUI({
-      choices <- unique(comet_wa) %>%
-        subset(class %in% input$class) %>%
-        dplyr::select(practice)
+    observeEvent(
+      eventExpr = {
+        input$class
+      },
+      handlerExpr = {
+        choices <- unique(
+          comet_wa$practice[comet_wa$class %in% input$class]
+        )
 
-      choices <- as.character(pull(choices))
+        shinyWidgets::updateVirtualSelect(
+          inputId = "practice",
+          choices = sort(choices),
+          selected = input$practice
+        )
+      }
+    )
 
-      shinyWidgets::virtualSelectInput(
-        inputId = ns("practice"),
-        label = strong("Step 3. Conservation Practice"),
-        choices = sort(unique(choices)),
-        multiple = FALSE,
-        position = "bottom",
-        optionsCount = 5,
-        search = TRUE
-      )
-    })
+    # irrigation input
 
-    # render land use input
+    observeEvent(
+      eventExpr = {
+        input$class
+        input$practice
+      },
+      handlerExpr = {
+        choices <- unique(
+          comet_wa$irrigation[comet_wa$class %in% input$class &
+            comet_wa$practice %in% input$practice]
+        )
 
-    output$land_use <- renderUI({
-      choices <- unique(comet_tags) %>%
-        subset(class %in% input$class &
-          practice %in% input$practice) %>%
-        dplyr::select(current_land_use)
-
-      choices <- as.character(pull(choices))
-
-      shinyWidgets::virtualSelectInput(
-        inputId = ns("land_use"),
-        label = strong("Step 4. Current Land Use"),
-        choices = sort(unique(choices)),
-        multiple = FALSE,
-        position = "bottom",
-        optionsCount = 5
-      )
-    })
-
-    # render irrigation input
-
-    output$irrigation <- renderUI({
-      choices <- unique(comet_tags) %>%
-        subset(class %in% input$class &
-          practice %in% input$practice) %>%
-        dplyr::select(irrigation)
-
-      choices <- as.character(pull(choices))
-
-      shinyWidgets::virtualSelectInput(
-        inputId = ns("irrigation"),
-        label = strong("Step 5. Irrigation Type"),
-        choices = sort(unique(choices)),
-        multiple = FALSE,
-        position = "bottom",
-        optionsCount = 5
-      )
-    })
+        shinyWidgets::updateVirtualSelect(
+          inputId = "irrigation",
+          choices = sort(choices),
+          selected = input$irrigation
+        )
+      }
+    )
 
     # render implementation input
 
-    output$implementation <- renderUI({
-      choices <- unique(comet_tags) %>%
-        subset(class %in% input$class &
-          practice %in% input$practice &
-          current_land_use %in% input$land_use &
-          irrigation %in% input$irrigation) %>%
-        dplyr::select(implementation)
+    observeEvent(
+      eventExpr = {
+        input$class
+        input$practice
+        input$irrigation
+      },
+      handlerExpr = {
+        choices <- unique(
+          comet_wa$implementation[comet_wa$class %in% input$class &
+            comet_wa$practice %in% input$practice &
+            comet_wa$irrigation %in% input$irrigation]
+        )
 
-      choices <- as.character(pull(choices))
-
-      shinyWidgets::virtualSelectInput(
-        inputId = ns("implementation"),
-        label = strong("Step 6. Practice Implementation"),
-        choices = sort(unique(choices)),
-        multiple = FALSE,
-        position = "bottom",
-        optionsCount = 5,
-        search = TRUE
-      )
-    })
+        shinyWidgets::updateVirtualSelect(
+          inputId = "implementation",
+          choices = sort(choices),
+          selected = input$implementation
+        )
+      }
+    )
 
     # give warning if user selects acres <1
 

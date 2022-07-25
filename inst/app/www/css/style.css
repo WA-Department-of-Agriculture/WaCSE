@@ -46,6 +46,10 @@
       font-weight: bold;
 }
 
+.help-block {
+  color: #222 !important;
+}
+
 .btn {
     text-transform: capitalize;
 }

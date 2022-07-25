@@ -37,27 +37,70 @@ mod_explore_ui <- function(id) {
           shinyWidgets::virtualSelectInput(
             inputId = ns("county"),
             label = strong("Step 1. County"),
+            placeholder = "Select county",
             choices = sort(unique(comet_wa$county)),
             multiple = TRUE,
             search = TRUE,
             position = "bottom",
-            optionsCount = 5,
-            autoSelectFirstOption = TRUE,
-            showValueAsTags = TRUE
+            showValueAsTags = TRUE,
+            optionsCount = 5
           ),
           shinyWidgets::virtualSelectInput(
             inputId = ns("class"),
-            label = strong("Step 2. Conservation Class"),
+            label = span(
+              strong("Step 2. Conservation Class"),
+              br(),
+              helpText("Select categories that describe the practices
+                       you are interested in.")
+            ),
+            placeholder = "Select conservation class",
             choices = sort(unique(comet_tags$class)),
             multiple = TRUE,
             position = "bottom",
-            optionsCount = 5,
-            autoSelectFirstOption = TRUE,
             showValueAsTags = TRUE
           ),
-          uiOutput(outputId = ns("practice")),
-          uiOutput(outputId = ns("land_use")),
-          uiOutput(outputId = ns("irrigation")),
+          shinyWidgets::virtualSelectInput(
+            inputId = ns("practice"),
+            label = span(
+              strong("Step 3. Conservation Practice"),
+              br(),
+              helpText("Select NRCS conservation practice standards
+                       (CPS) you are interested in.")
+            ),
+            placeholder = "Select conservation practice",
+            choices = NULL,
+            multiple = TRUE,
+            search = TRUE,
+            position = "bottom",
+            showValueAsTags = TRUE,
+            optionsCount = 5
+          ),
+          shinyWidgets::virtualSelectInput(
+            inputId = ns("land_use"),
+            label = span(
+              strong("Step 4. Current Land Use"),
+              br(),
+              helpText("Select how the land currently is used.")
+            ),
+            placeholder = "Select land use",
+            choices = NULL,
+            multiple = TRUE,
+            position = "bottom",
+            showValueAsTags = TRUE
+          ),
+          shinyWidgets::virtualSelectInput(
+            inputId = ns("irrigation"),
+            label = span(
+              strong("Step 5. Irrigation Type"),
+              br(),
+              helpText("Select how the current system is irrigated.")
+            ),
+            placeholder = "Select irrigation type",
+            choices = NULL,
+            multiple = TRUE,
+            position = "bottom",
+            showValueAsTags = TRUE
+          ),
           uiOutput(outputId = ns("nutrient_practice"))
         )
       ),
@@ -78,6 +121,15 @@ mod_explore_ui <- function(id) {
               "Table",
               icon = icon("table"),
               br(),
+              strong(
+                HTML(
+                  "All NRCS conservation classes, practices, and
+                  implementations are described in the
+                   <a href='http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf'
+                   target = '_blank'>COMET-Planner Final Report PDF</a>."
+                )
+              ),
+              rep_br(2),
               shinycssloaders::withSpinner(
                 DT::DTOutput(ns("table"))
               )
@@ -124,92 +176,98 @@ mod_explore_server <- function(id) {
       fct_helpModal("exploreExplore")
     })
 
-    # render UI filter elements -----------------------------------------------
+    # update select input choices  --------------------------------------------
 
-    output$practice <- renderUI({
-      choices <- unique(comet_wa) %>%
-        subset(class %in% input$class) %>%
-        dplyr::select(practice)
+    # practice input
 
-      choices <- as.character(pull(choices))
+    observeEvent(
+      eventExpr = {
+        input$class
+      },
+      handlerExpr = {
+        choices <- unique(
+          comet_wa$practice[comet_wa$class %in% input$class]
+        )
 
-      shinyWidgets::virtualSelectInput(
-        inputId = ns("practice"),
-        label = strong("Step 3. Conservation Practice"),
-        choices = sort(unique(choices)),
-        multiple = TRUE,
-        search = TRUE,
-        position = "bottom",
-        optionsCount = 5,
-        autoSelectFirstOption = TRUE,
-        showValueAsTags = TRUE
-      )
-    })
+        shinyWidgets::updateVirtualSelect(
+          inputId = "practice",
+          choices = sort(choices),
+          selected = input$practice
+        )
+      }
+    )
 
-    output$land_use <- renderUI({
-      choices <- unique(comet_tags) %>%
-        subset(class %in% input$class &
-          practice %in% input$practice) %>%
-        dplyr::select(current_land_use)
+    # land use input
 
-      choices <- as.character(pull(choices))
+    observeEvent(
+      eventExpr = {
+        input$class
+        input$practice
+      },
+      handlerExpr = {
+        choices <- unique(
+          comet_wa$current_land_use[comet_wa$class %in% input$class &
+            comet_wa$practice %in% input$practice]
+        )
 
-      shinyWidgets::virtualSelectInput(
-        inputId = ns("land_use"),
-        label = strong("Step 4. Current Land Use"),
-        choices = sort(unique(choices)),
-        multiple = TRUE,
-        selected = choices,
-        position = "bottom",
-        optionsCount = 5,
-        showValueAsTags = TRUE
-      )
-    })
+        shinyWidgets::updateVirtualSelect(
+          inputId = "land_use",
+          choices = sort(choices),
+          selected = input$land_use
+        )
+      }
+    )
 
-    output$irrigation <- renderUI({
-      choices <- unique(comet_tags) %>%
-        subset(class %in% input$class &
-          practice %in% input$practice) %>%
-        dplyr::select(irrigation)
+    # irrigation input
 
-      choices <- as.character(pull(choices))
+    observeEvent(
+      eventExpr = {
+        input$class
+        input$practice
+      },
+      handlerExpr = {
+        choices <- unique(
+          comet_wa$irrigation[comet_wa$class %in% input$class &
+            comet_wa$practice %in% input$practice]
+        )
 
-      shinyWidgets::virtualSelectInput(
-        inputId = ns("irrigation"),
-        label = strong("Step 5. Irrigation Type"),
-        choices = sort(unique(choices)),
-        selected = choices,
-        multiple = TRUE,
-        position = "bottom",
-        optionsCount = 5,
-        showValueAsTags = TRUE
-      )
-    })
+        shinyWidgets::updateVirtualSelect(
+          inputId = "irrigation",
+          choices = sort(choices),
+          selected = input$irrigation
+        )
+      }
+    )
+
+    # nutrient practice
 
     output$nutrient_practice <- renderUI({
       req("Nutrient Management (CPS 590)" %in% input$practice)
-      choices <- unique(comet_tags) %>%
-        subset(practice %in% input$practice) %>%
-        dplyr::select(nutrient_practice)
-
-      choices <- as.character(pull(choices))
+      choices <- unique(
+        comet_wa$nutrient_practice[comet_wa$class %in% input$class &
+          comet_wa$practice %in% input$practice]
+      )
 
       tagList(
         shinyWidgets::virtualSelectInput(
           inputId = ns("nutrient_practice"),
-          label = strong("Step 6. Nutrient Management*"),
+          label = span(
+            strong("Step 6. Nutrient Management"),
+            br(),
+            helpText("Select if you want to reduce your
+                     application rate or change your nutrient source."),
+            br(),
+            helpText(em("If you selected multiple practices in Step 3,
+              'Not Applicable' must be selected in Step 6 to include
+              all selected practices."))
+          ),
+          placeholder = "Select nutrient management",
           choices = sort(unique(choices)),
-          selected = c(choices["Not Applicable"], choices[1:3]),
+          selected = input$nutrient_practice,
           multiple = TRUE,
           position = "bottom",
-          optionsCount = 5,
           search = TRUE,
           showValueAsTags = TRUE
-        ),
-        p(
-          "*",
-          em("If you selected multiple practices in Step 3,
-              select 'Not Applicable' in Step 6 to include all practices.")
         )
       )
     })
