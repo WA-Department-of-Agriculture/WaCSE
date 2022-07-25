@@ -1,7 +1,7 @@
 
 <!-- aboutWaCSE.md is generated from aboutWaCSE.Rmd. Please edit that file -->
 
-<img src="img/favicon.png" align="right" width="120"/>
+<img src="img/favicon.png" align="right" width="150"/>
 
 # Washington Climate Smart Estimator (WaCSE)
 

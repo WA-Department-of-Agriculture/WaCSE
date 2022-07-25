@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<img src="inst/app/www/rmd/img/favicon.png" align="right" width="120"/>
+<img src="inst/app/www/rmd/img/favicon.png" align="right" width="150"/>
 
 # Washington Climate Smart Estimator (WaCSE)
 

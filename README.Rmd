@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-<img src="inst/app/www/rmd/img/favicon.png" align="right" width="120"/>
+<img src="inst/app/www/rmd/img/favicon.png" align="right" width="150"/>
 
 # Washington Climate Smart Estimator (WaCSE) 
 
