@@ -33,7 +33,7 @@ golem::set_golem_options()
 
 ## Create Common Files ----
 ## See ?usethis for more information
-usethis::use_mit_license("Golem User") # You can set another license here
+usethis::use_mit_license("Washington State Department of Agriculture") # You can set another license here
 usethis::use_readme_rmd(open = FALSE)
 usethis::use_ccby_license() # You can set another license here
 usethis::use_readme_rmd(open = TRUE)

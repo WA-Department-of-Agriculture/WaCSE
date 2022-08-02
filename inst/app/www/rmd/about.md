@@ -80,7 +80,7 @@ Resource Conservation Service, Handbook 296.
 When using WaCSE, we appreciate if you include a reference in your
 publications. To cite the web application, please use:
 
-> Ryan J, Gelardi D, Michel L. 2022. WaCSE: A shiny web app for
+> Ryan JN, Michel L, Gelardi DL. 2022. WaCSE: A shiny web app for
 > comparing climate benefits of agricultural conservation practices.
 > Natural Resources Assessment Section, Washington Department of
 > Agriculture. <https://github.com/WA-Department-of-Agriculture/WaCSE>.
