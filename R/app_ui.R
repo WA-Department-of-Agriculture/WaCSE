@@ -33,7 +33,7 @@ app_ui <- function(request) {
           mod_impact_ui("impact_tab")
         ),
         tabPanel(
-          "About",
+          title = "About",
           column(10,
             offset = 1,
             shinydashboard::box(

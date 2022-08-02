@@ -18,16 +18,18 @@ fct_plot <- function(data, type, error_bar) {
       "<b>{data$implementation}</b>
         <b>MLRA:</b> {data$mlra}
         <b>County:</b> {data$county}
-        <b>ERC:</b> {data$mean} (MT CO2e/ac/yr)"
+        <b>ERC:</b> {data$mean} (MT CO2eq/ac/yr)"
     )
 
     ylab <- paste(
       "\n",
-      "Total GHG Emission Reduction Coefficient",
+      "Total GHG Emission Reduction Coefficient (ERC)",
       "\n(Metric tonnes CO2eq per acre per year)"
     )
 
     labels <- scales::label_number(accuracy = 0.001, big.mark = ",")
+
+    font <- "Source Sans Pro"
   }
 
   if (type == "estimate") {
@@ -36,8 +38,7 @@ fct_plot <- function(data, type, error_bar) {
         <b>MLRA:</b> {data$mlra}
         <b>County:</b> {data$county}
         <b>Acres:</b> {format(round(data$acres, 0), big.mark = ',')}
-        <b>Estimated Emission Reduction:</b>
-      {format(round(data$mean, 2), big.mark = ',')} (MT CO2e/yr)"
+        <b>Estimated Emission Reduction:</b> {format(round(data$mean, 2), big.mark = ',')} (MT CO2eq/yr)"
     )
 
     ylab <- paste(
@@ -47,6 +48,8 @@ fct_plot <- function(data, type, error_bar) {
     )
 
     labels <- scales::label_number(accuracy = 1, big.mark = ",")
+
+    font <- "Source Sans Pro"
   }
 
   if (type == "download") {
@@ -56,7 +59,7 @@ fct_plot <- function(data, type, error_bar) {
         <b>County:</b> {data$county}
         <b>Acres:</b> {format(round(data$acres, 0), big.mark = ',')}
         <b>Estimated Emission Reduction:</b>
-      {format(round(data$mean, 2), big.mark = ',')} (MT CO2e/yr)"
+      {format(round(data$mean, 2), big.mark = ',')} (MT CO2eq/yr)"
     )
 
     ylab <- paste(
@@ -66,6 +69,8 @@ fct_plot <- function(data, type, error_bar) {
     )
 
     labels <- scales::label_number(accuracy = , big.mark = ",")
+
+    font <- "Arial"
   }
 
   # plot data
@@ -93,7 +98,7 @@ fct_plot <- function(data, type, error_bar) {
       y = ylab
     ) +
     theme_minimal(
-      base_family = "Source Sans Pro",
+      base_family = font,
       base_size = 11
     ) +
     theme(

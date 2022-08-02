@@ -1,7 +1,7 @@
 
 <!-- aboutWaCSE.md is generated from aboutWaCSE.Rmd. Please edit that file -->
 
-<img src="img/favicon.png" align="right" width="150"/>
+<img src="img/favicon.png" align="right" width="130"/>
 
 # Washington Climate Smart Estimator (WaCSE)
 
@@ -75,8 +75,22 @@ USDA-NRCS. 2006. Land Resource Regions and Major Land Resource Areas of
 the United States, the Caribbean, and the Pacific Basin. USDA, Natural
 Resource Conservation Service, Handbook 296.
 
-### Contact
+### Suggested Citation
 
-If you have feedback or would like to report a bug, please contact the
-app author: Jadey Ryan at
+When using WaCSE, we appreciate if you include a reference in your
+publications. To cite the web application, please use:
+
+> Ryan J, Gelardi D, Michel L. 2022. WaCSE: A shiny web app for
+> comparing climate benefits of agricultural conservation practices.
+> Natural Resources Assessment Section, Washington Department of
+> Agriculture. <https://github.com/WA-Department-of-Agriculture/WaCSE>.
+
+### Source Code and Feedback
+
+To view the source code, visit the [GitHub
+repository](https://github.com/WA-Department-of-Agriculture/WaCSE).
+
+If you have feedback or would like to report a bug, please [submit an
+issue](https://github.com/WA-Department-of-Agriculture/WaCSE/issues) or
+contact the app developer: Jadey Ryan at
 [jryan@agr.wa.gov](mailto:jryan@agr.wa.gov?subject=WaCSE).
