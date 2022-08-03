@@ -25,12 +25,6 @@ app_server <- function(input, output, session) {
 
   mod_impact_server("impact_tab")
 
-  # stop session when browser is closed -------------------------------------
-
-  session$onSessionEnded(function() {
-    stopApp()
-  })
-
   # warn user after 7 minutes of inactivity that they have 3 minutes left -----
 
   shinyjs::runjs(
@@ -39,7 +33,7 @@ app_server <- function(input, output, session) {
       var idleTimer;
 
       function onTimeout() {
-        alert('Warning: Your session will timeout in 3 minutes.');
+        alert('Warning: Your session will time out in 3 minutes.');
       }
 
       function startIdleTimer() {
