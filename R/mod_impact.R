@@ -79,7 +79,7 @@ mod_impact_server <- function(id) {
       shinydashboard::valueBox(
         subtitle = "Homes' electricity use for one year",
         value = fct_ghgEq(ghg_input(), "home"),
-        icon = icon("home"),
+        icon = icon("house"),
         color = "yellow",
         width = NULL
       )
@@ -190,7 +190,7 @@ mod_impact_server <- function(id) {
         subtitle = "Acres of US forests preserved from
         conversion to cropland in one year",
         value = fct_ghgEq(ghg_input(), "conversion"),
-        icon = icon("apple"),
+        icon = icon("wheat-awn"),
         color = "green",
         width = NULL
       )

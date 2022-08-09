@@ -490,6 +490,7 @@ mod_estimate_server <- function(id) {
       value_acres <- rv$df %>%
         dplyr::select(acres) %>%
         as.vector() %>%
+        unlist() %>%
         sum() %>%
         format(big.mark = ",")
     })
@@ -511,16 +512,16 @@ mod_estimate_server <- function(id) {
       value_ghg <- rv$df %>%
         dplyr::select(totalGHG) %>%
         as.vector() %>%
+        unlist() %>%
         sum() %>%
         format(big.mark = ",")
-      return(value_ghg)
     })
 
     output$total_ghg <- shinydashboard::renderValueBox({
       shinydashboard::valueBox(
         subtitle = "Total GHG Reductions",
         value = paste(value_ghg(), "MT CO2eq/yr"),
-        icon = icon("globe-americas"),
+        icon = icon("earth-americas"),
         color = "blue",
         width = NULL
       )

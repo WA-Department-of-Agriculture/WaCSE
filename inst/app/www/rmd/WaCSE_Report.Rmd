@@ -254,6 +254,7 @@ The values shown here are your total estimated esmissions reductions converted i
 totalGHG <- params$data %>%
   select(totalGHG) %>%
   as.vector() %>%
+  unlist() %>% 
   sum()
 ```
 
