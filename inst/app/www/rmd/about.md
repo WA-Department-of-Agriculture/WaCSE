@@ -29,7 +29,7 @@ from county-rectified major land resource areas (Swan et al. 2020).
 NRCS and Colorado State University developed two tools to estimate
 impacts on GHG and soil carbon from conservation practices.
 
--   <a href="http://comet-farm.com" target="_blank">**COMET-Farm**</a>
+-   <a href="https://comet-farm.com" target="_blank">**COMET-Farm**</a>
     is a field-specific tool that requires detailed management and
     parcel history to estimate the impact of conservation practices.
 
@@ -57,7 +57,7 @@ Negative values indicate a loss of carbon or increased emissions of GHG
 ### Where can I find more information about the NRCS conservation practices?
 
 For technical guides, review the
-<a href="https://www.nrcs.usda.gov/wps/portal/nrcs/main/national/technical/cp/" target="_blank">NRCS
+<a href="https://www.nrcs.usda.gov/resources/guides-and-instructions/conservation-practice-standards" target="_blank">NRCS
 conservation practices standards (CPS)</a>.
 
 ### References
@@ -68,7 +68,7 @@ Version 2.1, Build 1, and COMET-Planner Report: Carbon and Greenhouse
 Gas Evaluation for NRCS Conservation Practice Planning. A Companion
 report to
 <a href="http://www.comet-planner.com" target = "_blank">COMET-Planner.</a>
-<a href="http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf" target = "_blank">COMET-Planner
+<a href="https://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf" target = "_blank">COMET-Planner
 Final Report PDF.</a>
 
 USDA-NRCS. 2006. Land Resource Regions and Major Land Resource Areas of

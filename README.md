@@ -37,7 +37,7 @@ Jeff Creque, John Wick, Keith Paustian. 2020. COMET-Planner Dataset,
 Version 2.1, Build 1, and COMET-Planner Report: Carbon and Greenhouse
 Gas Evaluation for NRCS Conservation Practice Planning. A Companion
 report to [COMET-Planner](http://www.comet-planner.com).
-[COMET-Planner_Report_Final.pdf](http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf).
+[COMET-Planner_Report_Final.pdf](https://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf).
 
 ## Suggested Citation
 
