@@ -5,7 +5,7 @@
 \alias{comet_tags}
 \title{comet_wa tags}
 \format{
-A data frame with 114 rows and 7 variables:
+A data frame with 113 rows and 7 variables:
 \describe{
   \item{class}{Broad class of conservation practice}
   \item{practice}{USDA-NRCS Conservation Practice Standard name}

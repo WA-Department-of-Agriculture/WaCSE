@@ -1,9 +1,10 @@
 #' Greenhouse gas emission reduction coefficients
 #'
-#' A subset of the NRCS Comet-Planner dataset containing the coefficients of greenhouse gas emissions
-#' and soil carbon for Washington State.
+#' A subset of the NRCS Comet-Planner dataset (Version 3.0, released 2022)
+#' containing the coefficients of greenhouse gas emissions and soil carbon
+#' for Washington State.
 #'
-#' @format A data frame with 17280 rows and 14 variables:
+#' @format A data frame with 12756 rows and 14 variables:
 #' \describe{
 #'   \item{county}{County name}
 #'   \item{mlra}{USDA Major Land Resource Area rectified to county boundaries}
@@ -40,7 +41,7 @@
 #'
 #' Tags for filtering conservation practice implementations from the comet_wa dataset
 #'
-#' @format A data frame with 114 rows and 7 variables:
+#' @format A data frame with 113 rows and 7 variables:
 #' \describe{
 #'   \item{class}{Broad class of conservation practice}
 #'   \item{practice}{USDA-NRCS Conservation Practice Standard name}

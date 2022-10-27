@@ -11,9 +11,6 @@ conservation practice standards</a> included in
 **There are multiple options for most practices.** Each step narrows the
 options based on your choices.
 
-**The NRCS has not evaluated all practices for every county.** For
-example, Hedgerow Planting data are only available in Western Washington
-
 ------------------------------------------------------------------------
 
 **How to use:**

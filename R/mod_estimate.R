@@ -144,15 +144,7 @@ mod_estimate_ui <- function(id) {
               tabPanel("Table",
                 icon = icon("table"),
                 br(),
-                strong(
-                  HTML(
-                    "All NRCS conservation classes, practices, and
-                  implementations are described in the
-                   <a href='http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf'
-                   target = '_blank'>COMET-Planner Final Report PDF</a>."
-                  )
-                ),
-                rep_br(2),
+                includeMarkdown(normalizePath("inst/app/www/rmd/aboveTableText.md")),
                 shinycssloaders::withSpinner(
                   DT::DTOutput(outputId = ns("table"))
                 )
@@ -410,7 +402,7 @@ mod_estimate_server <- function(id) {
         "co2" = input$acres * filtered()$co2,
         "n2o" = input$acres * filtered()$n2o,
         "ch4" = input$acres * filtered()$ch4,
-        "totalGHG" = input$acres * filtered()$total.ghg.co2
+        "totalGHG" = input$acres * filtered()$total_ghg_co2
       )
 
       rv$df <- rbind(rv$df, tmp) %>% unique()
@@ -514,7 +506,7 @@ mod_estimate_server <- function(id) {
         as.vector() %>%
         unlist() %>%
         sum() %>%
-        format(big.mark = ",")
+        format(big.mark = ",", digits = 2)
     })
 
     output$total_ghg <- shinydashboard::renderValueBox({

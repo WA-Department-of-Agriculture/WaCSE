@@ -1,60 +1,77 @@
-library(dplyr)
-library(tidyr)
-
-# Read in data ------------------------------------------------------------
-
-comet_all <- vroom::vroom("data-raw/US_COMET-Planner_Download.csv",
-  na = "-999.00", # import -999 values as na (means "not estimated")
-  col_select = c(1:2, 4, 6, 8, 9, 12:17, 33:34)
-  # select only cols of interest
-  # keep only GHG variables that have data. Soil carbon equals CO2.
+box::use(
+  vroom[vroom],
+  dplyr[
+    select,
+    across,
+    starts_with,
+    ends_with,
+    rename,
+    mutate,
+    left_join,
+    relocate,
+    bind_cols,
+    summarize
+  ],
+  tidyr[extract, replace_na, pivot_longer, pivot_wider],
+  stringr[str_replace, str_replace_all],
+  usethis[use_data]
 )
 
-mlra <- vroom::vroom("data-raw/MLRA.csv",
-  col_select = c(MLRARSYM, MLRA_NAME)
-) %>%
-  unique()
+# read in data ------------------------------------------------------------
 
-# rename columns ----------------------------------------------------------
-
-comet_all <- comet_all %>%
-  dplyr::rename(
+# import -999 values as na which represent "not estimated"
+# filter out multiple CPS implementations since COMET team confirmed they are additive.
+comet_wa <- vroom(
+  "data-raw/US_COMET-Planner_data.csv",
+  na = "-999"
+) |>
+  subset(state == "WA" & cps_name != "Multiple Conservation Practices") |>
+  select(
+    state,
+    county,
+    mlra,
+    class,
+    cps_name,
+    planner_implementation,
+    starts_with(c("co2", "n2o", "ch4", "total")),
+    -c(ends_with(c("min", "max")))
+  ) |>
+  rename(
+    mlra_code = mlra,
     practice = cps_name,
     implementation = planner_implementation,
-    total.ghg.co2_mean = total_ghg_co2,
-    total.ghg.co2_sterr = total_ghg_co2_sterr
-  )
+    total_ghg_co2_mean = total_ghg_co2
+  ) |>
+  mutate(across(ends_with(c("mean", "sterr")), as.numeric))
 
-# filter to only WA
-# filter out multiple CPS implementations since COMET team confirmed they are additive.
-
-comet_wa <- comet_all %>%
-  dplyr::filter(state == "WA") %>%
-  dplyr::filter(!(practice == "Multiple Conservation Practices"))
-
+mlra <- vroom(
+  "data-raw/MLRA.csv",
+  col_select = c(MLRARSYM, MLRA_NAME)
+) |>
+  unique()
 
 # join comet with MLRA to get MLRA names ----------------------------------
 
-comet_wa <- dplyr::left_join(comet_wa, mlra, by = c("mlra" = "MLRARSYM")) %>%
-  relocate(mlra = MLRA_NAME, .after = county) %>%
-  subset(select = -c(1, 4))
+comet_wa <- left_join(comet_wa, mlra, by = c("mlra_code" = "MLRARSYM")) |>
+  relocate(mlra = MLRA_NAME, .after = county) |>
+  subset(select = -c(state, mlra_code))
 
 # parse out CPS implementations -------------------------------------------
 
-comet_wa <- comet_wa %>%
-  tidyr::extract(
+comet_wa <- comet_wa |>
+  extract(
     "implementation",
     "nutrient_practice",
     "(Rate|Beef Feedlot Manure|Chicken|Compost|Dairy Manure|Other Manure|Sheep Manure|Swine Manure)",
     remove = FALSE
-  ) %>%
-  tidyr::extract(
+  ) |>
+  extract(
     "implementation",
     "irrigation",
     "(Non-Irrigated|Irrigated)",
     remove = FALSE
-  ) %>%
-  tidyr::extract(
+  ) |>
+  extract(
     "implementation",
     "current_land_use",
     "(Cropland|Crops|Rangeland|Grassland|Pasture)",
@@ -63,7 +80,7 @@ comet_wa <- comet_wa %>%
 
 # replace NAs
 
-comet_wa <- comet_wa %>% tidyr::replace_na(list(
+comet_wa <- comet_wa |> replace_na(list(
   irrigation = "Not Specified",
   current_land_use = "Not Specified",
   nutrient_practice = "Not Applicable"
@@ -72,49 +89,59 @@ comet_wa <- comet_wa %>% tidyr::replace_na(list(
 # replace Crops with Cropland, Rate with Reduce Application Rate, Chicken with Chicken Manure
 
 comet_wa$current_land_use <-
-  stringr::str_replace(comet_wa$current_land_use, "Crops", "Cropland")
+  str_replace(comet_wa$current_land_use, "Crops", "Cropland")
 
 comet_wa$nutrient_practice <-
-  stringr::str_replace_all(comet_wa$nutrient_practice, c(
-    "Rate" = "Reduce Application Rate",
-    "Chicken" = "Chicken Manure"
-  ))
+  str_replace_all(
+    comet_wa$nutrient_practice,
+    c(
+      "Rate" = "Reduce Application Rate",
+      "Chicken" = "Chicken Manure"
+    )
+  )
 
 # convert character strings to factors
 
-comet_wa <- as.data.frame(unclass(comet_wa),
+comet_wa <- as.data.frame(
+  unclass(comet_wa),
   stringsAsFactors = TRUE
 )
 
 # abbreviate implementation for improved readability in plot
 
-comet_wa$abbr <- stringr::str_replace_all(comet_wa$implementation, c(
-  "Irrigated" = "Irr",
-  "Permanent" = "Perm",
-  "Fertilizer" = "Fert",
-  "Unfertilized" = "Unfert",
-  "Synthetic" = "Synth",
-  "Management" = "Mngmt",
-  "with" = "w/"
-))
+comet_wa$abbr <- str_replace_all(
+  comet_wa$implementation,
+  c(
+    "Irrigated" = "Irr",
+    "Permanent" = "Perm",
+    "Fertilizer" = "Fert",
+    "Unfertilized" = "Unfert",
+    "Synthetic" = "Synth",
+    "Management" = "Mngmt",
+    "with" = "w/"
+  )
+)
 
-comet_wa <- comet_wa %>% relocate(abbr, .after = implementation)
+comet_wa <- comet_wa |> relocate(abbr, .after = implementation)
 
 # create separate df for just the tags
-comet_tags <- unique(comet_wa[, 3:9])
+comet_tags <- comet_wa |>
+  select(class:nutrient_practice) |>
+  unique()
 
 # pivot to tidy data ------------------------------------------------------------
 
-comet_wa <- comet_wa %>%
-  tidyr::pivot_longer(
-    cols = 10:17,
+comet_wa_long <- comet_wa |>
+  pivot_longer(
+    cols = where(is.numeric),
     names_to = c("ghg_type", "type"),
-    names_sep = "_",
+    names_pattern = "(.*)(_mean|_sterr)$",
     values_to = "value"
-  )
+  ) |>
+  mutate(type = substr(type, 2, nchar(type)))
 
-comet_wa <- comet_wa %>%
-  tidyr::pivot_wider(
+comet_wa <- comet_wa_long |>
+  pivot_wider(
     names_from = type,
     values_from = value
   )
@@ -122,8 +149,8 @@ comet_wa <- comet_wa %>%
 # calculate error bars ----------------------------------------------------
 
 fct_error <- function(data) {
-  errors <- data %>%
-    dplyr::summarize(
+  errors <- data |>
+    summarize(
       lower = mean - sterr,
       upper = mean + sterr
     )
@@ -138,5 +165,5 @@ comet_wa <- fct_error(comet_wa)
 write.csv(comet_wa, "data-raw/comet_wa.csv")
 write.csv(comet_tags, "data-raw/comet_tags.csv")
 
-usethis::use_data(comet_wa, overwrite = TRUE)
-usethis::use_data(comet_tags, overwrite = TRUE)
+use_data(comet_wa, overwrite = TRUE)
+use_data(comet_tags, overwrite = TRUE)

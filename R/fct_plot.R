@@ -18,7 +18,7 @@ fct_plot <- function(data, type, error_bar) {
       "<b>{data$implementation}</b>
         <b>MLRA:</b> {data$mlra}
         <b>County:</b> {data$county}
-        <b>ERC:</b> {data$mean} (MT CO2eq/ac/yr)"
+        <b>ERC:</b> {format(round(data$mean, 2))} (MT CO2eq/ac/yr)"
     )
 
     ylab <- paste(

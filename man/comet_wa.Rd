@@ -5,7 +5,7 @@
 \alias{comet_wa}
 \title{Greenhouse gas emission reduction coefficients}
 \format{
-A data frame with 17280 rows and 14 variables:
+A data frame with 12756 rows and 14 variables:
 \describe{
   \item{county}{County name}
   \item{mlra}{USDA Major Land Resource Area rectified to county boundaries}
@@ -42,7 +42,8 @@ A data frame with 17280 rows and 14 variables:
 comet_wa
 }
 \description{
-A subset of the NRCS Comet-Planner dataset containing the coefficients of greenhouse gas emissions
-and soil carbon for Washington State.
+A subset of the NRCS Comet-Planner dataset (Version 3.0, released 2022)
+containing the coefficients of greenhouse gas emissions and soil carbon
+for Washington State.
 }
 \keyword{datasets}

@@ -24,7 +24,7 @@ Values were determined by the United States Department of Agriculture’s
 Natural Resources Conservation Service (NRCS). NRCS reviewed field
 studies and applied a sample-based metamodeling approach to calculate
 potential GHG emission reduction coefficients. These values are derived
-from county-rectified major land resource areas (Swan et al. 2020).
+from county-rectified major land resource areas (Swan et al. 2022).
 
 NRCS and Colorado State University developed two tools to estimate
 impacts on GHG and soil carbon from conservation practices.
@@ -52,7 +52,7 @@ energy use, consuming gasoline, charging smartphones, and more!
 ### What do negative values mean?
 
 Negative values indicate a loss of carbon or increased emissions of GHG
-(Swan et al. 2020).
+(Swan et al. 2022).
 
 ### Where can I find more information about the NRCS conservation practices?
 
@@ -63,19 +63,19 @@ conservation practices standards (CPS)</a>.
 ### References
 
 Amy Swan, Mark Easter, Adam Chambers, Kevin Brown, Stephen A. Williams,
-Jeff Creque, John Wick, Keith Paustian. 2020. COMET-Planner Dataset,
-Version 2.1, Build 1, and COMET-Planner Report: Carbon and Greenhouse
+Jeff Creque, John Wick, Keith Paustian. 2022. COMET-Planner Dataset,
+Version 3.0, Build 1, and COMET-Planner Report: Carbon and Greenhouse
 Gas Evaluation for NRCS Conservation Practice Planning. A Companion
 report to
 <a href="http://www.comet-planner.com" target = "_blank">COMET-Planner.</a>
-<a href="https://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf" target = "_blank">COMET-Planner
-Final Report PDF.</a>
+<a href="https://storage.googleapis.com/comet_public_directory/planner50states/pdfs/COMET-PlannerReport.pdf" target = "_blank">COMET-Planner
+Report.</a>
 
 USDA-NRCS. 2006. Land Resource Regions and Major Land Resource Areas of
 the United States, the Caribbean, and the Pacific Basin. USDA, Natural
 Resource Conservation Service, Handbook 296.
 
-### Suggested Citation
+## Suggested Citation
 
 When using WaCSE, we appreciate if you include a reference in your
 publications. To cite the web application, please use:
@@ -83,14 +83,16 @@ publications. To cite the web application, please use:
 > Ryan JN, Michel L, Gelardi DL. 2022. WaCSE: A shiny web app for
 > comparing climate benefits of agricultural conservation practices.
 > Natural Resources Assessment Section, Washington Department of
-> Agriculture. <https://github.com/WA-Department-of-Agriculture/WaCSE>.
+> Agriculture.
+> <a href = "https://github.com/WA-Department-of-Agriculture/WaCSE" target = "_blank"><https://github.com/WA-Department-of-Agriculture/WaCSE>.</a>
 
-### Source Code and Feedback
+## Source Code and Feedback
 
-To view the source code, visit the [GitHub
-repository](https://github.com/WA-Department-of-Agriculture/WaCSE).
+To view the source code, visit the
+<a href = "https://github.com/WA-Department-of-Agriculture/WaCSE" target = "_blank">GitHub
+repository.</a>
 
-If you have feedback or would like to report a bug, please [submit an
-issue](https://github.com/WA-Department-of-Agriculture/WaCSE/issues) or
-contact the app developer: Jadey Ryan at
+If you have feedback or would like to report a bug, please
+<a href = "https://github.com/WA-Department-of-Agriculture/WaCSE/issues" target = "_blank">
+submit an issue</a> or contact the app developer: Jadey Ryan at
 [jryan@agr.wa.gov](mailto:jryan@agr.wa.gov?subject=WaCSE).

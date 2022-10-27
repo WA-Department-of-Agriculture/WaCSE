@@ -130,15 +130,7 @@ mod_explore_ui <- function(id) {
               "Table",
               icon = icon("table"),
               br(),
-              strong(
-                HTML(
-                  "All NRCS conservation classes, practices, and
-                  implementations are described in the
-                   <a href='http://bfuels.nrel.colostate.edu/beta/COMET-Planner_Report_Final.pdf'
-                   target = '_blank'>COMET-Planner Final Report PDF</a>."
-                )
-              ),
-              rep_br(2),
+              includeMarkdown(normalizePath("inst/app/www/rmd/aboveTableText.md")),
               shinycssloaders::withSpinner(
                 DT::DTOutput(ns("table"))
               )
@@ -355,7 +347,7 @@ mod_explore_server <- function(id) {
         validate("The graph is too cluttered. Please remove some selections.")
       }
       explore_plot <- filtered_df() %>%
-        filter(ghg_type == "total.ghg.co2") %>%
+        filter(ghg_type == "total_ghg_co2") %>%
         fct_plot(type = "explore", error_bar = TRUE)
       return(explore_plot)
     })

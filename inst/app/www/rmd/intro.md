@@ -34,10 +34,10 @@ guidance throughout this web application.**
 
 ------------------------------------------------------------------------
 
-<span style="color: red;"><b>Data cannot be saved on this website.
+<span style="color: crimson;"><b>Data cannot be saved on this website.
 Please download your data and report before closing the window or
 allowing the session to time out. Sessions time out after 10 minutes of
 inactivity.</b></span>
 
 *Data source: <a href="http://comet-planner.com/" target="_blank">NRCS
-COMET-Planner (Swan et al. 2020) </a>*
+COMET-Planner (Swan et al. 2022) </a>*
