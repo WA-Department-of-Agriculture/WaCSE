@@ -1,8 +1,13 @@
 Package: WaCSE
 Title: Washington Climate Smart Estimator
 Version: 0.9.1
-Authors@R: person('Jadey', 'Ryan', email = 'jryan@agr.wa.gov', role = c('cre', 'aut'))
-Description: The Washington Climate Smart Estimator (WaCSE) is a shiny application to explore greenhouse gas mitigation potential from different conservation practices across Washington's diverse counties.
+Authors@R: c(
+    person('Jadey', 'Ryan', email = 'jryan@agr.wa.gov', role = c('cre', 'aut')),
+    person('Leslie', 'Michel', role = 'aut'),
+    person('Dani', 'Gelardi', role = 'aut'),
+    person('Washington State Department of Agriculture', role = c('cph', 'fnd'))
+    )
+Description: The Washington Climate Smart Estimator (WaCSE) is a shiny application to explore greenhouse gas mitigation potential from different agricultural conservation practices across Washington's diverse counties.
 License: MIT + file LICENSE
 URL: https://github.com/WA-Department-of-Agriculture/WaCSE
 BugReports: https://github.com/WA-Department-of-Agriculture/WaCSE/issues
