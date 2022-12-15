@@ -71,6 +71,10 @@ report to
 <a href="https://storage.googleapis.com/comet_public_directory/planner50states/pdfs/COMET-PlannerReport.pdf" target = "_blank">COMET-Planner
 Report.</a>
 
+EPA. Greenhouse Gases Emissions Equivalencies Calculator. U.S.
+Environmental Protection Agency. 2022.
+<a href="https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references" target = "_blank"><https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references>.</a>
+
 USDA-NRCS. 2006. Land Resource Regions and Major Land Resource Areas of
 the United States, the Caribbean, and the Pacific Basin. USDA, Natural
 Resource Conservation Service, Handbook 296.

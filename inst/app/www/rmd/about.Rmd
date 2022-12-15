@@ -46,6 +46,8 @@ For technical guides, review the <a href="https://www.nrcs.usda.gov/resources/gu
 
 Amy Swan, Mark Easter, Adam Chambers, Kevin Brown, Stephen A. Williams, Jeff Creque, John Wick, Keith Paustian. 2022. COMET-Planner Dataset, Version 3.0, Build 1, and COMET-Planner Report: Carbon and Greenhouse Gas Evaluation for NRCS Conservation Practice Planning. A Companion report to <a href="http://www.comet-planner.com" target = "_blank">COMET-Planner.</a> <a href="https://storage.googleapis.com/comet_public_directory/planner50states/pdfs/COMET-PlannerReport.pdf" target = "_blank">COMET-Planner Report.</a>
 
+EPA. Greenhouse Gases Emissions Equivalencies Calculator. U.S. Environmental Protection Agency. 2022. <a href="https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references" target = "_blank">https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references.</a>
+
 USDA-NRCS. 2006. Land Resource Regions and Major Land Resource Areas of the United States, the Caribbean, and the Pacific Basin. USDA, Natural Resource Conservation Service, Handbook 296.
 
 ## Suggested Citation

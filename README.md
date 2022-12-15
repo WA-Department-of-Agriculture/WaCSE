@@ -32,7 +32,7 @@ devtools::install_github("WA-Department-of-Agriculture/WaCSE")
 WaCSE::run_app()
 ```
 
-## Data reference
+## Data references
 
 Amy Swan, Mark Easter, Adam Chambers, Kevin Brown, Stephen A. Williams,
 Jeff Creque, John Wick, Keith Paustian. 2022. COMET-Planner Dataset,
@@ -42,6 +42,10 @@ report to
 <a href="http://www.comet-planner.com" target = "_blank">COMET-Planner.</a>
 <a href="https://storage.googleapis.com/comet_public_directory/planner50states/pdfs/COMET-PlannerReport.pdf" target = "_blank">COMET-Planner
 Report.</a>
+
+EPA. Greenhouse Gases Emissions Equivalencies Calculator. U.S.
+Environmental Protection Agency. 2022.
+<a href="https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references" target = "_blank"><https://www.epa.gov/energy/greenhouse-gases-equivalencies-calculator-calculations-and-references>.</a>
 
 ## Suggested Citation
 
