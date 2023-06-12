@@ -87,7 +87,7 @@ NRCS and Colorado State University developed two tools to estimate impacts on GH
 
 ### How does WaCSE differ from COMET-Farm and COMET-Planner? {.unlisted .unnumbered}
 
-WaCSE uses the COMET-Planner dataset and provides identical estimates. With WaCSE, however, data can be compared between multiple counties and multiple practices at once. WaCSE provides data in tables and bar graphs that can easily be download in spreadsheets and PDFs. WaCSE also helps the user understand their GHG reduction estimate by providing a calculator to convert the emissions data into equivalents from home energy use, consuming gasoline, charging smartphones, and more!
+WaCSE uses the COMET-Planner dataset and provides identical estimates. With WaCSE, however, data can be compared between multiple counties and multiple practices at once. WaCSE provides data in tables and bar graphs that can easily be downloaded in spreadsheets and PDFs. WaCSE also helps the user understand their GHG reduction estimate by providing a calculator to convert the emissions data into equivalents from home energy use, consuming gasoline, charging smartphones, and more!
 
 ### What do negative values mean? {.unlisted .unnumbered}
 

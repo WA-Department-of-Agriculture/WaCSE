@@ -29,22 +29,22 @@ from county-rectified major land resource areas (Swan et al. 2022).
 NRCS and Colorado State University developed two tools to estimate
 impacts on GHG and soil carbon from conservation practices.
 
--   <a href="https://comet-farm.com" target="_blank">**COMET-Farm**</a>
-    is a field-specific tool that requires detailed management and
-    parcel history to estimate the impact of conservation practices.
+- <a href="https://comet-farm.com" target="_blank">**COMET-Farm**</a> is
+  a field-specific tool that requires detailed management and parcel
+  history to estimate the impact of conservation practices.
 
--   <a href="http://comet-planner.com" target="_blank">**COMET-Planner**</a>
-    is a simplified tool that evaluates GHG emission reductions by
-    county rather than by a specific field with specific management
-    history. It provides a more generalized, less accurate GHG reduction
-    estimate, but is easier to use.
+- <a href="http://comet-planner.com" target="_blank">**COMET-Planner**</a>
+  is a simplified tool that evaluates GHG emission reductions by county
+  rather than by a specific field with specific management history. It
+  provides a more generalized, less accurate GHG reduction estimate, but
+  is easier to use.
 
 ### How does WaCSE differ from COMET-Farm and COMET-Planner?
 
 WaCSE uses the COMET-Planner dataset and provides identical estimates.
 With WaCSE, however, data can be compared between multiple counties and
 multiple practices at once. WaCSE provides data in tables and bar graphs
-that can easily be download in spreadsheets and PDFs. WaCSE also helps
+that can easily be downloaded in spreadsheets and PDFs. WaCSE also helps
 the user understand their GHG reduction estimate by providing a
 calculator to convert the emissions data into equivalents from home
 energy use, consuming gasoline, charging smartphones, and more!
