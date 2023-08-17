@@ -17,8 +17,5 @@ options based on your choices.
 
 <figure>
 <img src="img/selectInputControls.png" style="width:100.0%"
-alt="Alt text: Image showing how to deselect one option at a time, deselect all options, select all options, select a single option, and search all options." />
-<figcaption aria-hidden="true">Alt text: Image showing how to deselect
-one option at a time, deselect all options, select all options, select a
-single option, and search all options.</figcaption>
+alt="Image showing how to deselect one option at a time, deselect all options, select all options, select a single option, and search all options." />
 </figure>

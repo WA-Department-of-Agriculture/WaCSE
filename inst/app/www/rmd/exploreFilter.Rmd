@@ -1,5 +1,6 @@
 ---
-output: github_document
+output: 
+    github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -18,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **How to use:**
 
-![Alt text: Image showing how to deselect one option at a time, deselect all options, select all options, select a single option, and search all options.](img/selectInputControls.png){width=100%}
+![Image showing how to deselect one option at a time, deselect all options, select all options, select a single option, and search all options.](img/selectInputControls.png){width=100%}
 
 
 
