@@ -10,6 +10,7 @@ box::use(
     left_join,
     relocate,
     bind_cols,
+    reframe,
     summarize
   ],
   tidyr[extract, replace_na, pivot_longer, pivot_wider],
@@ -22,7 +23,7 @@ box::use(
 # import -999 values as na which represent "not estimated"
 # filter out multiple CPS implementations since COMET team confirmed they are additive.
 comet_wa <- vroom(
-  "data-raw/US_COMET-Planner_data.csv",
+  "data-raw/US_COMET-Planner.csv",
   na = "-999"
 ) |>
   subset(state == "WA" & cps_name != "Multiple Conservation Practices") |>
@@ -150,9 +151,10 @@ comet_wa <- comet_wa_long |>
 
 fct_error <- function(data) {
   errors <- data |>
-    summarize(
+    reframe(
       lower = mean - sterr,
-      upper = mean + sterr
+      upper = mean + sterr,
+
     )
 
   bind_cols(data, errors)
