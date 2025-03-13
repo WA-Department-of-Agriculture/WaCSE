@@ -59,7 +59,7 @@ fct_wrap <- function(x, width) {
 #' @noRd
 
 fct_tableFilter <- function(data) {
-  data <- data %>%
+  data <- data |>
     select(
       "mlra",
       "county",
@@ -68,7 +68,7 @@ fct_tableFilter <- function(data) {
       "implementation",
       "ghg_type",
       "mean"
-    ) %>%
+    ) |>
     tidyr::pivot_wider(
       names_from = ghg_type,
       values_from = mean

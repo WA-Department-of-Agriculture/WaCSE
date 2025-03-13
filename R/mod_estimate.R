@@ -399,7 +399,7 @@ mod_estimate_server <- function(id) {
         "totalGHG" = input$acres * filtered()$total_ghg_co2
       )
 
-      rv$df <- rbind(rv$df, tmp) %>% unique()
+      rv$df <- rbind(rv$df, tmp) |> unique()
 
       return(rv$df)
     })
@@ -453,15 +453,15 @@ mod_estimate_server <- function(id) {
 
     summary_county <- reactive({
       req(rv$df)
-      summary_county <- rv$df %>%
+      summary_county <- rv$df |>
         mutate(acres = as.numeric(acres),
                totalGHG = as.numeric(totalGHG)) %>%
-        group_by(mlra, county) %>%
+        group_by(mlra, county) |>
         summarize(
           "uniqueImpl" = dplyr::n_distinct(implementation),
           "acres" = sum(acres),
           "totalGHG" = sum(totalGHG)
-        ) %>%
+        ) |>
         as.data.frame()
       return(summary_county)
     })
@@ -470,11 +470,11 @@ mod_estimate_server <- function(id) {
 
     value_acres <- reactive({
       req(rv$df)
-      value_acres <- rv$df %>%
-        dplyr::select(acres) %>%
-        as.vector() %>%
-        unlist() %>%
-        sum() %>%
+      value_acres <- rv$df |>
+        dplyr::select(acres) |>
+        as.vector() |>
+        unlist() |>
+        sum() |>
         format(big.mark = ",")
     })
 
@@ -492,11 +492,11 @@ mod_estimate_server <- function(id) {
 
     value_ghg <- reactive({
       req(rv$df)
-      value_ghg <- rv$df %>%
-        dplyr::select(totalGHG) %>%
-        as.vector() %>%
-        unlist() %>%
-        sum() %>%
+      value_ghg <- rv$df |>
+        dplyr::select(total_ghg_co2) |>
+        as.vector() |>
+        unlist() |>
+        sum() |>
         format(big.mark = ",", digits = 2)
     })
 
@@ -555,7 +555,7 @@ mod_estimate_server <- function(id) {
 
     filtered_plot <- reactive({
       req(rv$df)
-      rv$df %>%
+      rv$df |>
         dplyr::select(
           mlra = mlra,
           county = county,
@@ -563,7 +563,7 @@ mod_estimate_server <- function(id) {
           implementation = implementation,
           acres = acres,
           mean = totalGHG
-        ) %>%
+        ) |>
         dplyr::mutate(acres = as.numeric(acres),
                       mean = as.numeric(mean))
     })

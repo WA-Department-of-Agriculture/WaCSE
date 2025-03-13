@@ -166,7 +166,7 @@ fct_table <- function(data, type) {
       ))
     ),
     selection = selection
-  ) %>%
-    DT::formatCurrency(columns = numeric_cols, currency = "") %>%
+  ) |>
+    DT::formatCurrency(columns = numeric_cols, currency = "") |>
     DT::formatRound(columns = acre_col, digits = 0)
 }
