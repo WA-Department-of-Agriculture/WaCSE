@@ -342,7 +342,7 @@ mod_estimate_server <- function(id) {
       "co2" = numeric(),
       "n2o" = numeric(),
       "ch4" = numeric(),
-      "totalGHG" = numeric()
+      "total_ghg_co2" = numeric()
     )
 
     rv <- reactiveValues(x = df)
@@ -396,7 +396,7 @@ mod_estimate_server <- function(id) {
         "co2" = input$acres * filtered()$co2,
         "n2o" = input$acres * filtered()$n2o,
         "ch4" = input$acres * filtered()$ch4,
-        "totalGHG" = input$acres * filtered()$total_ghg_co2
+        "total_ghg_co2" = input$acres * filtered()$total_ghg_co2
       )
 
       rv$df <- rbind(rv$df, tmp) |> unique()
@@ -446,21 +446,21 @@ mod_estimate_server <- function(id) {
     summary_df <- data.frame(
       "mlra" = character(),
       "county" = character(),
-      "uniqueImpl" = numeric(),
+      "unique_implementation" = numeric(),
       "acres" = numeric(),
-      "totalGHG" = numeric()
+      "total_ghg_co2" = numeric()
     )
 
     summary_county <- reactive({
       req(rv$df)
       summary_county <- rv$df |>
         mutate(acres = as.numeric(acres),
-               totalGHG = as.numeric(totalGHG)) %>%
+               total_ghg_co2 = as.numeric(total_ghg_co2)) |>
         group_by(mlra, county) |>
         summarize(
-          "uniqueImpl" = dplyr::n_distinct(implementation),
+          "unique_implementation" = dplyr::n_distinct(implementation),
           "acres" = sum(acres),
-          "totalGHG" = sum(totalGHG)
+          "total_ghg_co2" = sum(total_ghg_co2)
         ) |>
         as.data.frame()
       return(summary_county)
@@ -562,7 +562,7 @@ mod_estimate_server <- function(id) {
           abbr = implementation,
           implementation = implementation,
           acres = acres,
-          mean = totalGHG
+          mean = total_ghg_co2
         ) |>
         dplyr::mutate(acres = as.numeric(acres),
                       mean = as.numeric(mean))

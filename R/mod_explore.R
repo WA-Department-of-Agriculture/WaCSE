@@ -269,15 +269,15 @@ mod_explore_server <- function(id) {
     # render df for proxy -----------------------------------------------------
 
     df <- data.frame(
-      "MLRA" = character(),
-      "County" = character(),
-      "Conservation Class" = character(),
-      "Conservation Practice" = character(),
-      "Practice Implementation" = character(),
-      "Carbon Dioxide" = numeric(),
-      "Nitrous Oxide" = numeric(),
-      "Methane" = numeric(),
-      "Total Greenhouse Gases" = numeric()
+      "mlra" = character(),
+      "county" = character(),
+      "class" = character(),
+      "practice" = character(),
+      "implementation" = character(),
+      "co2" = numeric(),
+      "n2o" = numeric(),
+      "ch4" = numeric(),
+      "total_ghg_co2" = numeric()
     )
 
     # render reactive df ------------------------------------------------------
