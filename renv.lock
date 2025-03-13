@@ -5467,40 +5467,6 @@
       "Maintainer": "Hadley Wickham <hadley@posit.co>",
       "Repository": "CRAN"
     },
-    "webshot": {
-      "Package": "webshot",
-      "Version": "0.5.5",
-      "Source": "Repository",
-      "Title": "Take Screenshots of Web Pages",
-      "Authors@R": "c( person(\"Winston\", \"Chang\", email = \"winston@rstudio.com\", role = c(\"aut\", \"cre\")), person(\"Yihui\", \"Xie\", role = \"ctb\"), person(\"Francois\", \"Guillem\", role = \"ctb\"), person(\"Barret\", \"Schloerke\", role = \"ctb\"), person(\"Nicolas\", \"Perriault\", role = \"ctb\", comment = \"The CasperJS library\") )",
-      "Description": "Takes screenshots of web pages, including Shiny applications and R Markdown documents.",
-      "Depends": [
-        "R (>= 3.0)"
-      ],
-      "Imports": [
-        "magrittr",
-        "jsonlite",
-        "callr"
-      ],
-      "Suggests": [
-        "httpuv",
-        "knitr",
-        "rmarkdown",
-        "shiny",
-        "testthat (>= 3.0.0)"
-      ],
-      "License": "GPL-2",
-      "SystemRequirements": "PhantomJS for taking screenshots, ImageMagick or GraphicsMagick and OptiPNG for manipulating images.",
-      "RoxygenNote": "7.2.3",
-      "Encoding": "UTF-8",
-      "URL": "https://wch.github.io/webshot/, https://github.com/wch/webshot/",
-      "BugReports": "https://github.com/wch/webshot/issues",
-      "Config/testthat/edition": "3",
-      "NeedsCompilation": "no",
-      "Author": "Winston Chang [aut, cre], Yihui Xie [ctb], Francois Guillem [ctb], Barret Schloerke [ctb], Nicolas Perriault [ctb] (The CasperJS library)",
-      "Maintainer": "Winston Chang <winston@rstudio.com>",
-      "Repository": "CRAN"
-    },
     "whisker": {
       "Package": "whisker",
       "Version": "0.4.1",

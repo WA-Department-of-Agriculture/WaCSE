@@ -18,12 +18,14 @@ mod_estimate_ui <- function(id) {
       # inputs box ---------------------------------------------------------
 
       shinydashboard::box(
-        title = tagList(span(strong(
-          "Add conservation practices"
-        )),
-        span(fct_helpBtn(ns(
-          "addHelp"
-        )))),
+        title = tagList(
+          span(strong(
+            "Add conservation practices"
+          )),
+          span(fct_helpBtn(ns(
+            "addHelp"
+          )))
+        ),
         width = NULL,
         status = "primary",
         collapsible = TRUE,
@@ -133,14 +135,15 @@ mod_estimate_ui <- function(id) {
       width = 8,
       fluidRow(
         # view estimate box -------------------------------------------------
-
         shinydashboard::box(
-          title = tagList(span(
-            strong("View your GHG reduction estimate")
+          title = tagList(
+            span(
+              strong("View your GHG reduction estimate")
+            ),
+            span(fct_helpBtn(id = ns(
+              "viewHelp"
+            )))
           ),
-          span(fct_helpBtn(id = ns(
-            "viewHelp"
-          )))),
           width = NULL,
           status = "primary",
           collapsible = TRUE,
@@ -166,14 +169,15 @@ mod_estimate_ui <- function(id) {
       ),
       fluidRow(
         # summary and download box -----------------------------------------
-
         shinydashboard::box(
-          title = tagList(span(
-            strong("Summarize and download your GHG reduction estimate")
+          title = tagList(
+            span(
+              strong("Summarize and download your GHG reduction estimate")
+            ),
+            span(fct_helpBtn(
+              id = ns("summarizeHelp")
+            ))
           ),
-          span(fct_helpBtn(
-            id = ns("summarizeHelp")
-          ))),
           width = NULL,
           status = "primary",
           collapsible = TRUE,
@@ -195,8 +199,10 @@ mod_estimate_ui <- function(id) {
               title = "Download Report",
               icon = icon("file-export"),
               br(),
-              textInput(inputId = ns("name"),
-                        label = "Organization or Farm Name"),
+              textInput(
+                inputId = ns("name"),
+                label = "Organization or Farm Name"
+              ),
               textInput(inputId = ns("project"), "Project Name"),
               downloadButton(
                 outputId = ns("report"),
@@ -242,61 +248,67 @@ mod_estimate_server <- function(id) {
 
     # practice input
 
-    observeEvent(eventExpr = {
-      input$county
-      input$class
-    },
-    handlerExpr = {
-      choices <-
-        unique(comet_wa$practice[comet_wa$county %in% input$county &
-                                   comet_wa$class %in% input$class])
+    observeEvent(
+      eventExpr = {
+        input$county
+        input$class
+      },
+      handlerExpr = {
+        choices <-
+          unique(comet_wa$practice[comet_wa$county %in% input$county &
+            comet_wa$class %in% input$class])
 
-      shinyWidgets::updateVirtualSelect(
-        inputId = "practice",
-        choices = sort(choices),
-        selected = input$practice
-      )
-    })
+        shinyWidgets::updateVirtualSelect(
+          inputId = "practice",
+          choices = sort(choices),
+          selected = input$practice
+        )
+      }
+    )
 
     # irrigation input
 
-    observeEvent(eventExpr = {
-      input$class
-      input$practice
-    },
-    handlerExpr = {
-      choices <-
-        unique(comet_wa$irrigation[comet_wa$class %in% input$class &
-                                     comet_wa$practice %in% input$practice])
+    observeEvent(
+      eventExpr = {
+        input$class
+        input$practice
+      },
+      handlerExpr = {
+        choices <-
+          unique(comet_wa$irrigation[comet_wa$class %in% input$class &
+            comet_wa$practice %in% input$practice])
 
-      shinyWidgets::updateVirtualSelect(
-        inputId = "irrigation",
-        choices = sort(choices),
-        selected = input$irrigation
-      )
-    })
+        shinyWidgets::updateVirtualSelect(
+          inputId = "irrigation",
+          choices = sort(choices),
+          selected = input$irrigation
+        )
+      }
+    )
 
     # render implementation input
 
-    observeEvent(eventExpr = {
-      input$county
-      input$class
-      input$practice
-      input$irrigation
-    },
-    handlerExpr = {
-      choices <-
-        unique(comet_wa$implementation[comet_wa$county %in% input$county &
-                                         comet_wa$class %in% input$class &
-                                         comet_wa$practice %in% input$practice &
-                                         comet_wa$irrigation %in% input$irrigation])
+    observeEvent(
+      eventExpr = {
+        input$county
+        input$class
+        input$practice
+        input$irrigation
+      },
+      handlerExpr = {
+        choices <-
+          unique(comet_wa$implementation[comet_wa$county %in% input$county &
+            comet_wa$class %in% input$class &
+            comet_wa$practice %in% input$practice &
+            comet_wa$irrigation %in% input$irrigation])
 
-      shinyWidgets::updateVirtualSelect(
-        inputId = "implementation",
-        choices = sort(choices),
-        selected = input$implementation
-      )
-    })
+        shinyWidgets::updateVirtualSelect(
+          inputId = "implementation",
+          choices = sort(choices),
+          selected = input$implementation
+        )
+      }
+    )
 
     # give warning if user selects acres <1
 
@@ -454,8 +466,10 @@ mod_estimate_server <- function(id) {
     summary_county <- reactive({
       req(rv$df)
       summary_county <- rv$df |>
-        mutate(acres = as.numeric(acres),
-               total_ghg_co2 = as.numeric(total_ghg_co2)) |>
+        mutate(
+          acres = as.numeric(acres),
+          total_ghg_co2 = as.numeric(total_ghg_co2)
+        ) |>
         group_by(mlra, county) |>
         summarize(
           "unique_implementation" = dplyr::n_distinct(implementation),
@@ -564,8 +578,10 @@ mod_estimate_server <- function(id) {
           acres = acres,
           mean = total_ghg_co2
         ) |>
-        dplyr::mutate(acres = as.numeric(acres),
-                      mean = as.numeric(mean))
+        dplyr::mutate(
+          acres = as.numeric(acres),
+          mean = as.numeric(mean)
+        )
     })
 
     output$plot <- ggiraph::renderGirafe({
@@ -574,7 +590,7 @@ mod_estimate_server <- function(id) {
       }
 
       if (dplyr::n_distinct(filtered_plot()$implementation) > 10 ||
-          nrow(filtered_plot()) > 30) {
+        nrow(filtered_plot()) > 30) {
         validate("The graph is too cluttered. Please remove some selections.")
       }
 
@@ -591,50 +607,64 @@ mod_estimate_server <- function(id) {
         # Copy the report file to a temporary directory before processing it,
         # in case we don't have write permissions to the current working dir
         # (which can happen when deployed).
-        withProgress(message = "Preparing your report.",
-                     detail = " This could take a while...",
-                     {
-                       tempReport <- file.path(tempdir(), "WaCSE_Report.Rmd")
-                       file.copy(
-                         normalizePath("inst/app/www/rmd/WaCSE_Report.Rmd"),
-                         tempReport,
-                         overwrite = TRUE
-                       )
-                       fct_ghgEq <-
-                         file.path(tempdir(), "fct_ghgEq.R")
-                       file.copy(normalizePath("R/fct_ghgEq.R"),
-                                 fct_ghgEq,
-                                 overwrite = TRUE)
+        withProgress(
+          message = "Preparing your report.",
+          detail = " This could take a few minutes.",
+          {
+            tempReport <- file.path(tempdir(), "WaCSE_Report.Rmd")
 
-                       incProgress(0.1)
+            file.copy(
+              normalizePath("inst/app/www/rmd/WaCSE_Report.Rmd"),
+              tempReport,
+              overwrite = TRUE
+            )
 
-                       # Set up parameters to pass to Rmd document
-                       params <- list(
-                         name = input$name,
-                         project = input$project,
-                         data = rv$df,
-                         summary = summary_county(),
-                         plot = fct_plot(
-                           filtered_plot(),
-                           type = "download",
-                           error_bar = FALSE
-                         )
-                       )
+            fct_ghgEq <- file.path(tempdir(), "fct_ghgEq.R")
 
-                       incProgress(0.5)
+            file.copy(normalizePath("R/fct_ghgEq.R"),
+              fct_ghgEq,
+              overwrite = TRUE
+            )
 
-                       # Knit the document, passing in the `params` list, and eval it in a
-                       # child of the global environment (this isolates the code in the
-                       # document from the code in this app).
-                       rmarkdown::render(
-                         tempReport,
-                         output_file = file,
-                         params = params,
-                         envir = new.env(parent = globalenv())
-                       )
+            plot <- fct_plot(
+              filtered_plot(),
+              type = "download",
+              error_bar = FALSE
+            )
 
-                       incProgress(1)
-                     })
+            plot_path <- file.path(tempdir(), "plot.png")
+
+            ggplot2::ggsave(plot_path,
+              dpi = 300, bg = "white",
+              height = 3, width = 8
+            )
+
+            incProgress(0.1)
+
+            # Set up parameters to pass to Rmd document
+            params <- list(
+              name = input$name,
+              project = input$project,
+              data = rv$df,
+              summary = summary_county(),
+              plot_path = plot_path
+            )
+
+            incProgress(0.5)
+
+            # Knit the document, passing in the `params` list, and eval it in a
+            # child of the global environment (this isolates the code in the
+            # document from the code in this app).
+            rmarkdown::render(
+              tempReport,
+              output_file = file,
+              params = params,
+              envir = new.env(parent = globalenv())
+            )
+
+            incProgress(1)
+          }
+        )
       }
     )
   })
