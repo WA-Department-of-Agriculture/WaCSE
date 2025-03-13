@@ -35,12 +35,12 @@ WaCSE::run_app()
 ## Data references
 
 Amy Swan, Mark Easter, Adam Chambers, Kevin Brown, Stephen A. Williams,
-Jeff Creque, John Wick, Keith Paustian. 2022. COMET-Planner Dataset,
-Version 3.0, Build 1, and COMET-Planner Report: Carbon and Greenhouse
+Jeff Creque, John Wick, Keith Paustian. 2024. COMET-Planner Dataset,
+Version 3.1, Build 2, and COMET-Planner Report: Carbon and Greenhouse
 Gas Evaluation for NRCS Conservation Practice Planning. A Companion
 report to
 <a href="http://www.comet-planner.com" target = "_blank">COMET-Planner.</a>
-<a href="https://storage.googleapis.com/comet_public_directory/planner50states/pdfs/COMET-PlannerReport.pdf" target = "_blank">COMET-Planner
+<a href="https://storage.googleapis.com/comet-planner-public-assets/fiftyStates/pdfs/COMET-PlannerReport.pdf" target = "_blank">COMET-Planner
 Report.</a>
 
 EPA. Greenhouse Gases Emissions Equivalencies Calculator. U.S.
@@ -52,7 +52,7 @@ Environmental Protection Agency. 2022.
 When using WaCSE, we appreciate if you include a reference in your
 publications. To cite the web application, please use:
 
-> Ryan JN, Michel L, Gelardi DL. 2022. WaCSE: A shiny web app for
+> Ryan JN, Michel L, Gelardi DL. 2025. WaCSE: A shiny web app for
 > comparing climate benefits of agricultural conservation practices.
 > Natural Resources Assessment Section, Washington Department of
 > Agriculture.

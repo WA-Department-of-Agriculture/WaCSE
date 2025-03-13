@@ -71,13 +71,13 @@ Emission reduction coefficients were calculated by COMET-Farm, which uses USDA g
 
 ###  What are major land resource areas? {.unlisted .unnumbered}
 
-Major Land Resource Areas (MLRA) are defined by the NRCS as regions with similar physiography, climate, soils, biological resources, and land use (USDA-NRCS 2006). The GHG emission reduction estimates were calculated at the spatial scale of these multi-county MLRAs (Swan et al. 2022).
+Major Land Resource Areas (MLRA) are defined by the NRCS as regions with similar physiography, climate, soils, biological resources, and land use (USDA-NRCS 2006). The GHG emission reduction estimates were calculated at the spatial scale of these multi-county MLRAs (Swan et al. 2024).
 
 Counties within the same MLRA will have the same estimate, unless the county falls within multiple MLRAs. Visit WSDA's <a href= "https://nras.maps.arcgis.com/apps/instant/basic/index.html?appid=4233536b08044da7a9bc32c7040418be" target = "_blank">online map</a> to identify which county is in which MLRA.
 
 ### Where do the potential GHG emission reduction values come from? {.unlisted .unnumbered}
 
-Values were determined by the United States Department of Agriculture's Natural Resources Conservation Service (NRCS). NRCS reviewed field studies and applied a sample-based metamodeling approach to calculate potential GHG emission reduction coefficients. These values are derived from county-rectified major land resource areas (Swan et al. 2022). 
+Values were determined by the United States Department of Agriculture's Natural Resources Conservation Service (NRCS). NRCS reviewed field studies and applied a sample-based metamodeling approach to calculate potential GHG emission reduction coefficients. These values are derived from county-rectified major land resource areas (Swan et al. 2024). 
 
 NRCS and Colorado State University developed two tools to estimate impacts on GHG and soil carbon from conservation practices.
 
@@ -91,7 +91,7 @@ WaCSE uses the COMET-Planner dataset and provides identical estimates. With WaCS
 
 ### What do negative values mean? {.unlisted .unnumbered}
 
-Negative values indicate a loss of carbon or increased emissions of GHG (Swan et al. 2022).   
+Negative values indicate a loss of carbon or increased emissions of GHG (Swan et al. 2024).   
 
 ### Where can I find more information about the NRCS conservation practices? {.unlisted .unnumbered}
 
@@ -99,7 +99,7 @@ For technical guides, review the <a href="https://www.nrcs.usda.gov/resources/gu
 
 ### References {.unlisted .unnumbered}
 
-Amy Swan, Mark Easter, Adam Chambers, Kevin Brown, Stephen A. Williams, Jeff Creque, John Wick, Keith Paustian. 2022. COMET-Planner Dataset, Version 3.0, Build 1, and COMET-Planner Report: Carbon and Greenhouse Gas Evaluation for NRCS Conservation Practice Planning. A Companion report to <a href="http://www.comet-planner.com" target = "_blank">COMET-Planner.</a> <a href="https://storage.googleapis.com/comet_public_directory/planner50states/pdfs/COMET-PlannerReport.pdf" target = "_blank">COMET-Planner Report.</a>
+Amy Swan, Mark Easter, Adam Chambers, Kevin Brown, Stephen A. Williams, Jeff Creque, John Wick, Keith Paustian. 2024. COMET-Planner Dataset, Version 3.1, Build 2, and COMET-Planner Report: Carbon and Greenhouse Gas Evaluation for NRCS Conservation Practice Planning. A Companion report to <a href="http://www.comet-planner.com" target = "_blank">COMET-Planner.</a> <a href="https://storage.googleapis.com/comet-planner-public-assets/fiftyStates/pdfs/COMET-PlannerReport.pdf" target = "_blank">COMET-Planner Report.</a>
 
 USDA-NRCS. 2006. Land Resource Regions and Major Land Resource Areas of the United States, the Caribbean, and the Pacific Basin. USDA, Natural Resource Conservation Service, Handbook 296.
 
@@ -107,7 +107,7 @@ USDA-NRCS. 2006. Land Resource Regions and Major Land Resource Areas of the Unit
 
 When using WaCSE, we appreciate if you include a reference in your publications. To cite the web application, please use:
 
->Ryan JN, Michel L, Gelardi DL. 2022. WaCSE: A shiny web app for comparing climate benefits of agricultural conservation practices. Natural Resources Assessment Section, Washington Department of Agriculture. <a href = "https://github.com/WA-Department-of-Agriculture/WaCSE" target = "_blank">https://github.com/WA-Department-of-Agriculture/WaCSE.</a>
+>Ryan JN, Michel L, Gelardi DL. 2025. WaCSE: A shiny web app for comparing climate benefits of agricultural conservation practices. Natural Resources Assessment Section, Washington Department of Agriculture. <a href = "https://github.com/WA-Department-of-Agriculture/WaCSE" target = "_blank">https://github.com/WA-Department-of-Agriculture/WaCSE.</a>
 
 ## Source Code and Feedback {.unlisted .unnumbered}
 
@@ -138,7 +138,7 @@ If you have feedback or would like to report a bug, please <a href = "https://gi
 
 ```{r summary}
 
-summary_df <- params$summary %>%
+summary_df <- params$summary |>
   janitor::adorn_totals(fill = "", name = "Totals")
 
 
@@ -157,18 +157,18 @@ kbl_summary <- kbl(summary_df,
   format.args = list(big.mark = ",", scientific = FALSE, digits = 2),
   booktabs = TRUE,
   longtable = TRUE
-) %>%
+) |>
   kable_styling(
     position = "left",
     latex_options = c("HOLD_position", "repeat_header", "striped")
-  ) %>%
+  ) |>
   row_spec(
     row = 0,
     bold = TRUE
-  ) %>%
+  ) |>
   row_spec(dim(summary_df)[1] - 1,
     hline_after = TRUE
-  ) %>%
+  ) |>
   row_spec(dim(summary_df)[1],
     bold = TRUE
   )
@@ -185,8 +185,8 @@ kbl_summary
 
 options(knitr.kable.NA = "Not estimated")
 
-df <- params$data %>%
-  dplyr::select(-c(mlra, class)) %>%
+df <- params$data |>
+  dplyr::select(-c(mlra, class)) |>
   janitor::adorn_totals(fill = "", name = "Totals")
 
 kbl_all <- kbl(df,
@@ -207,28 +207,28 @@ kbl_all <- kbl(df,
   format.args = list(big.mark = ",", scientific = FALSE, digits = 2),
   booktabs = TRUE,
   longtable = TRUE
-) %>%
+) |>
   add_header_above(c(" " = 4, "(Metric tonnes CO2eq per year)" = 4),
     italic = TRUE
-  ) %>%
+  ) |>
   kable_styling(
     position = "left",
     latex_options = c("HOLD_position", "repeat_header", "striped")
-  ) %>%
+  ) |>
   row_spec(
     row = 0,
     bold = TRUE
-  ) %>%
+  ) |>
   row_spec(dim(df)[1] - 1,
     hline_after = TRUE
-  ) %>%
+  ) |>
   row_spec(dim(df)[1],
     bold = TRUE
-  ) %>%
+  ) |>
   column_spec(
     column = c(1, 4:8),
     width = "0.8in"
-  ) %>%
+  ) |>
   column_spec(
     column = 2:3,
     width = "1.8in"
@@ -253,10 +253,10 @@ The values shown here are your total estimated esmissions reductions converted i
 
 ```{r get total GHG estimate}
 
-totalGHG <- params$data %>%
-  select(totalGHG) %>%
-  as.vector() %>%
-  unlist() %>% 
+totalGHG <- params$data |>
+  select(totalGHG) |>
+  as.vector() |>
+  unlist() |> 
   sum()
 ```
 
@@ -285,7 +285,7 @@ description <- c(
   "acres of US forests preserved from conversion to cropland in one year"
 )
 
-value <- lapply(type, fct_ghgEq, CO2eq = totalGHG) %>% unlist()
+value <- lapply(type, fct_ghgEq, CO2eq = totalGHG) |> unlist()
 
 df <- data.frame(value, description)
 
@@ -295,8 +295,8 @@ kbl_equivalencies <- kbl(df,
   align = "rl",
   booktabs = TRUE,
   col.names = NULL
-) %>%
-  kable_styling(position = "left", latex_options = "HOLD_position") %>%
+) |>
+  kable_styling(position = "left", latex_options = "HOLD_position") |>
   pack_rows(
     index = c(
       "This is equivalent to CO2 emissions from:" = 3,
@@ -305,19 +305,19 @@ kbl_equivalencies <- kbl(df,
     ),
     hline_before = TRUE,
     hline_after = TRUE
-  ) %>%
+  ) |>
   column_spec(
     column = 1,
     width = "2.2in",
     bold = TRUE,
     latex_valign = "m"
-  ) %>%
+  ) |>
   column_spec(
     column = 2,
     width = "5in",
     latex_valign = "m"
-  ) %>%
-  sub("\\\\toprule", "", .) %>%
+  ) |>
+  sub("\\\\toprule", "", .) |>
   sub("\\\\bottomrule", "", .)
 
 kbl_equivalencies
