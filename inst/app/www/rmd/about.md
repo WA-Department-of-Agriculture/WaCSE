@@ -86,7 +86,7 @@ publications. To cite the web application, please use:
 
 > Ryan JN, Michel L, Gelardi DL. 2025. WaCSE: A shiny web app for
 > comparing climate benefits of agricultural conservation practices.
-> Natural Resources Assessment Section, Washington Department of
+> Natural Resources & Agricultural Sciences, Washington Department of
 > Agriculture.
 > <a href = "https://github.com/WA-Department-of-Agriculture/WaCSE" target = "_blank"><https://github.com/WA-Department-of-Agriculture/WaCSE>.</a>
 

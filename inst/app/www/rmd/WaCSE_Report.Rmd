@@ -106,7 +106,7 @@ USDA-NRCS. 2006. Land Resource Regions and Major Land Resource Areas of the Unit
 
 When using WaCSE, we appreciate if you include a reference in your publications. To cite the web application, please use:
 
-> Ryan JN, Michel L, Gelardi DL. 2025. WaCSE: A shiny web app for comparing climate benefits of agricultural conservation practices. Natural Resources Assessment Section, Washington Department of Agriculture. [https://github.com/WA-Department-of-Agriculture/WaCSE](https://github.com/WA-Department-of-Agriculture/WaCSE){.uri target="_blank"}.
+> Ryan JN, Michel L, Gelardi DL. 2025. WaCSE: A shiny web app for comparing climate benefits of agricultural conservation practices. Natural Resources & Agricultural Sciences, Washington Department of Agriculture. [https://github.com/WA-Department-of-Agriculture/WaCSE](https://github.com/WA-Department-of-Agriculture/WaCSE){.uri target="_blank"}.
 
 ## Source Code and Feedback {.unlisted .unnumbered}
 
