@@ -64,6 +64,17 @@ golem_add_external_resources <- function() {
 
   source("R/globals.R")
 
+  # Register Source Sans Pro font
+  if (!ggiraph::font_family_exists("Source Sans Pro")) {
+    systemfonts::register_font(
+      name = "Source Sans Pro",
+      plain = list("inst/app/www/fonts/source-sans-pro-v21-latin-regular.woff", 0),
+      bold = list("inst/app/www/fonts/source-sans-pro-v21-latin-700.woff", 0),
+      italic = list("inst/app/www/fonts/source-sans-pro-v21-latin-italic.woff", 0),
+      bolditalic = list("inst/app/www/fonts/source-sans-pro-v21-latin-700italic.woff", 0)
+    )
+  }
+
   tags$head(
     favicon(),
     favicon(ext = "png"),
@@ -98,12 +109,12 @@ golem_add_external_resources <- function() {
     includeHTML("inst/app/www/google-analytics.html"),
     # warn user that changes are not saved when closing the window.
     # unfortunately, custom messages are no longer supported by modern browsers.
-    tags$script(HTML("
-                // Enable navigation prompt
-                window.onbeforeunload = function() {
-                  return 'Did you download your data and reports?';
-                };
-                "))
+    # tags$script(HTML("
+    #             // Enable navigation prompt
+    #             window.onbeforeunload = function() {
+    #               return 'Did you download your data and reports?';
+    #             };
+    #             "))
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert()
   )

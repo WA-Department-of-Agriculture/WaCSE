@@ -1,3 +1,7 @@
+# WaCSE 0.9.2
+
+* Update to 2024 COMET-Planner data
+
 # WaCSE 0.9.1
 
 * Update to 2022 COMET-Planner data.

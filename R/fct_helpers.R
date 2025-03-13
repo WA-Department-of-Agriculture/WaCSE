@@ -1,25 +1,3 @@
-#' register font
-#'
-
-# gfonts::setup_font(
-#   id = "source-sans-pro",
-#   output_dir = "inst/app/www",
-#   variants = c("regular", "italic", "700", "700italic")
-# )
-#
-# gfonts::use_font(id = "source-sans-pro",
-#                  css_path = "inst/app/www/css/source-sans-pro.css",
-#                  selector = ".dummy-selector")
-#
-# if (!ggiraph::font_family_exists("Source Sans Pro")) {
-#   systemfonts::register_font(name = "Source Sans Pro",
-#                 plain = list("inst/app/www/fonts/source-sans-pro-v21-latin-regular.woff", 0),
-#                 bold = list("inst/app/www/fonts/source-sans-pro-v21-latin-700.woff", 0),
-#                 italic = list("inst/app/www/fonts/source-sans-pro-v21-latin-italic.woff", 0),
-#                 bolditalic = list("inst/app/www/fonts/source-sans-pro-v21-latin-700italic.woff", 0)
-#   )
-# }
-
 #' theme
 #' @description define theme for shiny app
 #' @noRd
@@ -59,7 +37,7 @@ fct_wrap <- function(x, width) {
 #' @noRd
 
 fct_tableFilter <- function(data) {
-  data <- data %>%
+  data <- data |>
     select(
       "mlra",
       "county",
@@ -68,7 +46,7 @@ fct_tableFilter <- function(data) {
       "implementation",
       "ghg_type",
       "mean"
-    ) %>%
+    ) |>
     tidyr::pivot_wider(
       names_from = ghg_type,
       values_from = mean

@@ -11,7 +11,7 @@ those from transportation.
 <a href="https://comet-farm.com/" target="_blank"> COMET-Farm</a>, which
 uses USDA greenhouse gas inventory methods. More information on
 quantification methods can be found in the
-<a href="https://storage.googleapis.com/comet_public_directory/planner50states/pdfs/COMET-PlannerReport.pdf" target="_blank">
+<a href="https://storage.googleapis.com/comet-planner-public-assets/fiftyStates/pdfs/COMET-PlannerReport.pdf" target="_blank">
 COMET-Planner Report</a>
 
 **Minimize this box by clicking the Minus button in the top right

@@ -10,6 +10,7 @@ box::use(
     left_join,
     relocate,
     bind_cols,
+    reframe,
     summarize
   ],
   tidyr[extract, replace_na, pivot_longer, pivot_wider],
@@ -22,7 +23,7 @@ box::use(
 # import -999 values as na which represent "not estimated"
 # filter out multiple CPS implementations since COMET team confirmed they are additive.
 comet_wa <- vroom(
-  "data-raw/US_COMET-Planner_data.csv",
+  "data-raw/US_COMET-Planner.csv",
   na = "-999"
 ) |>
   subset(state == "WA" & cps_name != "Multiple Conservation Practices") |>
@@ -150,9 +151,9 @@ comet_wa <- comet_wa_long |>
 
 fct_error <- function(data) {
   errors <- data |>
-    summarize(
+    reframe(
       lower = mean - sterr,
-      upper = mean + sterr
+      upper = mean + sterr,
     )
 
   bind_cols(data, errors)
@@ -167,3 +168,22 @@ write.csv(comet_tags, "data-raw/comet_tags.csv")
 
 use_data(comet_wa, overwrite = TRUE)
 use_data(comet_tags, overwrite = TRUE)
+
+# summarize practices ------------------------------------------------------
+
+practices <- comet_wa |>
+  dplyr::filter(ghg_type == "total_ghg_co2") |>
+  dplyr::select(county, class, practice,
+    implementation,
+    total_ghg_co2 = mean
+  ) |>
+  dplyr::mutate(
+    cps = stringr::str_extract(practice, "(\\d)+"),
+    .after = practice
+  )
+
+write.csv(practices,
+  "data-raw/wacse-practices.csv",
+  na = "",
+  row.names = FALSE
+)

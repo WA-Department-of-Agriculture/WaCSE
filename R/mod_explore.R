@@ -31,10 +31,12 @@ mod_explore_ui <- function(id) {
       # filter box --------------------------------------------------------------
 
       shinydashboard::box(
-        title = tagList(span(strong("Filter the data")),
-                        span(fct_helpBtn(
-                          id = ns("filterHelp")
-                        ))),
+        title = tagList(
+          span(strong("Filter the data")),
+          span(fct_helpBtn(
+            id = ns("filterHelp")
+          ))
+        ),
         width = NULL,
         status = "primary",
         collapsible = TRUE,
@@ -119,10 +121,12 @@ mod_explore_ui <- function(id) {
       # explore the data box ----------------------------------------------------
 
       shinydashboard::box(
-        title = tagList(span(strong("Explore the data")),
-                        span(fct_helpBtn(
-                          ns("exploreHelp")
-                        ))),
+        title = tagList(
+          span(strong("Explore the data")),
+          span(fct_helpBtn(
+            ns("exploreHelp")
+          ))
+        ),
         width = NULL,
         status = "primary",
         collapsible = TRUE,
@@ -179,62 +183,68 @@ mod_explore_server <- function(id) {
 
     # practice input
 
-    observeEvent(eventExpr = {
-      input$county
-      input$class
-    },
-    handlerExpr = {
-      choices <-
-        unique(comet_wa$practice[comet_wa$county %in% input$county &
-                                   comet_wa$class %in% input$class])
+    observeEvent(
+      eventExpr = {
+        input$county
+        input$class
+      },
+      handlerExpr = {
+        choices <-
+          unique(comet_wa$practice[comet_wa$county %in% input$county &
+            comet_wa$class %in% input$class])
 
-      shinyWidgets::updateVirtualSelect(
-        inputId = "practice",
-        choices = sort(choices),
-        selected = input$practice
-      )
-    })
+        shinyWidgets::updateVirtualSelect(
+          inputId = "practice",
+          choices = sort(choices),
+          selected = input$practice
+        )
+      }
+    )
 
     # land use input
 
-    observeEvent(eventExpr = {
-      input$class
-      input$practice
-    },
-    handlerExpr = {
-      choices <- unique(comet_wa$current_land_use[comet_wa$class %in% input$class &
-                                                    comet_wa$practice %in% input$practice])
+    observeEvent(
+      eventExpr = {
+        input$class
+        input$practice
+      },
+      handlerExpr = {
+        choices <- unique(comet_wa$current_land_use[comet_wa$class %in% input$class &
+          comet_wa$practice %in% input$practice])
 
-      shinyWidgets::updateVirtualSelect(
-        inputId = "land_use",
-        choices = sort(choices),
-        selected = input$land_use
-      )
-    })
+        shinyWidgets::updateVirtualSelect(
+          inputId = "land_use",
+          choices = sort(choices),
+          selected = input$land_use
+        )
+      }
+    )
 
     # irrigation input
 
-    observeEvent(eventExpr = {
-      input$class
-      input$practice
-    },
-    handlerExpr = {
-      choices <- unique(comet_wa$irrigation[comet_wa$class %in% input$class &
-                                              comet_wa$practice %in% input$practice])
+    observeEvent(
+      eventExpr = {
+        input$class
+        input$practice
+      },
+      handlerExpr = {
+        choices <- unique(comet_wa$irrigation[comet_wa$class %in% input$class &
+          comet_wa$practice %in% input$practice])
 
-      shinyWidgets::updateVirtualSelect(
-        inputId = "irrigation",
-        choices = sort(choices),
-        selected = input$irrigation
-      )
-    })
+        shinyWidgets::updateVirtualSelect(
+          inputId = "irrigation",
+          choices = sort(choices),
+          selected = input$irrigation
+        )
+      }
+    )
 
     # nutrient practice
 
     output$nutrient_practice <- renderUI({
       req("Nutrient Management (CPS 590)" %in% input$practice)
       choices <- unique(comet_wa$nutrient_practice[comet_wa$class %in% input$class &
-                                                     comet_wa$practice %in% input$practice])
+        comet_wa$practice %in% input$practice])
 
       tagList(
         shinyWidgets::virtualSelectInput(
@@ -269,25 +279,27 @@ mod_explore_server <- function(id) {
     # render df for proxy -----------------------------------------------------
 
     df <- data.frame(
-      "MLRA" = character(),
-      "County" = character(),
-      "Conservation Class" = character(),
-      "Conservation Practice" = character(),
-      "Practice Implementation" = character(),
-      "Carbon Dioxide" = numeric(),
-      "Nitrous Oxide" = numeric(),
-      "Methane" = numeric(),
-      "Total Greenhouse Gases" = numeric()
+      "mlra" = character(),
+      "county" = character(),
+      "class" = character(),
+      "practice" = character(),
+      "implementation" = character(),
+      "co2" = numeric(),
+      "n2o" = numeric(),
+      "ch4" = numeric(),
+      "total_ghg_co2" = numeric()
     )
 
     # render reactive df ------------------------------------------------------
 
     filtered_df <- reactive({
-      req(input$county,
-          input$class,
-          input$practice,
-          input$land_use,
-          input$irrigation)
+      req(
+        input$county,
+        input$class,
+        input$practice,
+        input$land_use,
+        input$irrigation
+      )
       if (!("Nutrient Management (CPS 590)" %in% input$practice)) {
         filtered_df <- subset(
           comet_wa,
@@ -334,7 +346,7 @@ mod_explore_server <- function(id) {
 
     explore_plot <- reactive({
       if (dplyr::n_distinct(filtered_df()$implementation) > 12 ||
-          nrow(filtered_df()) > 100) {
+        nrow(filtered_df()) > 100) {
         validate("The graph is too cluttered. Please remove some selections.")
       }
       explore_plot <- filtered_df() %>%
@@ -350,9 +362,11 @@ mod_explore_server <- function(id) {
     # ArcGIS MLRA iframe
 
     output$mlra_map <- renderUI({
-      tags$iframe(src = "https://nras.maps.arcgis.com/apps/instant/basic/index.html?appid=4233536b08044da7a9bc32c7040418be",
-                  height = "500px",
-                  width = "100%")
+      tags$iframe(
+        src = "https://nras.maps.arcgis.com/apps/instant/basic/index.html?appid=4233536b08044da7a9bc32c7040418be",
+        height = "500px",
+        width = "100%"
+      )
     })
   })
 }

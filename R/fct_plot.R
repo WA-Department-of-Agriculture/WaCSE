@@ -29,7 +29,11 @@ fct_plot <- function(data, type, error_bar) {
 
     labels <- scales::label_number(accuracy = 0.001, big.mark = ",")
 
-    font <- "Source Sans Pro"
+    if (ggiraph::font_family_exists("Source Sans Pro")) {
+      font <- "Source Sans Pro"
+    } else {
+      font <- "sans"
+    }
   }
 
   if (type == "estimate") {
@@ -49,7 +53,11 @@ fct_plot <- function(data, type, error_bar) {
 
     labels <- scales::label_number(accuracy = 1, big.mark = ",")
 
-    font <- "Source Sans Pro"
+    if (ggiraph::font_family_exists("Source Sans Pro")) {
+      font <- "Source Sans Pro"
+    } else {
+      font <- "sans"
+    }
   }
 
   if (type == "download") {
@@ -70,7 +78,11 @@ fct_plot <- function(data, type, error_bar) {
 
     labels <- scales::label_number(accuracy = , big.mark = ",")
 
-    font <- "Arial"
+    if (ggiraph::font_family_exists("Arial")) {
+      font <- "Arial"
+    } else {
+      font <- "sans"
+    }
   }
 
   # plot data
@@ -84,11 +96,12 @@ fct_plot <- function(data, type, error_bar) {
       )
     ) +
     coord_flip() +
-    ggiraph::geom_col_interactive(aes(
-      tooltip = tt
-    ),
-    position = position_dodge2(reverse = TRUE),
-    na.rm = TRUE
+    ggiraph::geom_col_interactive(
+      aes(
+        tooltip = tt
+      ),
+      position = position_dodge2(reverse = TRUE),
+      na.rm = TRUE
     ) +
     geom_hline(yintercept = 0, linetype = "dashed") +
     scale_fill_viridis_d(option = "F", end = 0.9) +
@@ -131,44 +144,47 @@ fct_plot <- function(data, type, error_bar) {
 
   if (error_bar == TRUE) {
     plot <- plot +
-      geom_errorbar(aes(
-        ymin = lower,
-        ymax = upper
-      ),
-      position = position_dodge2(
-        width = 0.01,
-        padding = 0.1,
-        reverse = TRUE
-      )
+      geom_errorbar(
+        aes(
+          ymin = lower,
+          ymax = upper
+        ),
+        position = position_dodge2(
+          width = 0.01,
+          padding = 0.1,
+          reverse = TRUE
+        )
       ) +
-      shadowtext::geom_shadowtext(aes(
-        y = ifelse(!is.na(upper), upper, mean),
-        label = county
-      ),
-      hjust = -0.1,
-      color = "black",
-      family = "Arial",
-      fontface = "bold",
-      bg.color = "white",
-      bg.r = 0.1,
-      position = position_dodge2(width = 0.9, reverse = TRUE),
-      na.rm = TRUE
+      shadowtext::geom_shadowtext(
+        aes(
+          y = ifelse(!is.na(upper), upper, mean),
+          label = county
+        ),
+        hjust = -0.1,
+        color = "black",
+        family = font,
+        fontface = "bold",
+        bg.color = "white",
+        bg.r = 0.1,
+        position = position_dodge2(width = 0.9, reverse = TRUE),
+        na.rm = TRUE
       )
   }
 
   if (error_bar == FALSE) {
     plot <- plot +
-      shadowtext::geom_shadowtext(aes(
-        label = county
-      ),
-      hjust = -0.05,
-      color = "black",
-      family = "Arial",
-      fontface = "bold",
-      bg.color = "white",
-      bg.r = 0.1,
-      position = position_dodge2(width = 0.9, reverse = TRUE),
-      na.rm = TRUE
+      shadowtext::geom_shadowtext(
+        aes(
+          label = county
+        ),
+        hjust = -0.05,
+        color = "black",
+        family = font,
+        fontface = "bold",
+        bg.color = "white",
+        bg.r = 0.1,
+        position = position_dodge2(width = 0.9, reverse = TRUE),
+        na.rm = TRUE
       )
   }
 

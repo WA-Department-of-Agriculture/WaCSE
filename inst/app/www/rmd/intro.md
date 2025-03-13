@@ -17,16 +17,16 @@ diverse counties.
 
 **What you can do with WaCSE:**
 
--   **Explore the data:** Compare the greenhouse gas emission reduction
-    estimates between counties and practices.
+- **Explore the data:** Compare the greenhouse gas emission reduction
+  estimates between counties and practices.
 
--   **Calculate your estimate:** Input your county, practice, and
-    acreage to build a downloadable report of your estimated greenhouse
-    gas mitigation potential.
+- **Calculate your estimate:** Input your county, practice, and acreage
+  to build a downloadable report of your estimated greenhouse gas
+  mitigation potential.
 
--   **Understand your impact:** Convert your reduced emissions to the
-    equivalent from home energy use, consuming gasoline, charging
-    smartphones, and more!
+- **Understand your impact:** Convert your reduced emissions to the
+  equivalent from home energy use, consuming gasoline, charging
+  smartphones, and more!
 
 **Look for
 <img src="img/question.png" height="30" alt="Question mark icon" /> for
@@ -40,4 +40,4 @@ allowing the session to time out. Sessions time out after 10 minutes of
 inactivity.</b></span>
 
 *Data source: <a href="http://comet-planner.com/" target="_blank">NRCS
-COMET-Planner (Swan et al. 2022) </a>*
+COMET-Planner (Swan et al. 2024) </a>*

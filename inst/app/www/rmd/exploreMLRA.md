@@ -3,7 +3,7 @@
 with similar physiography, climate, soils, biological resources, and
 land use (USDA-NRCS 2006). The GHG emission reduction estimates were
 calculated at the spatial scale of these multi-county MLRAs (Swan et
-al. 2022).
+al. 2024).
 
 **Use this map to identify which county is in which MLRA. Counties
 within the same MLRA will have the same estimate, unless the county
