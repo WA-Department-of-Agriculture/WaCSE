@@ -154,7 +154,6 @@ fct_error <- function(data) {
     reframe(
       lower = mean - sterr,
       upper = mean + sterr,
-
     )
 
   bind_cols(data, errors)
@@ -169,3 +168,22 @@ write.csv(comet_tags, "data-raw/comet_tags.csv")
 
 use_data(comet_wa, overwrite = TRUE)
 use_data(comet_tags, overwrite = TRUE)
+
+# summarize practices ------------------------------------------------------
+
+practices <- comet_wa |>
+  dplyr::filter(ghg_type == "total_ghg_co2") |>
+  dplyr::select(county, class, practice,
+    implementation,
+    total_ghg_co2 = mean
+  ) |>
+  dplyr::mutate(
+    cps = stringr::str_extract(practice, "(\\d)+"),
+    .after = practice
+  )
+
+write.csv(practices,
+  "data-raw/wacse-practices.csv",
+  na = "",
+  row.names = FALSE
+)
