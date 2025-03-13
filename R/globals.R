@@ -8,7 +8,7 @@ utils::globalVariables(unique(c(
   "ghg_type",
   # mod_estimate_server :
   "acres", "comet_tags", "comet_wa", "county", "current_land_use",
-  "implementation", "irrigation", "mlra", "practice", "totalGHG",
+  "implementation", "irrigation", "mlra", "practice", "total_ghg_co2",
   # mod_estimate_ui:
   "comet_tags", "comet_wa",
   # mod_explore_server :

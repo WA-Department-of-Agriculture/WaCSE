@@ -24,7 +24,8 @@ Imports:
     pkgload,
     rmarkdown,
     shiny (>= 1.7.1),
-    shinydashboard
+    shinydashboard,
+    systemfonts
 Suggests: 
     bslib,
     bsplus,

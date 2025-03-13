@@ -1,6 +1,6 @@
 #' Greenhouse gas emission reduction coefficients
 #'
-#' A subset of the NRCS Comet-Planner dataset (Version 3.1, Build 2, Released
+#' A subset of the NRCS COMET-Planner dataset (Version 3.1, Build 2, Released
 #' Dec 10 2024) containing the coefficients of greenhouse gas emissions and soil
 #' carbon for Washington State.
 #'

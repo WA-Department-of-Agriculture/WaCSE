@@ -42,7 +42,7 @@ A data frame with 17584 rows and 14 variables:
 comet_wa
 }
 \description{
-A subset of the NRCS Comet-Planner dataset (Version 3.1, Build 2, Released
+A subset of the NRCS COMET-Planner dataset (Version 3.1, Build 2, Released
 Dec 10 2024) containing the coefficients of greenhouse gas emissions and soil
 carbon for Washington State.
 }
