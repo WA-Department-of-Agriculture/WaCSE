@@ -6,33 +6,43 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<center><h2> 
+<center><h2>
 
-Welcome to WaCSE 
+⚠️ WaCSE Deprecated ⚠️
 
 </center></h2>
 
-<center>
+As of October 2025, this tool is no longer maintained and may produce outdated CO~2~eq estimates.
 
-An interactive decision-support tool for comparing climate benefits of different agricultural conservation practices across Washington's diverse counties.
+Please use [COMET-Planner](http://comet-planner.com/) instead for accurate and up-to-date estimates.
 
-</center>
+<!-- <center><h2>  -->
 
-<hr>
+<!-- Welcome to WaCSE  -->
 
-**What you can do with WaCSE:**
+<!-- </center></h2> -->
 
-- **Explore the data:** Compare the greenhouse gas emission reduction estimates between counties and practices.
+<!-- <center> -->
 
-- **Calculate your estimate:** Input your county, practice, and acreage to build a downloadable report of your estimated greenhouse gas mitigation potential.
+<!-- An interactive decision-support tool for comparing climate benefits of different agricultural conservation practices across Washington's diverse counties. -->
 
-- **Understand your impact:** Convert your reduced emissions to the equivalent from home energy use, consuming gasoline, charging smartphones, and more!
+<!-- </center> -->
 
-**Look for ![Question mark icon](img/question.png){height=30} for guidance throughout this web application.** 
+<!-- <hr> -->
 
----
+<!-- **What you can do with WaCSE:** -->
 
-<span style="color: crimson;"><b>Data cannot be saved on this website. Please download your data and report before closing the window or allowing the session to time out. Sessions time out after 10 minutes of inactivity.</b></span>
+<!-- - **Explore the data:** Compare the greenhouse gas emission reduction estimates between counties and practices. -->
 
-*Data source: <a href="http://comet-planner.com/" target="_blank">NRCS COMET-Planner (Swan et al. 2024) </a>*
+<!-- - **Calculate your estimate:** Input your county, practice, and acreage to build a downloadable report of your estimated greenhouse gas mitigation potential. -->
+
+<!-- - **Understand your impact:** Convert your reduced emissions to the equivalent from home energy use, consuming gasoline, charging smartphones, and more! -->
+
+<!-- **Look for ![Question mark icon](img/question.png){height=30} for guidance throughout this web application.**  -->
+
+<!-- --- -->
+
+<!-- <span style="color: crimson;"><b>Data cannot be saved on this website. Please download your data and report before closing the window or allowing the session to time out. Sessions time out after 10 minutes of inactivity.</b></span> -->
+
+<!-- *Data source: <a href="http://comet-planner.com/" target="_blank">NRCS COMET-Planner (Swan et al. 2024) </a>* -->
 

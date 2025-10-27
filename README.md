@@ -5,6 +5,24 @@
 
 # Washington Climate Smart Estimator (WaCSE)
 
+<center>
+
+<h2>
+
+⚠️ WaCSE Deprecated ⚠️
+
+</center>
+
+</h2>
+
+As of October 2025, this tool is no longer maintained and may produce
+outdated CO<sub>2</sub>eq estimates.
+
+Please use [COMET-Planner](http://comet-planner.com/) instead for
+accurate and up-to-date estimates.
+
+<hr>
+
 The <a
 href="https://agr.wa.gov/departments/land-and-water/natural-resources"
 target="_blank">Washington State Department of Agriculture</a> developed

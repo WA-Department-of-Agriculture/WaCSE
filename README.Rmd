@@ -16,6 +16,18 @@ knitr::opts_chunk$set(
 
 # Washington Climate Smart Estimator (WaCSE) 
 
+<center><h2>
+
+⚠️ WaCSE Deprecated ⚠️
+
+</center></h2>
+
+As of October 2025, this tool is no longer maintained and may produce outdated CO~2~eq estimates.
+
+Please use [COMET-Planner](http://comet-planner.com/) instead for accurate and up-to-date estimates.
+
+<hr>
+
 The [Washington State Department of Agriculture](https://agr.wa.gov/departments/land-and-water/natural-resources){target="_blank"} developed WaCSE for the [Washington State Conservation Commission](https://www.scc.wa.gov/sff){target="_blank"} to use in the Sustainable Farms and Fields (SFF) program. Intended users are the Conservation Commission, conservation districts, growers, and anyone interested in reducing agricultural greenhouse gas (GHG) emissions. This interactive tool estimates the reduction of GHG emissions from different conservation practices across Washington’s diverse counties.
 
 This app was built using the <a href="https://github.com/ThinkR-open/golem" target="_blank">Golem</a> framework.
